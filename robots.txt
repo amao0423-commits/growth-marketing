@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.nishinippon-adv.jp/sitemap.xml
