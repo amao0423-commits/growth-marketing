@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Growth Marketing">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff6a3d"/>
+      <stop offset="1" stop-color="#e8400f"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7.5" fill="url(#g)"/>
+  <!-- 上昇トレンドライン（Growth） -->
+  <path d="M7 22 L13.5 15.5 L18 18.5 L24.5 10" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 右上の矢印ヘッド -->
+  <path d="M19.5 10 L25 10 L25 15.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- ブランドのドット（起点） -->
+  <circle cx="7" cy="22" r="2.4" fill="#fff"/>
+</svg>
