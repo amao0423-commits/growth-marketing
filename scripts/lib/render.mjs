@@ -14,6 +14,10 @@ function esc(s = '') {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function stripHtml(s = '') {
+  return String(s).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+}
+
 // 背景のドットグリッド（既存サムネと同じ意匠）
 function dotGrid(opacity = 0.10) {
   let dots = '';
@@ -87,26 +91,67 @@ function relatedCard(post) {
 export function articlePage(article, category, related, dates) {
   const cat = CATEGORIES[category] || CATEGORIES.sns;
   const canonical = `${BASE_URL}/blog/${article.slug}.html`;
+  const wordCount = [
+    article.leadParagraphHtml,
+    ...article.sections.map((s) => s.html),
+    article.conclusionHtml,
+    ...(article.faq || []).map((f) => f.answerHtml),
+  ].join('\n').replace(/<[^>]+>/g, '').replace(/\s+/g, '').length;
 
   const toc = article.sections
     .map((s) => `    <a href="#${esc(s.id)}">${esc(s.heading)}</a>`)
+    .concat((article.faq || []).length ? [`    <a href="#faq">よくある質問</a>`] : [])
     .concat([`    <a href="#conclusion">まとめ</a>`])
     .join('\n');
 
+  const takeaways = (article.keyTakeaways || []).length
+    ? `  <div class="key-takeaways">\n    <h2>重要ポイント</h2>\n    <ul>\n${article.keyTakeaways.map((t) => `      <li>${esc(t)}</li>`).join('\n')}\n    </ul>\n  </div>\n\n`
+    : '';
+  const faqHtml = (article.faq || []).length
+    ? `\n\n  <h2 id="faq">よくある質問</h2>\n${article.faq.map((f) => `  <h3>${esc(f.question)}</h3>\n${f.answerHtml}`).join('\n\n')}`
+    : '';
   const body = article.leadParagraphHtml + '\n\n'
+    + takeaways
     + article.sections.map((s) => `  <h2 id="${esc(s.id)}">${esc(s.heading)}</h2>\n${s.html}`).join('\n\n')
+    + faqHtml
     + `\n\n  <h2 id="conclusion">まとめ</h2>\n${article.conclusionHtml}`;
 
   const schema = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: article.h1,
-    description: article.metaDescription,
-    datePublished: dates.iso,
-    articleSection: cat.label,
-    author: { '@type': 'Organization', name: 'Growth Marketing' },
-    publisher: { '@type': 'Organization', name: 'Growth Marketing' },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    '@graph': [
+      {
+        '@type': 'BlogPosting',
+        '@id': `${canonical}#article`,
+        headline: article.h1,
+        description: article.metaDescription,
+        datePublished: dates.iso,
+        dateModified: dates.iso,
+        articleSection: cat.label,
+        keywords: article.keywords,
+        wordCount,
+        author: { '@type': 'Organization', name: 'Growth Marketing' },
+        publisher: { '@type': 'Organization', name: 'Growth Marketing' },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${canonical}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'ホーム', item: BASE_URL },
+          { '@type': 'ListItem', position: 2, name: 'ブログ', item: `${BASE_URL}/blog/` },
+          { '@type': 'ListItem', position: 3, name: article.h1, item: canonical },
+        ],
+      },
+      ...(article.faq || []).length ? [{
+        '@type': 'FAQPage',
+        '@id': `${canonical}#faq`,
+        mainEntity: article.faq.map((f) => ({
+          '@type': 'Question',
+          name: f.question,
+          acceptedAnswer: { '@type': 'Answer', text: stripHtml(f.answerHtml) },
+        })),
+      }] : [],
+    ],
   };
 
   const relatedHtml = related.map(relatedCard).join('\n');

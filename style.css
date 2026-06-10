@@ -351,6 +351,10 @@ section { position: relative; }
 .article-body .callout { background: var(--accent-wash); border: 1px solid #ffd9c9; border-radius: 8px; padding: 22px 24px; margin: 28px 0; }
 .article-body .callout p { margin: 0; color: var(--ink-soft); }
 .article-body .callout strong { color: var(--accent-deep); }
+.key-takeaways { background: var(--paper-2); border-left: 4px solid var(--accent); padding: 26px 28px; margin: 34px 0 44px; }
+.key-takeaways h2 { font-size: 1.2rem; margin: 0 0 14px; }
+.key-takeaways ul { margin-bottom: 0; }
+.key-takeaways li:last-child { margin-bottom: 0; }
 .toc { background: var(--paper-2); border-radius: 10px; padding: 26px 28px; margin-bottom: 40px; }
 .toc h4 { font-family: "Zen Kaku Gothic New", sans-serif; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
 .toc a { display: block; font-size: 0.92rem; color: var(--ink-soft); padding: 6px 0; border-bottom: 1px dashed var(--line); transition: color 0.2s, padding 0.2s; }

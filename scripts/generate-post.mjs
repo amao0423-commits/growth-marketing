@@ -3,7 +3,7 @@
 // → 4) 品質ゲート → 5) HTML出力・index/sitemap/台帳の更新
 //
 // 必須環境変数: ANTHROPIC_API_KEY
-// 任意: POST_MODEL（既定 claude-opus-4-8）, MAX_RETRIES（既定 2）
+// 任意: POST_MODEL（既定 claude-opus-4-8）, MAX_RETRIES（既定 4）
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,7 +13,8 @@ import { articlePage, indexCard, CATEGORIES, BASE_URL } from './lib/render.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MODEL = process.env.POST_MODEL || 'claude-opus-4-8';
-const MAX_RETRIES = Number(process.env.MAX_RETRIES || 2);
+const MAX_RETRIES = Number(process.env.MAX_RETRIES || 4);
+const MIN_TEXT_CHARS = Number(process.env.MIN_TEXT_CHARS || 2200);
 
 // 被リンクを許可する権威ドメイン（一次情報・公式のみ）
 const AUTH_DOMAINS = [
@@ -23,6 +24,14 @@ const AUTH_DOMAINS = [
   'www.tiktok.com', 'ads.tiktok.com', 'business.tiktok.com',
   'business.x.com', 'help.x.com', 'thinkwithgoogle.com',
   'www.soumu.go.jp', 'www.meti.go.jp', 'www.caa.go.jp',
+];
+
+// 調査結果に十分な公式URLが出ない時の補助。実在確認してから使う。
+const FALLBACK_SOURCE_URLS = [
+  'https://developers.google.com/search/docs/fundamentals/creating-helpful-content',
+  'https://developers.google.com/search/docs/fundamentals/seo-starter-guide',
+  'https://developers.google.com/search/docs/appearance/structured-data/article',
+  'https://developers.google.com/search/docs/appearance/structured-data/breadcrumb',
 ];
 
 const client = new Anthropic(); // ANTHROPIC_API_KEY を環境から取得
@@ -46,6 +55,61 @@ function isAuthoritative(url) {
 // HTML中の href を全部取り出す
 function extractHrefs(html) {
   return [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
+}
+
+function unique(arr) {
+  return [...new Set(arr.filter(Boolean))];
+}
+
+function cleanUrl(url) {
+  return String(url || '').replace(/[)\].,、。]+$/g, '');
+}
+
+function extractUrls(text) {
+  return unique([...String(text || '').matchAll(/https?:\/\/[^\s<>"']+/g)].map((m) => cleanUrl(m[0])));
+}
+
+async function aliveAuthoritativeUrls(urls, limit = 8) {
+  const out = [];
+  for (const url of unique(urls)) {
+    if (!isAuthoritative(url)) continue;
+    if (await isLinkAlive(url)) out.push(url);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
+async function buildSourceLinks(findings) {
+  const fromResearch = await aliveAuthoritativeUrls(extractUrls(findings), 8);
+  const fallback = fromResearch.length >= 4 ? [] : await aliveAuthoritativeUrls(FALLBACK_SOURCE_URLS, 4);
+  return unique([...fromResearch, ...fallback]).slice(0, 8);
+}
+
+function scoreCocomarkeArticle(article, idea) {
+  const haystack = `${article.slug} ${article.keywords.join(' ')}`.toLowerCase();
+  const words = `${idea.primaryKeyword} ${idea.intent}`.toLowerCase()
+    .split(/[\s　、。・/（）()]+/)
+    .filter((w) => w.length >= 2);
+  let score = 0;
+  for (const word of words) if (haystack.includes(word)) score += 3;
+  for (const keyword of article.keywords) {
+    if (idea.intent.includes(keyword) || idea.primaryKeyword.includes(keyword)) score += 2;
+  }
+  return score;
+}
+
+function pickCocomarkeCandidates(cocomarke, idea, limit = 40) {
+  return [...cocomarke]
+    .map((article, idx) => ({ article, idx, score: scoreCocomarkeArticle(article, idea) }))
+    .sort((a, b) => b.score - a.score || a.idx - b.idx)
+    .slice(0, limit)
+    .map((x) => x.article);
+}
+
+function keywordCovered(primaryKeyword, ...texts) {
+  const haystack = texts.join(' ');
+  const terms = String(primaryKeyword || '').split(/[\s　]+/).filter(Boolean);
+  return terms.length > 0 && terms.every((term) => haystack.includes(term));
 }
 
 // 外部の絶対URLリンクに target/rel を付与（無ければ）
@@ -126,9 +190,11 @@ const ARTICLE_SCHEMA = {
     metaTitle: { type: 'string' },
     metaDescription: { type: 'string' },
     keywords: { type: 'array', items: { type: 'string' } },
+    searchIntent: { type: 'string' },
     h1: { type: 'string' },
     cardDescription: { type: 'string' },
     readMinutes: { type: 'integer' },
+    keyTakeaways: { type: 'array', items: { type: 'string' } },
     leadParagraphHtml: { type: 'string' },
     sections: {
       type: 'array',
@@ -139,31 +205,42 @@ const ARTICLE_SCHEMA = {
       },
     },
     conclusionHtml: { type: 'string' },
+    faq: {
+      type: 'array',
+      items: {
+        type: 'object', additionalProperties: false,
+        properties: { question: { type: 'string' }, answerHtml: { type: 'string' } },
+        required: ['question', 'answerHtml'],
+      },
+    },
     cocomarkeLinksUsed: { type: 'array', items: { type: 'string' } },
     backlinksUsed: { type: 'array', items: { type: 'string' } },
     relatedSlugs: { type: 'array', items: { type: 'string' } },
   },
-  required: ['metaTitle', 'metaDescription', 'keywords', 'h1', 'cardDescription', 'readMinutes',
-    'leadParagraphHtml', 'sections', 'conclusionHtml', 'cocomarkeLinksUsed', 'backlinksUsed', 'relatedSlugs'],
+  required: ['metaTitle', 'metaDescription', 'keywords', 'searchIntent', 'h1', 'cardDescription', 'readMinutes',
+    'keyTakeaways', 'leadParagraphHtml', 'sections', 'conclusionHtml', 'faq', 'cocomarkeLinksUsed', 'backlinksUsed', 'relatedSlugs'],
 };
 
 // --- Step B: 構造化出力で記事を生成 ---
-async function writeArticle(idea, catLabel, findings, cocomarke, gmPosts, feedback) {
+async function writeArticle(idea, catLabel, findings, cocomarke, gmPosts, sourceLinks, feedback) {
   const cocoList = cocomarke.map((c) => `- ${c.url} （関連語: ${c.keywords.join('、')}）`).join('\n');
   const gmList = gmPosts.map((p) => `- ${p.slug} ：${p.title}（${p.categoryLabel}）`).join('\n');
+  const sourceList = sourceLinks.map((u) => `- ${u}`).join('\n');
 
   const prompt = `あなたはSEOに精通したマーケティング会社「Growth Marketing」の編集者です。下記の調査結果をもとに、検索流入を狙う高品質な日本語ブログ記事を作成してください。読者の検索意図を満たし、独自の視点と実務的な具体性を備えた、オリジナルで有用な記事にしてください。\n\n`
     + `# テーマ\n${idea.intent}\n主要キーワード: ${idea.primaryKeyword} / カテゴリ: ${catLabel}\n\n`
     + `# 調査結果（最新トレンド・一次情報）\n${findings}\n\n`
     + `# 相互リンク候補（cocomarke.com の記事。本文の文脈に自然に合うものを1〜3本、自然なアンカーテキストで <a href="URL">語句</a> として本文中に挿入。リストにあるURLのみ使用）\n${cocoList}\n\n`
-    + `# 被リンク（出典）として使える権威ドメイン\n${AUTH_DOMAINS.join(', ')}\n調査結果に出てきた上記ドメインの実在URLを2〜4本、出典として本文中に <a href="URL">…</a> で引用してください。存在しないURLは絶対に作らないこと。\n\n`
+    + `# 使用可能な公式出典URL（本文にはこの中から2〜4本のみ使用。存在しないURLやリスト外URLは絶対に作らない）\n${sourceList}\n\n`
     + `# 関連記事候補（Growth Marketing内。relatedSlugs に3つのslugを選ぶ。本文テーマに近いものを優先）\n${gmList}\n\n`
     + `# 執筆要件\n`
-    + `- 文字数: 本文合計でおおむね2000〜3500字。\n`
-    + `- 構成: 導入(leadParagraphHtml) → 本文セクション(sections 4〜6個、各 heading は検索意図に沿うH2見出し、id は英小文字とハイフンのユニークなアンカー) → まとめ(conclusionHtml)。\n`
+    + `- 文字数: 本文合計でおおむね2500〜3800字。薄い一般論ではなく、判断基準・手順・失敗例・改善指標まで具体化する。\n`
+    + `- 検索意図: searchIntent に読者が解決したい課題を1文で要約し、本文全体でその答えを完結させる。\n`
+    + `- 構成: 導入(leadParagraphHtml) → 重要ポイント(keyTakeaways 3〜5個) → 本文セクション(sections 5〜7個、各 heading は検索意図に沿うH2見出し、id は英小文字とハイフンのユニークなアンカー) → FAQ 2〜4個 → まとめ(conclusionHtml)。\n`
     + `- 各セクションのhtmlは <p> を基本に、必要に応じ <h3>小見出し</h3>・<ul><li>・<ol><li>・<strong>・<blockquote>・<div class="callout"><p>要点</p></div> を使う。h1/h2タグやstyle属性、画像は使わない（H2はシステム側で付与）。\n`
-    + `- 相互リンク(cocomarke)を最低1本、出典リンク(権威ドメイン)を最低2本、本文中に含める。\n`
-    + `- 誇大表現・断定的な数値の捏造をしない。E-E-A-Tを意識し、一次情報に基づく。\n`
+    + `- 相互リンク(cocomarke)を最低1本、公式出典リンクを最低2本、本文中に含める。\n`
+    + `- GoogleのHelpful Contentの考え方に沿い、検索順位だけを狙う文章ではなく、実務者が読み終えて次の行動を決められる内容にする。\n`
+    + `- 誇大表現・断定的な数値の捏造をしない。E-E-A-Tを意識し、一次情報に基づく。引用元の要約だけで終わらせず、Growth Marketingとしての実務的な解釈を加える。\n`
     + `- metaTitle は28〜36字目安で主要キーワードを前方に。metaDescription は110〜130字。keywords は5語前後。cardDescription は一覧カード用に60字前後。\n`
     + (feedback ? `\n# 前回の指摘（必ず修正すること）\n${feedback}\n` : '')
     + `\n指定スキーマのJSONのみを返してください。`;
@@ -180,12 +257,34 @@ async function writeArticle(idea, catLabel, findings, cocomarke, gmPosts, feedba
 }
 
 // --- 品質ゲート ---
-async function qualityGate(article, cocomarke) {
+async function qualityGate(article, cocomarke, sourceLinks, idea) {
   const issues = [];
-  const fullBody = [article.leadParagraphHtml, ...article.sections.map((s) => s.html), article.conclusionHtml].join('\n');
+  const fullBody = [
+    article.leadParagraphHtml,
+    ...article.sections.map((s) => s.html),
+    article.conclusionHtml,
+    ...(article.faq || []).map((f) => f.answerHtml),
+  ].join('\n');
   const textLen = fullBody.replace(/<[^>]+>/g, '').replace(/\s+/g, '').length;
-  if (textLen < 1500) issues.push(`本文が短すぎます（約${textLen}字）。2000字以上にしてください。`);
-  if (article.sections.length < 4) issues.push('セクションが少なすぎます。4個以上にしてください。');
+  if (textLen < MIN_TEXT_CHARS) issues.push(`本文が短すぎます（約${textLen}字）。${MIN_TEXT_CHARS}字以上にしてください。`);
+  if (article.sections.length < 5) issues.push('セクションが少なすぎます。5個以上にしてください。');
+  if (!keywordCovered(idea.primaryKeyword, article.metaTitle, article.h1)) {
+    issues.push(`主要キーワード「${idea.primaryKeyword}」の主要語がmetaTitleまたはh1に自然に含まれていません。`);
+  }
+  if ((article.metaDescription || '').length < 80 || (article.metaDescription || '').length > 150) {
+    issues.push('metaDescription は80〜150字の範囲にしてください。');
+  }
+  if (!Array.isArray(article.keyTakeaways) || article.keyTakeaways.length < 3) {
+    issues.push('keyTakeaways が不足しています。3個以上にしてください。');
+  }
+  if (!Array.isArray(article.faq) || article.faq.length < 2) {
+    issues.push('FAQ が不足しています。2個以上にしてください。');
+  }
+  const ids = article.sections.map((s) => s.id);
+  if (new Set(ids).size !== ids.length) issues.push('セクションidが重複しています。');
+  if (/<\/?(h1|h2|script|style|img)\b/i.test(fullBody)) {
+    issues.push('本文HTMLに使用禁止タグ（h1/h2/script/style/img）があります。');
+  }
 
   const hrefs = extractHrefs(fullBody);
   const cocoSet = new Set(cocomarke.map((c) => c.url));
@@ -195,8 +294,11 @@ async function qualityGate(article, cocomarke) {
   const ext = hrefs.filter((h) => /^https?:\/\//.test(h) && hostOf(h) !== hostOf(BASE_URL) && hostOf(h) !== 'www.cocomarke.com');
   const auth = ext.filter(isAuthoritative);
   const nonAuth = ext.filter((h) => !isAuthoritative(h));
+  const allowedSources = new Set(sourceLinks);
+  const inventedSources = auth.filter((h) => !allowedSources.has(h));
   if (nonAuth.length) issues.push(`許可外ドメインへの外部リンクがあります: ${nonAuth.join(', ')}。権威ドメインのみにしてください。`);
-  if (auth.length < 2) issues.push('権威ドメインへの出典リンクが不足しています（最低2本）。');
+  if (inventedSources.length) issues.push(`使用可能な公式出典URLリスト外のリンクがあります: ${inventedSources.join(', ')}。提示URLのみ使ってください。`);
+  if (auth.length < 2) issues.push('公式出典リンクが不足しています（最低2本）。');
 
   // 外部リンクの死活チェック
   const dead = [];
@@ -223,28 +325,33 @@ async function main() {
   while (existingSlugs.has(slug)) slug += '-2';
   console.log(`▶ トピック: [${category}] ${idea.intent}\n  slug=${slug} / model=${MODEL}`);
 
-  const cocomarke = await fetchCocomarkeArticles();
-  console.log(`  cocomarke記事 ${cocomarke.length}件を相互リンク候補に取得`);
+  const cocomarkeAll = await fetchCocomarkeArticles();
+  const cocomarke = pickCocomarkeCandidates(cocomarkeAll, idea);
+  console.log(`  cocomarke記事 ${cocomarkeAll.length}件から関連候補 ${cocomarke.length}件を選定`);
 
   console.log('▶ Web検索で調査中…');
   const findings = await research(idea, catLabel);
+  const sourceLinks = await buildSourceLinks(findings);
+  if (sourceLinks.length < 2) throw new Error('公式出典URLを2本以上確認できませんでした。調査クエリまたはfallback sourceを見直してください。');
+  console.log(`  公式出典URL ${sourceLinks.length}件を確認`);
 
   let article = null, gate = null, feedback = '';
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     console.log(`▶ 記事生成（試行 ${attempt + 1}/${MAX_RETRIES + 1}）…`);
-    const draft = await writeArticle(idea, catLabel, findings, cocomarke, posts, feedback);
+    const draft = await writeArticle(idea, catLabel, findings, cocomarke, posts, sourceLinks, feedback);
     // 外部リンクに rel/target を付与
     for (const s of draft.sections) s.html = enforceExternalAttrs(s.html);
     draft.leadParagraphHtml = enforceExternalAttrs(draft.leadParagraphHtml);
     draft.conclusionHtml = enforceExternalAttrs(draft.conclusionHtml);
+    for (const f of draft.faq || []) f.answerHtml = enforceExternalAttrs(f.answerHtml);
     draft.slug = slug;
 
-    gate = await qualityGate(draft, cocomarke);
+    gate = await qualityGate(draft, cocomarke, sourceLinks, idea);
     if (gate.ok) { article = draft; break; }
     feedback = gate.issues.join('\n');
     console.log(`  品質ゲート不通過:\n   - ${gate.issues.join('\n   - ')}`);
   }
-  if (!article) { console.log('✕ 品質基準を満たせませんでした。今回は公開をスキップします。'); process.exitCode = 0; return; }
+  if (!article) { throw new Error(`品質基準を満たせませんでした。公開を中止します。\n${feedback}`); }
   console.log(`✓ 品質ゲート通過（本文 約${gate.textLen}字）`);
 
   // --- 出力 ---
