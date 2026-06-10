@@ -1,0 +1,45 @@
+name: Auto-publish SEO post
+
+on:
+  schedule:
+    # 週2回：火・金 09:00 JST（= 00:00 UTC）。曜日/時刻は調整可。
+    - cron: '0 0 * * 2'
+    - cron: '0 0 * * 5'
+  workflow_dispatch: {}   # 手動でもオンデマンド実行可能
+
+permissions:
+  contents: write   # 生成記事を commit & push する
+
+concurrency:
+  group: auto-publish
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Generate post
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: npm run generate
+
+      - name: Commit & push if changed
+        run: |
+          if [ -n "$(git status --porcelain blog content sitemap.xml)" ]; then
+            git config user.name "growth-marketing-bot"
+            git config user.email "bot@users.noreply.github.com"
+            git add blog content sitemap.xml
+            git commit -m "Auto-publish SEO post ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "No new post generated — nothing to commit."
+          fi

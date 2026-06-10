@@ -1,0 +1,63 @@
+{
+  "_comment": "SEO記事自動生成のトピック台帳。categoryRotation の順にカテゴリを輪番し、各カテゴリの未使用トピックから検索意図の高いものを選ぶ。usedTopicIds に公開済みを記録して重複を防ぐ。新しいトレンドが出たら ideas に追記すればよい。",
+  "categoryRotation": ["sns", "ads", "seo", "content", "brand"],
+  "nextRotationIndex": 0,
+  "usedTopicIds": [],
+  "clusters": {
+    "sns": {
+      "label": "SNS運用",
+      "pillar": "SNS運用代行",
+      "ideas": [
+        { "id": "sns-reels-retention-2026", "primaryKeyword": "リール 視聴維持率", "intent": "Instagramリールの視聴維持率を高める構成と冒頭3秒の設計を知りたい" },
+        { "id": "sns-ugc-strategy", "primaryKeyword": "UGC 活用", "intent": "UGC（ユーザー生成コンテンツ）をSNS運用に取り入れて信頼と拡散を得たい" },
+        { "id": "sns-tiktok-search", "primaryKeyword": "TikTok SEO", "intent": "TikTok内検索で見つけてもらうためのキャプション・ハッシュタグ最適化を知りたい" },
+        { "id": "sns-threads-growth", "primaryKeyword": "Threads 運用", "intent": "Threadsをビジネスアカウントで伸ばす投稿設計を知りたい" },
+        { "id": "sns-analytics-kpi", "primaryKeyword": "SNS 分析 KPI", "intent": "SNS運用の成果を正しく測るKPI設計とダッシュボードの作り方を知りたい" }
+      ]
+    },
+    "ads": {
+      "label": "広告運用",
+      "pillar": "広告運用代行",
+      "ideas": [
+        { "id": "ads-meta-advantage-plus", "primaryKeyword": "Advantage+ 攻略", "intent": "MetaのAdvantage+ショッピングキャンペーンを成果につなげる設計を知りたい" },
+        { "id": "ads-google-pmax", "primaryKeyword": "P-MAX 運用", "intent": "Google P-MAXキャンペーンのアセットとシグナル設計を最適化したい" },
+        { "id": "ads-lp-cvr", "primaryKeyword": "ランディングページ 改善 CVR", "intent": "広告のCVRを上げるランディングページ改善の打ち手を知りたい" },
+        { "id": "ads-retargeting-privacy", "primaryKeyword": "リターゲティング Cookie規制", "intent": "Cookie規制下でのリターゲティングとファーストパーティデータ活用を知りたい" },
+        { "id": "ads-creative-fatigue", "primaryKeyword": "広告 クリエイティブ 疲弊", "intent": "広告クリエイティブの疲弊を検知し差し替える運用フローを知りたい" }
+      ]
+    },
+    "seo": {
+      "label": "SEO",
+      "pillar": "コンテンツ・SEO",
+      "ideas": [
+        { "id": "seo-eeat-2026", "primaryKeyword": "E-E-A-T 高め方", "intent": "GoogleのE-E-A-Tを満たしてコンテンツの評価を高める具体策を知りたい" },
+        { "id": "seo-ai-overview", "primaryKeyword": "AI Overview 対策", "intent": "GoogleのAI Overview（生成AI検索）時代に流入を守るSEO戦略を知りたい" },
+        { "id": "seo-topic-cluster", "primaryKeyword": "トピッククラスター", "intent": "トピッククラスター構造で内部リンクとSEO評価を高める方法を知りたい" },
+        { "id": "seo-core-web-vitals", "primaryKeyword": "Core Web Vitals 改善", "intent": "Core Web VitalsとページエクスペリエンスをSEOのために改善したい" },
+        { "id": "seo-local-mybusiness", "primaryKeyword": "MEO Googleビジネスプロフィール", "intent": "ローカルSEO/MEOでGoogleビジネスプロフィールを最適化したい" }
+      ]
+    },
+    "content": {
+      "label": "コンテンツマーケティング",
+      "pillar": "コンテンツ・SEO",
+      "ideas": [
+        { "id": "content-pillar-strategy", "primaryKeyword": "ピラーコンテンツ", "intent": "ピラーコンテンツとクラスター記事で資産になるコンテンツ設計をしたい" },
+        { "id": "content-lead-nurturing", "primaryKeyword": "リードナーチャリング コンテンツ", "intent": "メールやホワイトペーパーで見込み客を育てるコンテンツ設計を知りたい" },
+        { "id": "content-video-short", "primaryKeyword": "ショート動画 コンテンツ", "intent": "ショート動画を軸にしたコンテンツマーケティングの組み立て方を知りたい" },
+        { "id": "content-ai-workflow", "primaryKeyword": "生成AI コンテンツ制作", "intent": "生成AIを使ってコンテンツ制作を効率化しつつ品質を保つ方法を知りたい" },
+        { "id": "content-measurement-roi", "primaryKeyword": "コンテンツマーケティング ROI", "intent": "コンテンツマーケティングのROIを測定し改善する指標設計を知りたい" }
+      ]
+    },
+    "brand": {
+      "label": "ブランディング",
+      "pillar": "ブランディング",
+      "ideas": [
+        { "id": "brand-purpose", "primaryKeyword": "パーパス ブランディング", "intent": "パーパス（存在意義）を軸にしたブランディングの進め方を知りたい" },
+        { "id": "brand-tone-of-voice", "primaryKeyword": "トーンオブボイス", "intent": "ブランドのトーンオブボイスを定義し全チャネルで統一したい" },
+        { "id": "brand-rebranding", "primaryKeyword": "リブランディング 進め方", "intent": "リブランディングを失敗なく進める手順とポイントを知りたい" },
+        { "id": "brand-employee-advocacy", "primaryKeyword": "従業員 アンバサダー", "intent": "従業員アンバサダー（エンプロイーアドボカシー）でブランドを広げたい" },
+        { "id": "brand-community", "primaryKeyword": "ブランドコミュニティ", "intent": "ファンと築くブランドコミュニティの作り方と運営を知りたい" }
+      ]
+    }
+  }
+}

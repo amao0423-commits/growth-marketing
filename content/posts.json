@@ -1,0 +1,12 @@
+[
+  { "slug": "sns-algorithm-2026", "category": "sns", "categoryLabel": "SNS運用", "title": "2026年版・主要SNSアルゴリズムの変化と運用戦略", "description": "各プラットフォームの最新アルゴリズム傾向を踏まえ、伸びる運用の考え方を解説します。", "date": "2026.05.28" },
+  { "slug": "sns-content-calendar", "category": "sns", "categoryLabel": "SNS運用", "title": "継続できるSNS運用のためのコンテンツカレンダー設計術", "description": "行き当たりばったりの投稿から卒業する、再現性ある運用の仕組みづくりを紹介します。", "date": "2026.05.07" },
+  { "slug": "meta-ads-cpa", "category": "ads", "categoryLabel": "広告運用", "title": "Meta広告のCPAを38%改善した5つの打ち手", "description": "実際の運用事例をもとに、広告費用対効果を高める具体的な改善ステップを紹介します。", "date": "2026.05.14" },
+  { "slug": "ad-creative-testing", "category": "ads", "categoryLabel": "広告運用", "title": "成果を分ける広告クリエイティブのABテスト設計", "description": "検証する変数の選び方から判断基準まで、正しいABテストの組み立て方を解説します。", "date": "2026.04.16" },
+  { "slug": "seo-content-design", "category": "seo", "categoryLabel": "SEO", "title": "検索意図から逆算するSEOコンテンツ設計の基本", "description": "キーワード選定から記事構成まで、成果につながるSEOの土台づくりを解説します。", "date": "2026.04.30" },
+  { "slug": "internal-link-seo", "category": "seo", "categoryLabel": "SEO", "title": "見落とされがちな内部リンク最適化でSEOを底上げする", "description": "コンテンツの質だけでなく、内部リンク構造もSEO評価を左右します。その基本を解説します。", "date": "2026.03.19" },
+  { "slug": "content-marketing-funnel", "category": "content", "categoryLabel": "コンテンツマーケティング", "title": "見込み客を育てるコンテンツマーケティングのファネル設計", "description": "認知から購買まで、見込み客の段階に応じたコンテンツの作り分け方を解説します。", "date": "2026.03.05" },
+  { "slug": "content-repurposing", "category": "content", "categoryLabel": "コンテンツマーケティング", "title": "1本のコンテンツを10倍活用するリパーパス術", "description": "限られたリソースで成果を出す、コンテンツの多面的な展開方法を紹介します。", "date": "2026.02.18" },
+  { "slug": "brand-story", "category": "brand", "categoryLabel": "ブランディング", "title": "選ばれ続けるブランドをつくるストーリーテリングの基本", "description": "機能や価格では差別化が難しい時代に、ブランドストーリーの役割と組み立て方を解説します。", "date": "2026.02.04" },
+  { "slug": "brand-consistency", "category": "brand", "categoryLabel": "ブランディング", "title": "ブランドの一貫性を保つビジュアル＆トーン設計", "description": "複数チャネルで発信する時代に、ブランドの世界観を崩さない統一方法を解説します。", "date": "2026.01.21" }
+]

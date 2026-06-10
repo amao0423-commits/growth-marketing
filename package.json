@@ -1,0 +1,13 @@
+{
+  "name": "growth-marketing-autopublish",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "週2回のSEO記事自動生成パイプライン（Anthropic API + Web検索）",
+  "scripts": {
+    "generate": "node scripts/generate-post.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.70.0"
+  }
+}
