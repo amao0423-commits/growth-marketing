@@ -14,7 +14,7 @@ import { articlePage, indexCard, CATEGORIES, BASE_URL } from './lib/render.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MODEL = process.env.POST_MODEL || 'claude-opus-4-8';
 const MAX_RETRIES = Number(process.env.MAX_RETRIES || 4);
-const MIN_TEXT_CHARS = Number(process.env.MIN_TEXT_CHARS || 2200);
+const MIN_TEXT_CHARS = Number(process.env.MIN_TEXT_CHARS || 3000);
 
 // 被リンクを許可する権威ドメイン（一次情報・公式のみ）
 const AUTH_DOMAINS = [
@@ -405,16 +405,16 @@ h1/h2タグ、style属性、画像タグは使わないでください。
 
 # CTAの条件
 
-CTAは本文中盤と記事末尾の2箇所に自然に入れてください。
+本文中盤に、CTAを1箇所だけ自然に入れてください。
 
 本文中盤CTA:
 - 読者が課題を自覚したタイミングで、無料相談または関連記事へ自然につなげる
+- 過度に売り込まず、読者の次の行動として自然に提案する
 
-記事末尾CTA:
-- 記事テーマとGrowth Marketingのサービスを結びつける
-- 「無料相談」「SNS運用改善」「広告運用改善」「コンテンツ改善」など、カテゴリに合う文言にする
-
-CTAは過度に売り込まず、読者の次の行動として自然に提案してください。
+重要:
+- 記事末尾のCTAは書かないでください（まとめ conclusionHtml にCTAを入れない）。
+  記事末尾には、システム側が「無料相談」のCTAバンドを自動で付与します。
+- conclusionHtml は要点の総括と次の一歩の提示にとどめ、CTAボタンや申し込み誘導の文は入れないでください。
 
 # 内部リンク条件
 
@@ -486,7 +486,7 @@ GoogleのHelpful Contentの考え方に沿い、検索順位だけを狙う文�
 - FAQが5〜8問ある
 - 相互リンクが1本以上ある
 - 公式出典リンクが2本以上ある
-- CTAが本文中盤と末尾にある
+- CTAが本文中盤に自然に入っている（末尾CTAはシステムが付与するため、まとめにCTAを書いていない）
 - 不確かな数値を断定していない
 - Growth Marketingとしての実務的な解釈がある
 - JSONスキーマに完全準拠している`
