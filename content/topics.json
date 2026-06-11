@@ -7,9 +7,10 @@
     "content",
     "brand"
   ],
-  "nextRotationIndex": 1,
+  "nextRotationIndex": 2,
   "usedTopicIds": [
-    "sns-reels-retention-2026"
+    "sns-reels-retention-2026",
+    "ads-meta-advantage-plus"
   ],
   "clusters": {
     "sns": {
