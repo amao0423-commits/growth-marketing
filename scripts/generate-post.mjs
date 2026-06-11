@@ -2,17 +2,22 @@
 // 1) トピック選定 → 2) Web検索でトレンド/一次情報を収集 → 3) 構造化出力で記事生成
 // → 4) 品質ゲート → 5) HTML出力・index/sitemap/台帳の更新
 //
-// 必須環境変数: ANTHROPIC_API_KEY
-// 任意: POST_MODEL（既定 claude-opus-4-8）, MAX_RETRIES（既定 4）
+// 認証/課金: Claude Code のサブスク（Maxプラン）で実行する。
+//   CLAUDE_CODE_OAUTH_TOKEN を環境に設定し、内部で `claude -p`（ヘッドレス）を呼び出す。
+//   API従量課金（ANTHROPIC_API_KEY）は使わない。CLI: npm i -g @anthropic-ai/claude-code
+// 任意: POST_MODEL（未指定ならClaude Code既定モデル）, MAX_RETRIES（既定 4）, CLAUDE_BIN（既定 claude）
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import Anthropic from '@anthropic-ai/sdk';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { fetchCocomarkeArticles, isLinkAlive } from './lib/cocomarke.mjs';
 import { articlePage, indexCard, CATEGORIES, BASE_URL } from './lib/render.mjs';
 
+const execFileP = promisify(execFile);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const MODEL = process.env.POST_MODEL || 'claude-opus-4-8';
+const MODEL = process.env.POST_MODEL || '';            // 空ならClaude Codeの既定モデル
+const CLAUDE_BIN = process.env.CLAUDE_BIN || 'claude';
 const MAX_RETRIES = Number(process.env.MAX_RETRIES || 4);
 const MIN_TEXT_CHARS = Number(process.env.MIN_TEXT_CHARS || 3000);
 
@@ -26,15 +31,70 @@ const AUTH_DOMAINS = [
   'www.soumu.go.jp', 'www.meti.go.jp', 'www.caa.go.jp',
 ];
 
-// 調査結果に十分な公式URLが出ない時の補助。実在確認してから使う。
-const FALLBACK_SOURCE_URLS = [
-  'https://developers.google.com/search/docs/fundamentals/creating-helpful-content',
-  'https://developers.google.com/search/docs/fundamentals/seo-starter-guide',
-  'https://developers.google.com/search/docs/appearance/structured-data/article',
-  'https://developers.google.com/search/docs/appearance/structured-data/breadcrumb',
-];
+// 調査結果に十分な公式URLが出ない時の補助。カテゴリに合った公式ドキュメントを優先し、
+// 最後に common（汎用）を足す。すべて実在確認してから使う。
+const FALLBACK_SOURCE_URLS = {
+  sns: [
+    'https://business.instagram.com/',
+    'https://help.instagram.com/',
+    'https://www.tiktok.com/business/en',
+    'https://business.x.com/',
+  ],
+  ads: [
+    'https://www.facebook.com/business/ads',
+    'https://www.facebook.com/business/help',
+    'https://ads.tiktok.com/',
+    'https://business.google.com/',
+  ],
+  seo: [
+    'https://developers.google.com/search/docs/fundamentals/seo-starter-guide',
+    'https://developers.google.com/search/docs/fundamentals/creating-helpful-content',
+    'https://developers.google.com/search/docs',
+  ],
+  content: [
+    'https://developers.google.com/search/docs/fundamentals/creating-helpful-content',
+    'https://www.thinkwithgoogle.com/',
+    'https://business.instagram.com/',
+  ],
+  brand: [
+    'https://www.thinkwithgoogle.com/',
+    'https://business.instagram.com/',
+    'https://developers.google.com/search/docs/fundamentals/creating-helpful-content',
+  ],
+  common: [
+    'https://developers.google.com/search/docs/fundamentals/creating-helpful-content',
+    'https://www.thinkwithgoogle.com/',
+  ],
+};
 
-const client = new Anthropic(); // ANTHROPIC_API_KEY を環境から取得
+// Claude Code をヘッドレス(`claude -p`)で呼び出し、最終テキストを返す（サブスク課金）。
+// opts.webTools=true のとき WebSearch / WebFetch を許可する。
+async function claudeText(prompt, opts = {}) {
+  const args = ['-p', prompt, '--output-format', 'json'];
+  if (MODEL) args.push('--model', MODEL);
+  if (opts.webTools) args.push('--allowedTools', 'WebSearch,WebFetch');
+  const { stdout } = await execFileP(CLAUDE_BIN, args, {
+    maxBuffer: 64 * 1024 * 1024,
+    timeout: 12 * 60 * 1000,
+    env: process.env,
+  });
+  let envelope;
+  try { envelope = JSON.parse(stdout); } catch { return String(stdout).trim(); }
+  if (envelope && envelope.is_error) {
+    throw new Error('claude -p error: ' + (envelope.result || JSON.stringify(envelope)).slice(0, 300));
+  }
+  return String(envelope?.result ?? stdout).trim();
+}
+
+// テキストからJSONオブジェクトを抽出（コードフェンスや前置きを許容）
+function extractJsonObject(text) {
+  if (!text) return null;
+  let s = String(text).trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+  const start = s.indexOf('{');
+  const end = s.lastIndexOf('}');
+  if (start === -1 || end <= start) return null;
+  try { return JSON.parse(s.slice(start, end + 1)); } catch { return null; }
+}
 
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const readJson = (p) => JSON.parse(read(p));
@@ -73,15 +133,18 @@ async function aliveAuthoritativeUrls(urls, limit = 8) {
   const out = [];
   for (const url of unique(urls)) {
     if (!isAuthoritative(url)) continue;
-    if (await isLinkAlive(url)) out.push(url);
+    // 公式サイトはbot拒否(403等)を返すことがあるため lenient で「実在」とみなす
+    if (await isLinkAlive(url, { lenient: true })) out.push(url);
     if (out.length >= limit) break;
   }
   return out;
 }
 
-async function buildSourceLinks(findings) {
+async function buildSourceLinks(findings, category) {
   const fromResearch = await aliveAuthoritativeUrls(extractUrls(findings), 8);
-  const fallback = fromResearch.length >= 4 ? [] : await aliveAuthoritativeUrls(FALLBACK_SOURCE_URLS, 4);
+  // 調査で十分な公式URLが得られない時は、カテゴリに合った公式ドキュメントで補完
+  const fallbackPool = [...(FALLBACK_SOURCE_URLS[category] || []), ...FALLBACK_SOURCE_URLS.common];
+  const fallback = fromResearch.length >= 3 ? [] : await aliveAuthoritativeUrls(fallbackPool, 4);
   return unique([...fromResearch, ...fallback]).slice(0, 8);
 }
 
@@ -204,26 +267,7 @@ Google検索セントラル、Meta/Instagram、TikTok、総務省など公式情
 - 公式ではないブログや二次情報は出典候補に含めない
 - 不確かな数値やベンチマークは「経験則」「目安」として扱う`;
 
-  let messages = [{ role: 'user', content: prompt }];
-  let collected = '';
-  for (let i = 0; i < 6; i++) {
-    const res = await client.messages.create({
-      model: MODEL,
-      max_tokens: 8000,
-      tools: [
-        { type: 'web_search_20260209', name: 'web_search' },
-        { type: 'web_fetch_20260209', name: 'web_fetch' },
-      ],
-      messages,
-    });
-    for (const b of res.content) if (b.type === 'text') collected += b.text + '\n';
-    if (res.stop_reason === 'pause_turn') {
-      messages = [{ role: 'user', content: prompt }, { role: 'assistant', content: res.content }];
-      continue;
-    }
-    break;
-  }
-  return collected.trim();
+  return (await claudeText(prompt, { webTools: true })).trim();
 }
 
 const ARTICLE_SCHEMA = {
@@ -491,17 +535,19 @@ GoogleのHelpful Contentの考え方に沿い、検索順位だけを狙う文�
 - Growth Marketingとしての実務的な解釈がある
 - JSONスキーマに完全準拠している`
     + (feedback ? `\n\n# 前回の指摘（品質ゲート不合格時のみ・必ず修正すること）\n${feedback}` : '')
-    + `\n\n指定スキーマのJSONのみを返してください。`;
+    + `\n\n# 出力JSONスキーマ（この構造に完全準拠する）\n${JSON.stringify(ARTICLE_SCHEMA)}`
+    + `\n\n# 出力形式（厳守）\nマークダウンのコードフェンスや前置き・後置きの説明を一切付けず、上記スキーマに完全準拠したJSONオブジェクトのみを出力してください。`;
 
-  const res = await client.messages.create({
-    model: MODEL,
-    max_tokens: 16000,
-    output_config: { format: { type: 'json_schema', schema: ARTICLE_SCHEMA } },
-    messages: [{ role: 'user', content: prompt }],
-  });
-  const text = res.content.find((b) => b.type === 'text')?.text;
-  if (!text) throw new Error('writer returned no text');
-  return JSON.parse(text);
+  let parsed = null, lastRaw = '';
+  for (let i = 0; i < 2; i++) {
+    const p = i === 0 ? prompt
+      : prompt + '\n\n# 重要\n前回の出力はJSONとして解析できませんでした。説明やコードフェンスを付けず、JSONオブジェクトのみを返してください。';
+    lastRaw = await claudeText(p);
+    parsed = extractJsonObject(lastRaw);
+    if (parsed) break;
+  }
+  if (!parsed) throw new Error('writer returned no parseable JSON: ' + String(lastRaw).slice(0, 300));
+  return parsed;
 }
 
 // --- 品質ゲート ---
@@ -548,9 +594,12 @@ async function qualityGate(article, cocomarke, sourceLinks, idea) {
   if (inventedSources.length) issues.push(`使用可能な公式出典URLリスト外のリンクがあります: ${inventedSources.join(', ')}。提示URLのみ使ってください。`);
   if (auth.length < 2) issues.push('公式出典リンクが不足しています（最低2本）。');
 
-  // 外部リンクの死活チェック
+  // 外部リンクの死活チェック（公式出典はbot拒否を許容、cocomarkeは厳格に200）
   const dead = [];
-  for (const u of [...new Set([...auth, ...cocoLinks])]) {
+  for (const u of unique(auth)) {
+    if (!(await isLinkAlive(u, { lenient: true }))) dead.push(u);
+  }
+  for (const u of unique(cocoLinks)) {
     if (!(await isLinkAlive(u))) dead.push(u);
   }
   if (dead.length) issues.push(`到達できないリンクがあります（404等）: ${dead.join(', ')}。実在URLに修正してください。`);
@@ -579,7 +628,7 @@ async function main() {
 
   console.log('▶ Web検索で調査中…');
   const findings = await research(idea, catLabel);
-  const sourceLinks = await buildSourceLinks(findings);
+  const sourceLinks = await buildSourceLinks(findings, category);
   if (sourceLinks.length < 2) throw new Error('公式出典URLを2本以上確認できませんでした。調査クエリまたはfallback sourceを見直してください。');
   console.log(`  公式出典URL ${sourceLinks.length}件を確認`);
 

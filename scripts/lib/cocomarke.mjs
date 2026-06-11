@@ -34,18 +34,29 @@ export async function fetchCocomarkeArticles() {
     });
 }
 
-// 外部リンクの死活チェック（200系/3xxを許容）。タイムアウト付き。
-export async function isLinkAlive(url) {
+// ブラウザ風UA（一部の公式サイトはbot系UAに403を返すため）
+const BROWSER_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
+// 公式サイトがbot対策で返しがちな「ページは存在するが拒否/制限」ステータス
+const EXISTS_BUT_BLOCKED = new Set([401, 403, 405, 429, 451, 503, 999]);
+
+// 外部リンクの死活チェック。
+// opts.lenient=true のとき、bot拒否系ステータス（403等）も「URLは実在」とみなす（公式出典用）。
+export async function isLinkAlive(url, opts = {}) {
+  const { lenient = false } = opts;
   try {
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), 8000);
-    let res = await fetch(url, { method: 'HEAD', redirect: 'follow', signal: ctrl.signal, headers: { 'user-agent': 'growth-marketing-bot/1.0' } });
-    if (res.status === 405 || res.status === 403) {
-      // 一部サーバはHEAD非対応 → GETで再確認
-      res = await fetch(url, { method: 'GET', redirect: 'follow', signal: ctrl.signal, headers: { 'user-agent': 'growth-marketing-bot/1.0' } });
+    const headers = { 'user-agent': BROWSER_UA, 'accept-language': 'ja,en;q=0.8' };
+    let res = await fetch(url, { method: 'HEAD', redirect: 'follow', signal: ctrl.signal, headers });
+    if (!res.ok && res.status !== 404) {
+      // HEAD非対応やbot拒否の可能性 → GETで再確認
+      res = await fetch(url, { method: 'GET', redirect: 'follow', signal: ctrl.signal, headers });
     }
     clearTimeout(t);
-    return res.ok;
+    if (res.ok) return true;
+    // 404/410（不在）や5xx（サーバ障害, 503除く）は不可。lenient時のみbot拒否系を許容。
+    if (lenient && EXISTS_BUT_BLOCKED.has(res.status)) return true;
+    return false;
   } catch {
     return false;
   }

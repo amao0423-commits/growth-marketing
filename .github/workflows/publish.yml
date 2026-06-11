@@ -24,12 +24,17 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
+      # Claude Code を入れて、Maxプランのサブスク課金（OAuthトークン）で記事生成する。
+      # APIキー従量課金は使わない。トークンは `claude setup-token` で発行し、
+      # GitHub Secrets の CLAUDE_CODE_OAUTH_TOKEN に登録しておく。
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
 
       - name: Generate post
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # 任意: モデル指定（未指定ならClaude Code既定）。例: claude-sonnet-4-6 / claude-opus-4-8
+          POST_MODEL: ${{ vars.POST_MODEL }}
         run: npm run generate
 
       - name: Commit & push if changed
