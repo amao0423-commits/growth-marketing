@@ -91,10 +91,13 @@ function runClaude(args, input, timeoutMs) {
 // Claude Code をヘッドレス(`claude -p`)で呼び出し、最終テキストを返す（サブスク課金）。
 // プロンプトは標準入力から渡す。opts.webTools=true のとき WebSearch / WebFetch を許可。
 async function claudeText(prompt, opts = {}) {
-  const args = ['-p', '--output-format', 'json'];
+  // --dangerously-skip-permissions: ヘッドレスでツール許可待ちで停止しないよう許可をスキップ。
+  const args = ['-p', '--output-format', 'json', '--dangerously-skip-permissions'];
   if (MODEL) args.push('--model', MODEL);
+  // webTools時のみツールを使えるように。執筆時はツール無し＝純粋生成で高速。
   if (opts.webTools) args.push('--allowedTools', 'WebSearch,WebFetch');
-  const timeoutMs = 12 * 60 * 1000;
+  // 失敗時に長く待たせないよう、調査8分／執筆5分で打ち切る。
+  const timeoutMs = (opts.webTools ? 8 : 5) * 60 * 1000;
   const { stdout, stderr, code } = await runClaude(args, prompt, timeoutMs);
   if (code !== 0) {
     let detail = String(stderr || '').trim();
