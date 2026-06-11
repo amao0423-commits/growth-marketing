@@ -37,7 +37,9 @@ export async function fetchCocomarkeArticles() {
 // ブラウザ風UA（一部の公式サイトはbot系UAに403を返すため）
 const BROWSER_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
 // 公式サイトがbot対策で返しがちな「ページは存在するが拒否/制限」ステータス
-const EXISTS_BUT_BLOCKED = new Set([401, 403, 405, 429, 451, 503, 999]);
+// 400 はMeta(facebook.com/business 等)がbotリクエストに返すチャレンジ。公式ドメイン限定の
+// lenient判定でのみ参照するため、実在ページの取りこぼし防止として許容する。
+const EXISTS_BUT_BLOCKED = new Set([400, 401, 403, 405, 429, 451, 503, 999]);
 
 // 外部リンクの死活チェック。
 // opts.lenient=true のとき、bot拒否系ステータス（403等）も「URLは実在」とみなす（公式出典用）。
