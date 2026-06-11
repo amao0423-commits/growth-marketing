@@ -713,8 +713,6 @@ async function qualityGate(article, cocomarke, sourceLinks, idea) {
 }
 
 async function main() {
-  if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY is not set');
-
   const posts = readJson('content/posts.json');
   const topics = readJson('content/topics.json');
   const existingSlugs = new Set(posts.map((p) => p.slug));
