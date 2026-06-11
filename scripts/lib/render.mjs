@@ -1,5 +1,6 @@
 // 記事HTML・カード・カバーSVGのレンダラ（既存テンプレート準拠）
 export const BASE_URL = 'https://www.nishinippon-adv.jp';
+const EDITORIAL_POLICY_URL = `${BASE_URL}/editorial-policy.html`;
 
 // カテゴリ → 表示ラベル・テーマカラー（既存サイトのブランドカラーに準拠）
 export const CATEGORIES = {
@@ -93,6 +94,7 @@ export function articlePage(article, category, related, dates) {
   const canonical = `${BASE_URL}/blog/${article.slug}.html`;
   const wordCount = [
     article.leadParagraphHtml,
+    article.authorProfileHtml,
     article.expertiseNoteHtml,
     ...(article.originalInsights || []),
     ...(article.practicalExamples || []).map((e) => e.html),
@@ -111,6 +113,9 @@ export function articlePage(article, category, related, dates) {
   const takeaways = (article.keyTakeaways || []).length
     ? `  <div class="key-takeaways">\n    <h2>重要ポイント</h2>\n    <ul>\n${article.keyTakeaways.map((t) => `      <li>${esc(t)}</li>`).join('\n')}\n    </ul>\n  </div>\n\n`
     : '';
+  const authorProfile = article.authorProfileHtml
+    ? `  <div class="author-box">\n    <h2>著者・編集方針</h2>\n${article.authorProfileHtml}\n  </div>\n\n`
+    : '';
   const expertiseNote = article.expertiseNoteHtml
     ? `  <div class="expertise-note">\n    <h2>編集・検証方針</h2>\n${article.expertiseNoteHtml}\n  </div>\n\n`
     : '';
@@ -120,12 +125,17 @@ export function articlePage(article, category, related, dates) {
   const examples = (article.practicalExamples || []).length
     ? `  <h2 id="practical-examples">実務ケース別の設計例</h2>\n${article.practicalExamples.map((e) => `  <h3>${esc(e.title)}</h3>\n${e.html}`).join('\n\n')}\n\n`
     : '';
+  const sourceHistory = ((article.updateHistory || []).length || (article.referencesUsed || []).length)
+    ? `  <div class="source-history">\n    <h2>参照情報・更新履歴</h2>\n    <table>\n      <thead><tr><th>項目</th><th>内容</th></tr></thead>\n      <tbody>\n${(article.referencesUsed || []).map((r) => `        <tr><td>参照資料</td><td><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.label)}</a>（参照日: ${esc(r.accessedDate)}）</td></tr>`).join('\n')}\n${(article.updateHistory || []).map((u) => `        <tr><td>更新履歴</td><td>${esc(u.date)}：${esc(u.detail)}</td></tr>`).join('\n')}\n      </tbody>\n    </table>\n  </div>\n\n`
+    : '';
   const faqHtml = (article.faq || []).length
     ? `\n\n  <h2 id="faq">よくある質問</h2>\n${article.faq.map((f) => `  <h3>${esc(f.question)}</h3>\n${f.answerHtml}`).join('\n\n')}`
     : '';
   const body = article.leadParagraphHtml + '\n\n'
+    + authorProfile
     + takeaways
     + expertiseNote
+    + sourceHistory
     + insights
     + article.sections.map((s) => `  <h2 id="${esc(s.id)}">${esc(s.heading)}</h2>\n${s.html}`).join('\n\n')
     + '\n\n' + examples
@@ -145,9 +155,24 @@ export function articlePage(article, category, related, dates) {
         articleSection: cat.label,
         keywords: article.keywords,
         wordCount,
-        author: { '@type': 'Organization', name: 'Growth Marketing' },
-        publisher: { '@type': 'Organization', name: 'Growth Marketing' },
+        author: { '@id': `${BASE_URL}/#editorial-team` },
+        publisher: { '@id': `${BASE_URL}/#organization` },
+        citation: (article.referencesUsed || []).map((r) => r.url),
         mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+      },
+      {
+        '@type': 'Organization',
+        '@id': `${BASE_URL}/#organization`,
+        name: 'Growth Marketing',
+        url: BASE_URL,
+        publishingPrinciples: EDITORIAL_POLICY_URL,
+      },
+      {
+        '@type': 'Organization',
+        '@id': `${BASE_URL}/#editorial-team`,
+        name: 'Growth Marketing編集部',
+        url: EDITORIAL_POLICY_URL,
+        parentOrganization: { '@id': `${BASE_URL}/#organization` },
       },
       {
         '@type': 'BreadcrumbList',
@@ -266,7 +291,7 @@ ${relatedHtml}
         <p>SNS運用と広告運用で、ブランドの成長を成果から逆算するデジタルマーケティング代行会社です。</p>
       </div>
       <div class="footer-col"><h5>サービス</h5><a href="../index.html#services">SNS運用代行</a><a href="../index.html#services">広告運用代行</a><a href="../index.html#services">コンテンツ・SEO</a></div>
-      <div class="footer-col"><h5>コンテンツ</h5><a href="index.html">ブログ</a><a href="../index.html#works">実績</a><a href="../index.html#process">プロセス</a></div>
+      <div class="footer-col"><h5>コンテンツ</h5><a href="index.html">ブログ</a><a href="../editorial-policy.html">編集方針</a><a href="../index.html#works">実績</a><a href="../index.html#process">プロセス</a></div>
       <div class="footer-col"><h5>会社情報</h5><a href="../contact.html">無料相談</a><a href="../contact.html">お問い合わせ</a></div>
     </div>
     <div class="footer-bottom">

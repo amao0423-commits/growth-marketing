@@ -356,7 +356,10 @@ section { position: relative; }
 .key-takeaways ul { margin-bottom: 0; }
 .key-takeaways li:last-child { margin-bottom: 0; }
 .expertise-note { border: 1px solid var(--line); border-radius: 8px; padding: 22px 24px; margin: 30px 0 34px; background: #fff; }
-.expertise-note h2, .original-insights h2 { font-size: 1.1rem; margin: 0 0 12px; }
+.author-box, .source-history { border: 1px solid var(--line); border-radius: 8px; padding: 22px 24px; margin: 30px 0 34px; background: #fff; }
+.author-box h2, .source-history h2, .expertise-note h2, .original-insights h2 { font-size: 1.1rem; margin: 0 0 12px; }
+.author-box p, .source-history p { margin-bottom: 12px; font-size: 0.94rem; }
+.author-box p:last-child, .source-history p:last-child { margin-bottom: 0; }
 .expertise-note p { margin: 0; font-size: 0.94rem; }
 .original-insights { background: #faf8f4; border-radius: 8px; padding: 24px 26px; margin: 30px 0 40px; }
 .original-insights ul { margin-bottom: 0; }

@@ -34,9 +34,30 @@
       "articleSection": "SEO",
       "keywords": ["E-E-A-T 高め方", "SEO", "Helpful Content", "著者情報", "コンテンツ品質"],
       "wordCount": 4300,
-      "author": { "@type": "Organization", "name": "Growth Marketing" },
-      "publisher": { "@type": "Organization", "name": "Growth Marketing" },
+      "author": { "@id": "https://www.nishinippon-adv.jp/#editorial-team" },
+      "publisher": { "@id": "https://www.nishinippon-adv.jp/#organization" },
+      "citation": [
+        "https://developers.google.com/search/docs/fundamentals/creating-helpful-content",
+        "https://developers.google.com/search/docs/appearance/title-link",
+        "https://developers.google.com/search/docs/appearance/snippet",
+        "https://developers.google.com/search/docs/monitor-debug/search-console-start"
+      ],
       "mainEntityOfPage": { "@type": "WebPage", "@id": "https://www.nishinippon-adv.jp/blog/seo-eeat-2026.html" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.nishinippon-adv.jp/#organization",
+      "name": "Growth Marketing",
+      "url": "https://www.nishinippon-adv.jp/",
+      "sameAs": [],
+      "publishingPrinciples": "https://www.nishinippon-adv.jp/editorial-policy.html"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.nishinippon-adv.jp/#editorial-team",
+      "name": "Growth Marketing編集部",
+      "url": "https://www.nishinippon-adv.jp/editorial-policy.html",
+      "parentOrganization": { "@id": "https://www.nishinippon-adv.jp/#organization" }
     },
     {
       "@type": "BreadcrumbList",
@@ -52,8 +73,10 @@
       "@id": "https://www.nishinippon-adv.jp/blog/seo-eeat-2026.html#faq",
       "mainEntity": [
         { "@type": "Question", "name": "E-E-A-Tとは何ですか？", "acceptedAnswer": { "@type": "Answer", "text": "Experience、Expertise、Authoritativeness、Trustworthinessの略で、Googleが有用で信頼できるコンテンツを評価する際に参照する考え方です。" } },
-        { "@type": "Question", "name": "E-E-A-Tはランキング要因ですか？", "acceptedAnswer": { "@type": "Answer", "text": "E-E-A-Tそのものが単独のランキング要因ではありませんが、有用性や信頼性を判断する複数のシグナルを整理するうえで重要です。" } },
-        { "@type": "Question", "name": "まず何から改善すべきですか？", "acceptedAnswer": { "@type": "Answer", "text": "著者・監修・出典・更新日の明記から始め、次に一次情報や実務経験に基づく独自分析を増やします。" } }
+        { "@type": "Question", "name": "E-E-A-Tはランキング要因ですか？", "acceptedAnswer": { "@type": "Answer", "text": "Googleの公式説明では、E-E-A-Tそのものを単独のランキング要因とは説明していません。信頼性や有用性を判断するための考え方として捉えるのが安全です。" } },
+        { "@type": "Question", "name": "まず何から改善すべきですか？", "acceptedAnswer": { "@type": "Answer", "text": "著者・監修・出典・更新日の明記から始め、次に一次情報や実務経験に基づく独自分析を増やします。" } },
+        { "@type": "Question", "name": "著者情報を追加すれば十分ですか？", "acceptedAnswer": { "@type": "Answer", "text": "著者情報だけでは不十分です。本文の具体性、公式出典、実務経験、更新履歴、運営者情報と組み合わせる必要があります。" } },
+        { "@type": "Question", "name": "監修者は必ず必要ですか？", "acceptedAnswer": { "@type": "Answer", "text": "すべての記事で必須ではありません。ただし健康、金融、法律など読者の生活に大きく影響するテーマでは専門家の監修や出典の明示が重要です。" } }
       ]
     }
   ]
@@ -105,6 +128,8 @@
 <div class="wrap article-body">
   <div class="toc">
     <h4>目次</h4>
+    <a href="#author-profile">著者・編集方針</a>
+    <a href="#source-history">参照情報・更新履歴</a>
     <a href="#what-is-eeat">E-E-A-Tとは？SEOで重要な4要素</a>
     <a href="#title-and-intent">検索意図に合うタイトル・見出しの作り方</a>
     <a href="#author-and-source">著者情報・監修・出典で信頼性を高める手順</a>
@@ -117,6 +142,24 @@
   </div>
 
 <p><strong>E-E-A-Tとは、Experience（経験）・Expertise（専門性）・Authoritativeness（権威性）・Trustworthiness（信頼性）を示す考え方です。</strong>SEOで「E-E-A-T 高め方」を調べる人の多くは、著者名を置くだけでよいのか、監修者が必要なのか、何を改善すれば検索評価につながるのかで迷っています。結論から言うと、E-E-A-Tは飾りではなく、検索意図に答える本文、根拠、運営者情報、更新運用を一貫させる編集設計です。</p>
+
+  <div class="author-box" id="author-profile">
+    <h2>著者・編集方針</h2>
+    <p><strong>著者：Growth Marketing編集部</strong></p>
+    <p>SNS運用、広告運用、コンテンツSEOの改善支援で使う確認項目をもとに、検索意図、公式情報、内部導線、CVへのつながりを整理して記事を制作しています。記事制作時の情報源・検証・更新方針は<a href="../editorial-policy.html">編集方針ページ</a>にまとめています。</p>
+  </div>
+
+  <div class="source-history" id="source-history">
+    <h2>参照情報・更新履歴</h2>
+    <table>
+      <thead><tr><th>項目</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td>公式情報の参照日</td><td>2026年6月11日</td></tr>
+        <tr><td>主な参照元</td><td>Google Search Central の Helpful Content、Title links、Meta descriptions、Search Console 関連ドキュメント</td></tr>
+        <tr><td>更新履歴</td><td>2026年6月11日：記事公開。公式情報の参照日、著者プロフィール、更新履歴、E-E-A-T改善チェックリストを追加。</td></tr>
+      </tbody>
+    </table>
+  </div>
 
   <div class="key-takeaways">
     <h2>重要ポイント</h2>
@@ -131,7 +174,7 @@
 
   <div class="expertise-note">
     <h2>編集・検証方針</h2>
-<p>この記事は、Google Search Centralの公式情報、SEOで確認すべきページ要素、コンテンツ改善の実務チェック項目をもとに、Growth Marketing編集部が実務者向けに整理しています。</p>
+<p>この記事は、Google Search Centralの公式情報、SEOで確認すべきページ要素、コンテンツ改善の実務チェック項目をもとに、Growth Marketing編集部が実務者向けに整理しています。制作時の確認基準は<a href="../editorial-policy.html">編集方針</a>に基づきます。</p>
   </div>
 
   <div class="original-insights">
@@ -145,7 +188,7 @@
   </div>
 
   <h2 id="what-is-eeat">E-E-A-Tとは？SEOで重要な4要素</h2>
-<p>Googleは、有用で信頼できる情報を検索結果で優先するために、経験・専門性・権威性・信頼性という観点を説明しています。公式ドキュメントでも、E-E-A-Tそのものが単独のランキング要因というより、良いコンテンツを評価するための複数のシグナルを整理する考え方として扱われています。特に信頼性は中心にあり、経験・専門性・権威性は信頼を補強する要素です。</p>
+<p>Googleは、有用で信頼できる情報を検索結果で優先するために、経験・専門性・権威性・信頼性という観点を説明しています。公式ドキュメントでは、E-E-A-Tそのものを「これだけで順位が決まる単独のランキング要因」とは説明していません。検索システムが有用性や信頼性を判断するうえで、ページやサイトが示すべき品質の考え方として捉えるのが慎重です。特に信頼性は中心にあり、経験・専門性・権威性は信頼を補強する要素です。</p>
 <table><thead><tr><th>要素</th><th>ページで示すもの</th><th>改善例</th></tr></thead><tbody><tr><td>Experience</td><td>実体験・運用経験・検証プロセス</td><td>実務ケース、設定手順、失敗例を書く</td></tr><tr><td>Expertise</td><td>専門知識と判断基準</td><td>著者・監修者、専門用語の説明、評価基準を明記</td></tr><tr><td>Authoritativeness</td><td>サイトや著者が領域で信頼される根拠</td><td>実績ページ、関連コンテンツ、外部からの言及</td></tr><tr><td>Trustworthiness</td><td>情報の正確性・透明性・安全性</td><td>公式出典、更新日、運営者情報、問い合わせ導線</td></tr></tbody></table>
 <p>Googleの「有用で信頼できる、人を第一にしたコンテンツ」のガイドでは、独自情報や深い分析、明確な出典、専門性の提示、読後に目的を達成できるかが自己点検項目として示されています。詳しくは<a href="https://developers.google.com/search/docs/fundamentals/creating-helpful-content" target="_blank" rel="noopener">Google Search CentralのHelpful Contentガイド</a>を確認してください。</p>
 
@@ -172,6 +215,7 @@
 
   <h2 id="checklist">E-E-A-T改善チェックリスト</h2>
 <p>公開前後の確認項目を、編集・技術・運用に分けて点検しましょう。</p>
+<table><thead><tr><th>優先度</th><th>対象ページ</th><th>確認ツール</th><th>確認項目</th></tr></thead><tbody><tr><td>高</td><td>問い合わせに近いキーワードの記事</td><td>Search Console</td><td>表示回数、CTR、平均掲載順位、検索クエリとH1の一致</td></tr><tr><td>高</td><td>YMYLに近い記事</td><td>本文・公式出典</td><td>著者/監修範囲、参照日、公式リンク、免責や注意点</td></tr><tr><td>中</td><td>順位11〜20位の記事</td><td>Search Console / GA4</td><td>導入、比較表、FAQ、内部リンク、CTA位置</td></tr><tr><td>中</td><td>古い仕様を含む記事</td><td>公式ヘルプ / 管理画面</td><td>名称変更、機能変更、更新履歴、参照日</td></tr><tr><td>低</td><td>流入が少ない補助記事</td><td>サイト内検索・内部リンク</td><td>関連ページへの導線、カテゴリ内の孤立ページ</td></tr></tbody></table>
 <ul><li>☐ H1とtitleが検索意図を具体的に表している</li><li>☐ 導入200字以内に定義と結論がある</li><li>☐ 著者、編集部、監修者の役割が明記されている</li><li>☐ 重要な主張の近くに公式出典がある</li><li>☐ 実務ケース、失敗例、判断基準が本文に含まれている</li><li>☐ 関連記事やサービスページへの内部リンクが自然に入っている</li><li>☐ 更新日だけでなく、更新内容を管理できる</li><li>☐ Search Consoleで改善対象ページを定期的に確認している</li></ul>
 <p>「どの記事から直せばよいか分からない」場合は、表示回数が多いのにCTRが低い記事、順位が11〜20位で止まっている記事、問い合わせに近いキーワードを持つ記事から着手すると効果を見やすくなります。SEO記事の構成から見直したい場合は、<a href="seo-content-design.html">検索意図から逆算するSEOコンテンツ設計</a>も参考にしてください。</p>
 
@@ -180,12 +224,14 @@
 <p>前提は、サービス説明記事はあるものの、著者情報と事例導線が弱く問い合わせにつながっていない状態です。推奨設計は、導入で課題を明確にし、本文中に比較表・導入判断・よくある失敗を入れ、関連記事からサービスページと実績ページへつなげることです。見るべきKPIは自然検索流入、サービスページ遷移率、問い合わせ完了率です。失敗しやすい点は、専門性を出そうとして難解な言葉を増やし、読者の判断を助けない記事になることです。</p>
   <h3>ケース2：メディア記事の信頼性を底上げする</h3>
 <p>前提は、記事本数は多いが、誰がどの根拠で書いたかが分かりにくい状態です。推奨設計は、記事テンプレートに編集・検証方針、出典欄、更新内容、監修範囲を入れることです。見るべきKPIはインデックス状況、CTR、平均掲載順位、再訪率です。失敗しやすい点は、監修者名だけを追加して本文の根拠や独自分析を増やさないことです。</p>
+  <h3>ケース3：公開可能な実績データがある場合</h3>
+<p>前提は、Search ConsoleやGA4で公開可能な改善データを持っている状態です。この場合は「公開前後の期間」「対象URL」「変更内容」「CTR・順位・CV導線の変化」を表で示すと、経験と信頼性が伝わります。ただし、比較期間や母数が不明な改善率は誤解を招きます。Growth Marketingでは、確認できない改善率を断定せず、数値を出す場合は計測条件と対象ページをセットで示します。</p>
 
   <h2 id="faq">よくある質問</h2>
   <h3>E-E-A-Tとは何ですか？</h3>
 <p>E-E-A-Tとは、経験・専門性・権威性・信頼性を表す考え方です。SEOでは、読者が安心して判断できる情報を提供できているかを確認する品質設計として使います。</p>
   <h3>E-E-A-Tはランキング要因ですか？</h3>
-<p>E-E-A-T自体が単独のランキング要因ではありません。ただし、Googleは有用で信頼できる情報を評価する複数のシグナルを使っており、E-E-A-Tはその品質を整理するうえで重要です。</p>
+<p>Googleの公式説明では、E-E-A-Tそのものを単独のランキング要因とは説明していません。ただし、有用で信頼できる情報を判断するための考え方として示されているため、記事制作では信頼性・専門性・経験を読者に分かる形で表現することが重要です。</p>
   <h3>著者情報を追加すれば十分ですか？</h3>
 <p>著者情報だけでは不十分です。本文の具体性、公式出典、実務経験、更新履歴、運営者情報と組み合わせて初めて信頼性が伝わります。</p>
   <h3>監修者は必ず必要ですか？</h3>
@@ -232,7 +278,7 @@
         <p>SNS運用と広告運用で、ブランドの成長を成果から逆算するデジタルマーケティング代行会社です。</p>
       </div>
       <div class="footer-col"><h5>サービス</h5><a href="../index.html#services">SNS運用代行</a><a href="../index.html#services">広告運用代行</a><a href="../index.html#services">コンテンツ・SEO</a></div>
-      <div class="footer-col"><h5>コンテンツ</h5><a href="index.html">ブログ</a><a href="../index.html#works">実績</a><a href="../index.html#process">プロセス</a></div>
+      <div class="footer-col"><h5>コンテンツ</h5><a href="index.html">ブログ</a><a href="../editorial-policy.html">編集方針</a><a href="../index.html#works">実績</a><a href="../index.html#process">プロセス</a></div>
       <div class="footer-col"><h5>会社情報</h5><a href="../contact.html">無料相談</a><a href="../contact.html">お問い合わせ</a></div>
     </div>
     <div class="footer-bottom">

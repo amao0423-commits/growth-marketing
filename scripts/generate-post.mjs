@@ -301,6 +301,7 @@ const ARTICLE_SCHEMA = {
     h1: { type: 'string' },
     cardDescription: { type: 'string' },
     readMinutes: { type: 'integer' },
+    authorProfileHtml: { type: 'string' },
     keyTakeaways: { type: 'array', items: { type: 'string' } },
     expertiseNoteHtml: { type: 'string' },
     originalInsights: { type: 'array', items: { type: 'string' } },
@@ -322,6 +323,22 @@ const ARTICLE_SCHEMA = {
       },
     },
     conclusionHtml: { type: 'string' },
+    updateHistory: {
+      type: 'array',
+      items: {
+        type: 'object', additionalProperties: false,
+        properties: { date: { type: 'string' }, detail: { type: 'string' } },
+        required: ['date', 'detail'],
+      },
+    },
+    referencesUsed: {
+      type: 'array',
+      items: {
+        type: 'object', additionalProperties: false,
+        properties: { label: { type: 'string' }, url: { type: 'string' }, accessedDate: { type: 'string' } },
+        required: ['label', 'url', 'accessedDate'],
+      },
+    },
     faq: {
       type: 'array',
       items: {
@@ -335,8 +352,8 @@ const ARTICLE_SCHEMA = {
     relatedSlugs: { type: 'array', items: { type: 'string' } },
   },
   required: ['metaTitle', 'metaDescription', 'keywords', 'searchIntent', 'h1', 'cardDescription', 'readMinutes',
-    'keyTakeaways', 'expertiseNoteHtml', 'originalInsights', 'practicalExamples', 'leadParagraphHtml', 'sections',
-    'conclusionHtml', 'faq', 'cocomarkeLinksUsed', 'backlinksUsed', 'relatedSlugs'],
+    'authorProfileHtml', 'keyTakeaways', 'expertiseNoteHtml', 'originalInsights', 'practicalExamples', 'leadParagraphHtml', 'sections',
+    'conclusionHtml', 'updateHistory', 'referencesUsed', 'faq', 'cocomarkeLinksUsed', 'backlinksUsed', 'relatedSlugs'],
 };
 
 // --- Step B: 構造化出力で記事を生成 ---
@@ -400,13 +417,16 @@ ${gmList}
 記事は以下の順で構成してください。
 
 1. 導入 leadParagraphHtml
-2. 重要ポイント keyTakeaways 4〜5個
-3. 編集・検証方針 expertiseNoteHtml
-4. 独自視点 originalInsights 3〜5個
-5. 実務ケース practicalExamples 2〜3個
-6. 本文セクション sections 6〜8個
-7. FAQ faq 5〜8個
-8. まとめ conclusionHtml
+2. 著者プロフィール authorProfileHtml
+3. 重要ポイント keyTakeaways 4〜5個
+4. 編集・検証方針 expertiseNoteHtml
+5. 独自視点 originalInsights 3〜5個
+6. 実務ケース practicalExamples 2〜3個
+7. 本文セクション sections 6〜8個
+8. 更新履歴 updateHistory
+9. 参照資料 referencesUsed
+10. FAQ faq 5〜8個
+11. まとめ conclusionHtml
 
 # 導入 leadParagraphHtml の必須条件
 
@@ -433,6 +453,18 @@ keyTakeaways は4〜5個にしてください。
 - 具体的な改善方法
 - 注意点
 - 次に取るべき行動
+
+# authorProfileHtml の必須条件
+
+authorProfileHtml は記事上部に表示する著者プロフィールです。
+必ず以下を含めてください。
+
+- 著者名は「Growth Marketing編集部」
+- SNS運用・広告運用・コンテンツSEOの記事を制作している編集部であること
+- 記事制作時に公式情報、管理画面で確認すべき項目、KPI、内部導線を確認すること
+- 編集方針ページへのリンク: <a href="../editorial-policy.html">編集方針</a>
+
+実名の監修者、広告運用額、改善率、実案件実績は、確認可能な根拠がない限り書かないでください。
 
 # sections の必須条件
 
@@ -493,6 +525,17 @@ practicalExamples は2〜3個作成してください。
 - 推奨する設計
 - 見るべきKPI
 - 失敗しやすい点
+
+公開可能な実績データがある場合のみ、数値事例を入れてください。
+数値を入れる場合は、必ず以下をセットで書いてください。
+- 対象ページまたは対象施策
+- 比較期間
+- 変更内容
+- 指標名（CTR、CVR、CPA、ROAS、問い合わせ率など）
+- 母数や注意点
+
+公開可能な実績データがない場合は、改善率を捏造せず、
+「数値を入れるならこのKPIを見る」という測定テンプレートとして書いてください。
 
 # originalInsights の条件
 
@@ -561,6 +604,7 @@ FAQは5〜8問作成してください。
 
 expertiseNoteHtml に、記事上部で表示できる編集・検証方針を書いてください。
 80〜180字程度で、読者に専門性と信頼性が伝わる内容にしてください。
+必ず <a href="../editorial-policy.html">編集方針</a> へのリンクを自然に含めてください。
 
 例:
 「この記事は、公式情報・管理画面で確認すべき設定項目・広告運用で見るべきKPIをもとに、Growth Marketing編集部が実務者向けに整理しています。」
@@ -571,12 +615,24 @@ expertiseNoteHtml に、記事上部で表示できる編集・検証方針を�
 - 「実案件で改善しました」のような断定は、根拠データがない限り禁止です
 - 代わりに「実務で確認すべき観点」「よくある相談パターン」「仮想ケース」として独自性を出してください
 
+# 更新履歴と参照資料の条件
+
+updateHistory は1件以上作成してください。
+初回公開時は「YYYY年M月D日：記事公開。公式情報を確認し、実務チェックリストとFAQを追加。」のように書いてください。
+
+referencesUsed は2〜5件作成してください。
+本文で使った公式出典URLのみを入れてください。
+accessedDate は記事公開日と同じ日付にしてください。
+本文中の公式リンク付近にも「参照日: YYYY年M月D日」を自然に入れてください。
+
 # 出典・数値の扱い
 
 - 公式が公表していない数値を断定しない
 - 業界目安や経験則は「目安」「経験則」「自社で検証する前提」と表現する
 - 公式出典の要約だけで終わらせず、実務上どう解釈すべきかを書く
 - 2026年時点の最新動向として書くが、将来の不確かな仕様変更は断定しない
+- 「◯%改善」「運用額◯万円」などの実績数値は、確認可能な根拠がある場合だけ使う
+- Google公式の見解は断定しすぎず、「公式説明では〜とされている」「〜として捉えるのが安全」のように慎重に表現する
 
 # Helpful Content条件
 
@@ -601,8 +657,11 @@ GoogleのHelpful Contentの考え方に沿い、検索順位だけを狙う文�
 - 主要キーワードがmetaTitleの前方にある
 - metaTitleが抽象的すぎず、「とは」「設定方法」「改善」「変更点」「手順」「原因」「比較」「注意点」など検索されやすい語を自然に含む
 - expertiseNoteHtmlで編集・検証方針が明記されている
+- authorProfileHtmlでGrowth Marketing編集部の担当領域と編集方針ページへのリンクが示されている
 - originalInsightsが3〜5個ある
 - practicalExamplesが2〜3個あり、業種別・相談パターン・仮想ケースとして実務判断を補っている
+- updateHistoryが1件以上ある
+- referencesUsedが2件以上あり、本文の公式リンクと対応している
 - searchIntentが1文で明確
 - sectionsが6〜8個ある
 - 比較表が1つ以上ある
@@ -638,6 +697,7 @@ async function qualityGate(article, cocomarke, sourceLinks, idea) {
   const issues = [];
   const fullBody = [
     article.leadParagraphHtml,
+    article.authorProfileHtml,
     article.expertiseNoteHtml,
     ...(article.originalInsights || []),
     ...(article.practicalExamples || []).map((e) => e.html),
@@ -663,17 +723,29 @@ async function qualityGate(article, cocomarke, sourceLinks, idea) {
   if (!Array.isArray(article.keyTakeaways) || article.keyTakeaways.length < 3) {
     issues.push('keyTakeaways が不足しています。3個以上にしてください。');
   }
+  if (!article.authorProfileHtml || !article.authorProfileHtml.includes('../editorial-policy.html')) {
+    issues.push('authorProfileHtml にGrowth Marketing編集部の説明と編集方針ページへのリンクを含めてください。');
+  }
   if (!Array.isArray(article.faq) || article.faq.length < 2) {
     issues.push('FAQ が不足しています。2個以上にしてください。');
   }
   if (!article.expertiseNoteHtml || stripTags(article.expertiseNoteHtml).length < 50) {
     issues.push('expertiseNoteHtml が不足しています。編集・検証方針を50字以上で明記してください。');
   }
+  if (!article.expertiseNoteHtml.includes('../editorial-policy.html')) {
+    issues.push('expertiseNoteHtml に編集方針ページへのリンクを含めてください。');
+  }
   if (!Array.isArray(article.originalInsights) || article.originalInsights.length < 3) {
     issues.push('originalInsights が不足しています。独自視点を3個以上にしてください。');
   }
   if (!Array.isArray(article.practicalExamples) || article.practicalExamples.length < 2) {
     issues.push('practicalExamples が不足しています。実務ケースを2個以上にしてください。');
+  }
+  if (!Array.isArray(article.updateHistory) || article.updateHistory.length < 1) {
+    issues.push('updateHistory が不足しています。更新履歴を1件以上にしてください。');
+  }
+  if (!Array.isArray(article.referencesUsed) || article.referencesUsed.length < 2) {
+    issues.push('referencesUsed が不足しています。公式参照資料を2件以上にしてください。');
   }
   if (!/<table[\s>]/i.test(fullBody)) issues.push('比較表または原因別表がありません。tableを1つ以上入れてください。');
   if (!/チェックリスト|確認項目|☐|□/.test(stripTags(fullBody))) {
@@ -695,8 +767,10 @@ async function qualityGate(article, cocomarke, sourceLinks, idea) {
   const nonAuth = ext.filter((h) => !isAuthoritative(h));
   const allowedSources = new Set(sourceLinks);
   const inventedSources = auth.filter((h) => !allowedSources.has(h));
+  const invalidReferences = (article.referencesUsed || []).map((r) => r.url).filter((u) => !allowedSources.has(u));
   if (nonAuth.length) issues.push(`許可外ドメインへの外部リンクがあります: ${nonAuth.join(', ')}。権威ドメインのみにしてください。`);
   if (inventedSources.length) issues.push(`使用可能な公式出典URLリスト外のリンクがあります: ${inventedSources.join(', ')}。提示URLのみ使ってください。`);
+  if (invalidReferences.length) issues.push(`referencesUsed に使用可能な公式出典URLリスト外のURLがあります: ${invalidReferences.join(', ')}。`);
   if (auth.length < 2) issues.push('公式出典リンクが不足しています（最低2本）。');
 
   // 外部リンクの死活チェック（公式出典はbot拒否を許容、cocomarkeは厳格に200）
@@ -742,6 +816,7 @@ async function main() {
     // 外部リンクに rel/target を付与
     for (const s of draft.sections) s.html = enforceExternalAttrs(s.html);
     draft.leadParagraphHtml = enforceExternalAttrs(draft.leadParagraphHtml);
+    draft.authorProfileHtml = enforceExternalAttrs(draft.authorProfileHtml);
     draft.expertiseNoteHtml = enforceExternalAttrs(draft.expertiseNoteHtml);
     for (const e of draft.practicalExamples || []) e.html = enforceExternalAttrs(e.html);
     draft.conclusionHtml = enforceExternalAttrs(draft.conclusionHtml);
