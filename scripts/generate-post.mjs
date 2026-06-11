@@ -5,18 +5,18 @@
 // 認証/課金: Claude Code のサブスク（Maxプラン）で実行する。
 //   CLAUDE_CODE_OAUTH_TOKEN を環境に設定し、内部で `claude -p`（ヘッドレス）を呼び出す。
 //   API従量課金（ANTHROPIC_API_KEY）は使わない。CLI: npm i -g @anthropic-ai/claude-code
-// 任意: POST_MODEL（未指定ならClaude Code既定モデル）, MAX_RETRIES（既定 4）, CLAUDE_BIN（既定 claude）
+// 任意: POST_MODEL（未指定なら claude-sonnet-4-6）, MAX_RETRIES（既定 4）, CLAUDE_BIN（既定 claude）
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execFile } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fetchCocomarkeArticles, isLinkAlive } from './lib/cocomarke.mjs';
 import { articlePage, indexCard, CATEGORIES, BASE_URL } from './lib/render.mjs';
 
 const execFileP = promisify(execFile);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const MODEL = process.env.POST_MODEL || '';            // 空ならClaude Codeの既定モデル
+const MODEL = process.env.POST_MODEL || 'claude-sonnet-4-6';  // 既定はsonnet(高速・低コスト)。POST_MODELで上書き可
 const CLAUDE_BIN = process.env.CLAUDE_BIN || 'claude';
 const MAX_RETRIES = Number(process.env.MAX_RETRIES || 4);
 const MIN_TEXT_CHARS = Number(process.env.MIN_TEXT_CHARS || 3000);
@@ -67,27 +67,36 @@ const FALLBACK_SOURCE_URLS = {
   ],
 };
 
+// claude を spawn で実行。stdin は /dev/null('ignore') にして標準入力待ち/ハングを防ぐ。
+function runClaude(args, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(CLAUDE_BIN, args, { stdio: ['ignore', 'pipe', 'pipe'], env: process.env });
+    let out = '', err = '', timedOut = false;
+    const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, timeoutMs);
+    child.stdout.on('data', (d) => { out += d; });
+    child.stderr.on('data', (d) => { err += d; });
+    child.on('error', (e) => { clearTimeout(timer); reject(e); });
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      if (timedOut) return reject(new Error(`claude タイムアウト (${Math.round(timeoutMs / 1000)}s)。stderr: ${err.slice(0, 300)}`));
+      resolve({ stdout: out, stderr: err, code });
+    });
+  });
+}
+
 // Claude Code をヘッドレス(`claude -p`)で呼び出し、最終テキストを返す（サブスク課金）。
 // opts.webTools=true のとき WebSearch / WebFetch を許可する。
 async function claudeText(prompt, opts = {}) {
   const args = ['-p', prompt, '--output-format', 'json'];
   if (MODEL) args.push('--model', MODEL);
   if (opts.webTools) args.push('--allowedTools', 'WebSearch,WebFetch');
-  let stdout = '';
-  try {
-    const r = await execFileP(CLAUDE_BIN, args, {
-      maxBuffer: 64 * 1024 * 1024,
-      timeout: 12 * 60 * 1000,
-      env: process.env,
-    });
-    stdout = r.stdout;
-  } catch (e) {
-    // claudeが非ゼロ終了。stderr / stdout(JSONエラー封筒) から実エラーを取り出して可視化する。
-    const out = String(e.stdout || '');
-    let detail = String(e.stderr || '').trim();
-    try { const env = JSON.parse(out); if (env?.result) detail = String(env.result); } catch { /* noop */ }
-    if (!detail) detail = out.trim() || e.message;
-    throw new Error(`claude -p 失敗 (exit ${e.code ?? '?'}): ${detail.slice(0, 600)}`);
+  const timeoutMs = (opts.webTools ? 12 : 8) * 60 * 1000;
+  const { stdout, stderr, code } = await runClaude(args, timeoutMs);
+  if (code !== 0) {
+    let detail = String(stderr || '').trim();
+    try { const env = JSON.parse(stdout); if (env?.result) detail = String(env.result); } catch { /* noop */ }
+    if (!detail) detail = String(stdout || '').trim();
+    throw new Error(`claude -p 失敗 (exit ${code}): ${detail.slice(0, 600)}`);
   }
   let envelope;
   try { envelope = JSON.parse(stdout); } catch { return String(stdout).trim(); }
