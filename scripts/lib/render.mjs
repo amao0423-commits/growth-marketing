@@ -195,7 +195,8 @@ export function articlePage(article, category, related, dates) {
     ],
   };
 
-  const relatedHtml = related.map(relatedCard).join('\n');
+  // 関連記事カードは一覧カードと同一マークアップ（サムネ＋説明文）に統一
+  const relatedHtml = related.map((p) => '      ' + indexCard(p).trim()).join('\n\n');
 
   return `<!DOCTYPE html>
 <html lang="ja">
