@@ -217,6 +217,8 @@ section { position: relative; }
 .trust .t-label { font-size: 0.74rem; letter-spacing: 0.18em; color: var(--ink-faint); text-transform: uppercase; }
 .trust .t-logos { display: flex; gap: 38px; flex-wrap: wrap; opacity: 0.7; }
 .trust .t-logos span { font-family: "Shippori Mincho", serif; font-weight: 700; font-size: 1.05rem; color: var(--ink-soft); }
+.trust .t-item { display: inline-flex; align-items: center; gap: 9px; }
+.trust .t-item svg { width: 22px; height: 22px; flex: none; }
 
 /* =========================================================
    Services
