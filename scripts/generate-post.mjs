@@ -19,6 +19,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MODEL = process.env.POST_MODEL || 'claude-sonnet-4-6';  // 既定はsonnet(高速・低コスト)。POST_MODELで上書き可
 const CLAUDE_BIN = process.env.CLAUDE_BIN || 'claude';
 const MAX_RETRIES = Number(process.env.MAX_RETRIES || 4);
+const ENABLE_RESEARCH = process.env.ENABLE_RESEARCH === '1';  // 既定OFF（高速化）。1で最新Web検索を有効化
 const MIN_TEXT_CHARS = Number(process.env.MIN_TEXT_CHARS || 3000);
 
 // 被リンクを許可する権威ドメイン（一次情報・公式のみ）
@@ -71,7 +72,9 @@ const FALLBACK_SOURCE_URLS = {
 // 書き込み後すぐEOFするので入力待ちでハングしない。
 function runClaude(args, input, timeoutMs) {
   return new Promise((resolve, reject) => {
-    const child = spawn(CLAUDE_BIN, args, { stdio: ['pipe', 'pipe', 'pipe'], env: process.env });
+    // 思考オフ＆補助モデル呼び出しオフで高速化（巨大生成での無言ハングを防ぐ）
+    const env = { ...process.env, MAX_THINKING_TOKENS: process.env.MAX_THINKING_TOKENS ?? '0', DISABLE_NON_ESSENTIAL_MODEL_CALLS: '1' };
+    const child = spawn(CLAUDE_BIN, args, { stdio: ['pipe', 'pipe', 'pipe'], env });
     let out = '', err = '', timedOut = false;
     const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, timeoutMs);
     child.stdout.on('data', (d) => { out += d; });
@@ -92,12 +95,13 @@ function runClaude(args, input, timeoutMs) {
 // プロンプトは標準入力から渡す。opts.webTools=true のとき WebSearch / WebFetch を許可。
 async function claudeText(prompt, opts = {}) {
   // --dangerously-skip-permissions: ヘッドレスでツール許可待ちで停止しないよう許可をスキップ。
+  // --max-turns: エージェントの周回を制限（執筆は1ターン＝純粋生成で高速）。
   const args = ['-p', '--output-format', 'json', '--dangerously-skip-permissions'];
   if (MODEL) args.push('--model', MODEL);
-  // webTools時のみツールを使えるように。執筆時はツール無し＝純粋生成で高速。
+  args.push('--max-turns', String(opts.maxTurns ?? (opts.webTools ? 6 : 1)));
   if (opts.webTools) args.push('--allowedTools', 'WebSearch,WebFetch');
-  // 失敗時に長く待たせないよう、調査8分／執筆5分で打ち切る。
-  const timeoutMs = (opts.webTools ? 8 : 5) * 60 * 1000;
+  // 失敗時に長く待たせないよう、調査8分／執筆4分で打ち切る。
+  const timeoutMs = (opts.webTools ? 8 : 4) * 60 * 1000;
   const { stdout, stderr, code } = await runClaude(args, prompt, timeoutMs);
   if (code !== 0) {
     let detail = String(stderr || '').trim();
@@ -386,7 +390,8 @@ const ARTICLE_SCHEMA = {
 // --- Step B: 構造化出力で記事を生成 ---
 async function writeArticle(idea, catLabel, findings, cocomarke, gmPosts, sourceLinks, feedback) {
   // 入力が大きいと生成が不安定/遅くなるため、調査結果と候補数を抑える
-  const briefFindings = String(findings || '').slice(0, 8000);
+  const briefFindings = String(findings || '').slice(0, 8000)
+    || '（外部調査は省略。2026年時点のベストプラクティスを、あなたの知識から正確かつ具体的に記述してください。最新の固有数値は断定せず「目安」として扱う。）';
   const cocoList = cocomarke.slice(0, 20).map((c) => `- ${c.url} （関連語: ${c.keywords.join('、')}）`).join('\n');
   const gmList = gmPosts.map((p) => `- ${p.slug} ：${p.title}（${p.categoryLabel}）`).join('\n');
   const sourceList = sourceLinks.map((u) => `- ${u}`).join('\n');
@@ -853,8 +858,13 @@ async function main() {
   const cocomarke = pickCocomarkeCandidates(cocomarkeAll, idea);
   console.log(`  cocomarke記事 ${cocomarkeAll.length}件から関連候補 ${cocomarke.length}件を選定`);
 
-  console.log('▶ Web検索で調査中…');
-  const findings = await research(idea, catLabel);
+  let findings = '';
+  if (ENABLE_RESEARCH) {
+    console.log('▶ Web検索で調査中…');
+    findings = await research(idea, catLabel);
+  } else {
+    console.log('▶ 調査スキップ（モデル知識＋カテゴリ公式出典で生成。最新Web検索が必要なら ENABLE_RESEARCH=1）');
+  }
   const sourceLinks = await buildSourceLinks(findings, category);
   if (sourceLinks.length < 2) throw new Error('公式出典URLを2本以上確認できませんでした。調査クエリまたはfallback sourceを見直してください。');
   console.log(`  公式出典URL ${sourceLinks.length}件を確認`);
