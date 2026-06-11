@@ -67,10 +67,11 @@ const FALLBACK_SOURCE_URLS = {
   ],
 };
 
-// claude を spawn で実行。stdin は /dev/null('ignore') にして標準入力待ち/ハングを防ぐ。
-function runClaude(args, timeoutMs) {
+// claude を spawn で実行。プロンプトは「標準入力」から渡し（ヘッドレス推奨形・巨大入力に強い）、
+// 書き込み後すぐEOFするので入力待ちでハングしない。
+function runClaude(args, input, timeoutMs) {
   return new Promise((resolve, reject) => {
-    const child = spawn(CLAUDE_BIN, args, { stdio: ['ignore', 'pipe', 'pipe'], env: process.env });
+    const child = spawn(CLAUDE_BIN, args, { stdio: ['pipe', 'pipe', 'pipe'], env: process.env });
     let out = '', err = '', timedOut = false;
     const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, timeoutMs);
     child.stdout.on('data', (d) => { out += d; });
@@ -81,17 +82,20 @@ function runClaude(args, timeoutMs) {
       if (timedOut) return reject(new Error(`claude タイムアウト (${Math.round(timeoutMs / 1000)}s)。stderr: ${err.slice(0, 300)}`));
       resolve({ stdout: out, stderr: err, code });
     });
+    child.stdin.on('error', () => { /* EPIPE等は無視 */ });
+    child.stdin.write(input);
+    child.stdin.end();
   });
 }
 
 // Claude Code をヘッドレス(`claude -p`)で呼び出し、最終テキストを返す（サブスク課金）。
-// opts.webTools=true のとき WebSearch / WebFetch を許可する。
+// プロンプトは標準入力から渡す。opts.webTools=true のとき WebSearch / WebFetch を許可。
 async function claudeText(prompt, opts = {}) {
-  const args = ['-p', prompt, '--output-format', 'json'];
+  const args = ['-p', '--output-format', 'json'];
   if (MODEL) args.push('--model', MODEL);
   if (opts.webTools) args.push('--allowedTools', 'WebSearch,WebFetch');
-  const timeoutMs = (opts.webTools ? 12 : 8) * 60 * 1000;
-  const { stdout, stderr, code } = await runClaude(args, timeoutMs);
+  const timeoutMs = 12 * 60 * 1000;
+  const { stdout, stderr, code } = await runClaude(args, prompt, timeoutMs);
   if (code !== 0) {
     let detail = String(stderr || '').trim();
     try { const env = JSON.parse(stdout); if (env?.result) detail = String(env.result); } catch { /* noop */ }
@@ -378,7 +382,9 @@ const ARTICLE_SCHEMA = {
 
 // --- Step B: 構造化出力で記事を生成 ---
 async function writeArticle(idea, catLabel, findings, cocomarke, gmPosts, sourceLinks, feedback) {
-  const cocoList = cocomarke.map((c) => `- ${c.url} （関連語: ${c.keywords.join('、')}）`).join('\n');
+  // 入力が大きいと生成が不安定/遅くなるため、調査結果と候補数を抑える
+  const briefFindings = String(findings || '').slice(0, 8000);
+  const cocoList = cocomarke.slice(0, 20).map((c) => `- ${c.url} （関連語: ${c.keywords.join('、')}）`).join('\n');
   const gmList = gmPosts.map((p) => `- ${p.slug} ：${p.title}（${p.categoryLabel}）`).join('\n');
   const sourceList = sourceLinks.map((u) => `- ${u}`).join('\n');
 
@@ -398,7 +404,7 @@ ${idea.primaryKeyword}
 ${catLabel}
 
 # 調査結果（最新トレンド・一次情報）
-${findings}
+${briefFindings}
 
 # 相互リンク候補（cocomarke.com の記事）
 本文の文脈に自然に合うものを1〜3本、自然なアンカーテキストで
