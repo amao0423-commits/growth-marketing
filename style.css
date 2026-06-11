@@ -355,6 +355,12 @@ section { position: relative; }
 .key-takeaways h2 { font-size: 1.2rem; margin: 0 0 14px; }
 .key-takeaways ul { margin-bottom: 0; }
 .key-takeaways li:last-child { margin-bottom: 0; }
+.expertise-note { border: 1px solid var(--line); border-radius: 8px; padding: 22px 24px; margin: 30px 0 34px; background: #fff; }
+.expertise-note h2, .original-insights h2 { font-size: 1.1rem; margin: 0 0 12px; }
+.expertise-note p { margin: 0; font-size: 0.94rem; }
+.original-insights { background: #faf8f4; border-radius: 8px; padding: 24px 26px; margin: 30px 0 40px; }
+.original-insights ul { margin-bottom: 0; }
+.original-insights li:last-child { margin-bottom: 0; }
 .article-body table { width: 100%; border-collapse: collapse; margin: 28px 0; font-size: 0.92rem; }
 .article-body table th, .article-body table td { border: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; }
 .article-body table thead th { background: var(--paper-2); color: var(--ink); font-weight: 700; }

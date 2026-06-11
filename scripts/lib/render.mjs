@@ -93,6 +93,9 @@ export function articlePage(article, category, related, dates) {
   const canonical = `${BASE_URL}/blog/${article.slug}.html`;
   const wordCount = [
     article.leadParagraphHtml,
+    article.expertiseNoteHtml,
+    ...(article.originalInsights || []),
+    ...(article.practicalExamples || []).map((e) => e.html),
     ...article.sections.map((s) => s.html),
     article.conclusionHtml,
     ...(article.faq || []).map((f) => f.answerHtml),
@@ -100,6 +103,7 @@ export function articlePage(article, category, related, dates) {
 
   const toc = article.sections
     .map((s) => `    <a href="#${esc(s.id)}">${esc(s.heading)}</a>`)
+    .concat((article.practicalExamples || []).length ? [`    <a href="#practical-examples">実務ケース別の設計例</a>`] : [])
     .concat((article.faq || []).length ? [`    <a href="#faq">よくある質問</a>`] : [])
     .concat([`    <a href="#conclusion">まとめ</a>`])
     .join('\n');
@@ -107,12 +111,24 @@ export function articlePage(article, category, related, dates) {
   const takeaways = (article.keyTakeaways || []).length
     ? `  <div class="key-takeaways">\n    <h2>重要ポイント</h2>\n    <ul>\n${article.keyTakeaways.map((t) => `      <li>${esc(t)}</li>`).join('\n')}\n    </ul>\n  </div>\n\n`
     : '';
+  const expertiseNote = article.expertiseNoteHtml
+    ? `  <div class="expertise-note">\n    <h2>編集・検証方針</h2>\n${article.expertiseNoteHtml}\n  </div>\n\n`
+    : '';
+  const insights = (article.originalInsights || []).length
+    ? `  <div class="original-insights">\n    <h2>Growth Marketingの実務視点</h2>\n    <ul>\n${article.originalInsights.map((t) => `      <li>${esc(t)}</li>`).join('\n')}\n    </ul>\n  </div>\n\n`
+    : '';
+  const examples = (article.practicalExamples || []).length
+    ? `  <h2 id="practical-examples">実務ケース別の設計例</h2>\n${article.practicalExamples.map((e) => `  <h3>${esc(e.title)}</h3>\n${e.html}`).join('\n\n')}\n\n`
+    : '';
   const faqHtml = (article.faq || []).length
     ? `\n\n  <h2 id="faq">よくある質問</h2>\n${article.faq.map((f) => `  <h3>${esc(f.question)}</h3>\n${f.answerHtml}`).join('\n\n')}`
     : '';
   const body = article.leadParagraphHtml + '\n\n'
     + takeaways
+    + expertiseNote
+    + insights
     + article.sections.map((s) => `  <h2 id="${esc(s.id)}">${esc(s.heading)}</h2>\n${s.html}`).join('\n\n')
+    + '\n\n' + examples
     + faqHtml
     + `\n\n  <h2 id="conclusion">まとめ</h2>\n${article.conclusionHtml}`;
 

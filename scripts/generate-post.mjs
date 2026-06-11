@@ -175,6 +175,14 @@ function keywordCovered(primaryKeyword, ...texts) {
   return terms.length > 0 && terms.every((term) => haystack.includes(term));
 }
 
+function stripTags(html) {
+  return String(html || '').replace(/<[^>]+>/g, '').replace(/\s+/g, '');
+}
+
+function titleHasSearchIntent(title) {
+  return /とは|設定|方法|手順|改善|変更|原因|比較|注意|目安|やり方|違い|攻略|事例/.test(title || '');
+}
+
 // 外部の絶対URLリンクに target/rel を付与（無ければ）
 function enforceExternalAttrs(html) {
   return html.replace(/<a\s+href="(https?:\/\/[^"]+)"([^>]*)>/g, (full, href, rest) => {
@@ -250,12 +258,24 @@ Growth Marketingの記事で差別化できる切り口を3〜5個挙げてく�
 - 失敗例
 - CTAやCVへのつなげ方
 - 企業アカウント運用での注意点
+- 管理画面で確認すべき設定項目
+- 業種別の設計例
+- 導入前後で見るべき評価指標
 
-5. FAQ候補
+5. 競合記事との差分
+検索上位記事にありがちな不足を3〜5個挙げてください。
+次の観点を必ず確認してください。
+- タイトルに検索語が十分入っているか
+- 設定手順が管理画面レベルまで具体的か
+- 実務例・業種別例があるか
+- 監修者・編集方針・更新日・出典が明記されているか
+- 古い仕様や名称変更への対応があるか
+
+6. FAQ候補
 自然検索されやすい質問を6〜10個挙げてください。
 質問は「とは」「違い」「原因」「やり方」「目安」「注意点」「できない場合」を優先してください。
 
-6. 引用・出典に使える公式/一次情報URL
+7. 引用・出典に使える公式/一次情報URL
 Google検索セントラル、Meta/Instagram、TikTok、総務省など公式情報のみを挙げてください。
 各URLについて、次を1行で整理してください。
 - URL
@@ -282,6 +302,16 @@ const ARTICLE_SCHEMA = {
     cardDescription: { type: 'string' },
     readMinutes: { type: 'integer' },
     keyTakeaways: { type: 'array', items: { type: 'string' } },
+    expertiseNoteHtml: { type: 'string' },
+    originalInsights: { type: 'array', items: { type: 'string' } },
+    practicalExamples: {
+      type: 'array',
+      items: {
+        type: 'object', additionalProperties: false,
+        properties: { title: { type: 'string' }, html: { type: 'string' } },
+        required: ['title', 'html'],
+      },
+    },
     leadParagraphHtml: { type: 'string' },
     sections: {
       type: 'array',
@@ -305,7 +335,8 @@ const ARTICLE_SCHEMA = {
     relatedSlugs: { type: 'array', items: { type: 'string' } },
   },
   required: ['metaTitle', 'metaDescription', 'keywords', 'searchIntent', 'h1', 'cardDescription', 'readMinutes',
-    'keyTakeaways', 'leadParagraphHtml', 'sections', 'conclusionHtml', 'faq', 'cocomarkeLinksUsed', 'backlinksUsed', 'relatedSlugs'],
+    'keyTakeaways', 'expertiseNoteHtml', 'originalInsights', 'practicalExamples', 'leadParagraphHtml', 'sections',
+    'conclusionHtml', 'faq', 'cocomarkeLinksUsed', 'backlinksUsed', 'relatedSlugs'],
 };
 
 // --- Step B: 構造化出力で記事を生成 ---
@@ -356,7 +387,10 @@ ${gmList}
 - 本文合計はおおむね3500〜5000字
 - 薄い一般論ではなく、判断基準・手順・失敗例・改善指標まで具体化する
 - searchIntent には、読者が解決したい課題を1文で要約する
-- metaTitle は28〜36字目安で、主要キーワードを前方に入れる
+- metaTitle は32〜55字目安で、主要キーワードを前方に入れる
+- metaTitle は抽象タイトルにしない。検索需要がある語を2〜4個自然に含める
+  例: 「とは」「設定方法」「改善」「変更点」「手順」「原因」「比較」「注意点」
+- h1 はmetaTitleと近い検索語を含めつつ、読者の課題解決が分かるタイトルにする
 - metaDescription は110〜130字で、主要キーワード・読者の悩み・記事で分かることを自然に含める
 - keywords は5語前後
 - cardDescription は一覧カード用に60字前後
@@ -367,9 +401,12 @@ ${gmList}
 
 1. 導入 leadParagraphHtml
 2. 重要ポイント keyTakeaways 4〜5個
-3. 本文セクション sections 6〜8個
-4. FAQ faq 5〜8個
-5. まとめ conclusionHtml
+3. 編集・検証方針 expertiseNoteHtml
+4. 独自視点 originalInsights 3〜5個
+5. 実務ケース practicalExamples 2〜3個
+6. 本文セクション sections 6〜8個
+7. FAQ faq 5〜8個
+8. まとめ conclusionHtml
 
 # 導入 leadParagraphHtml の必須条件
 
@@ -430,6 +467,42 @@ h1/h2タグ、style属性、画像タグは使わないでください。
 8. 改善指標・KPIの見方
 9. Growth Marketingとしての実務的な解釈
 10. 自然なCTA
+11. 競合記事に不足しがちな独自の補足
+
+# 管理画面・操作手順の条件
+
+広告運用、SNS運用、SEOツール、分析ツール、管理画面を伴うテーマでは、
+必ず「管理画面で確認する順番」または「設定画面で見る項目」を1セクションに入れてください。
+
+画像やスクリーンショットは使えないため、存在しないキャプチャをあるように書かないでください。
+代わりに、以下を文章・表・チェックリストで具体化してください。
+
+- どの画面やメニューを見るか
+- どの設定項目を確認するか
+- 初期設定で間違えやすい項目
+- 変更後にどの指標を見るか
+- 変更してはいけないタイミング
+
+# practicalExamples の条件
+
+practicalExamples は2〜3個作成してください。
+実案件の実績を捏造せず、「業種別の設計例」「よくある相談パターン」「仮想ケース」として書いてください。
+
+各 practicalExamples.html では、以下を含めてください。
+- 前提条件
+- 推奨する設計
+- 見るべきKPI
+- 失敗しやすい点
+
+# originalInsights の条件
+
+originalInsights は3〜5個作成してください。
+競合記事の要約ではなく、Growth Marketingとしての実務的な解釈・判断軸にしてください。
+
+例:
+- 自動化機能は「放置」ではなく、人間が設計すべき変数を減らす仕組みとして扱う
+- ROASだけでなく、計測の健全性・学習進捗・クリエイティブ寿命を同時に見る
+- 名称変更や仕様変更があるテーマでは、古い運用手順をそのまま使わない
 
 # 比較表の条件
 
@@ -486,12 +559,17 @@ FAQは5〜8問作成してください。
 
 # E-E-A-T条件
 
-本文内またはまとめ付近に、必要に応じてGrowth Marketingの編集方針を自然に入れてください。
+expertiseNoteHtml に、記事上部で表示できる編集・検証方針を書いてください。
+80〜180字程度で、読者に専門性と信頼性が伝わる内容にしてください。
 
 例:
-「Growth Marketingでは、単発の再生数ではなく、視聴維持率・保存率・問い合わせ導線まで含めてSNS運用を設計します。」
+「この記事は、公式情報・管理画面で確認すべき設定項目・広告運用で見るべきKPIをもとに、Growth Marketing編集部が実務者向けに整理しています。」
 
-ただし、実績や事例を捏造しないでください。
+重要:
+- 監修者名、広告運用額、改善率、実案件実績を捏造しないでください
+- 事実として確認できない実績は書かないでください
+- 「実案件で改善しました」のような断定は、根拠データがない限り禁止です
+- 代わりに「実務で確認すべき観点」「よくある相談パターン」「仮想ケース」として独自性を出してください
 
 # 出典・数値の扱い
 
@@ -521,10 +599,15 @@ GoogleのHelpful Contentの考え方に沿い、検索順位だけを狙う文�
 - 冒頭200字以内に自然な定義文がある
 - 導入で結論が先に示されている
 - 主要キーワードがmetaTitleの前方にある
+- metaTitleが抽象的すぎず、「とは」「設定方法」「改善」「変更点」「手順」「原因」「比較」「注意点」など検索されやすい語を自然に含む
+- expertiseNoteHtmlで編集・検証方針が明記されている
+- originalInsightsが3〜5個ある
+- practicalExamplesが2〜3個あり、業種別・相談パターン・仮想ケースとして実務判断を補っている
 - searchIntentが1文で明確
 - sectionsが6〜8個ある
 - 比較表が1つ以上ある
 - チェックリストが1つ以上ある
+- 管理画面やツールを伴うテーマでは、設定画面で見る項目・確認順・変更後のKPIが具体的に書かれている
 - 原因別またはケース別の改善策がある
 - よくある失敗例がある
 - FAQが5〜8問ある
@@ -555,6 +638,9 @@ async function qualityGate(article, cocomarke, sourceLinks, idea) {
   const issues = [];
   const fullBody = [
     article.leadParagraphHtml,
+    article.expertiseNoteHtml,
+    ...(article.originalInsights || []),
+    ...(article.practicalExamples || []).map((e) => e.html),
     ...article.sections.map((s) => s.html),
     article.conclusionHtml,
     ...(article.faq || []).map((f) => f.answerHtml),
@@ -565,6 +651,12 @@ async function qualityGate(article, cocomarke, sourceLinks, idea) {
   if (!keywordCovered(idea.primaryKeyword, article.metaTitle, article.h1)) {
     issues.push(`主要キーワード「${idea.primaryKeyword}」の主要語がmetaTitleまたはh1に自然に含まれていません。`);
   }
+  if ((article.metaTitle || '').length < 28 || (article.metaTitle || '').length > 60) {
+    issues.push('metaTitle は28〜60字の範囲にしてください。');
+  }
+  if (!titleHasSearchIntent(article.metaTitle) && !titleHasSearchIntent(article.h1)) {
+    issues.push('metaTitleまたはh1に「とは」「設定」「方法」「改善」「変更点」など検索意図が分かる語を含めてください。');
+  }
   if ((article.metaDescription || '').length < 80 || (article.metaDescription || '').length > 150) {
     issues.push('metaDescription は80〜150字の範囲にしてください。');
   }
@@ -573,6 +665,19 @@ async function qualityGate(article, cocomarke, sourceLinks, idea) {
   }
   if (!Array.isArray(article.faq) || article.faq.length < 2) {
     issues.push('FAQ が不足しています。2個以上にしてください。');
+  }
+  if (!article.expertiseNoteHtml || stripTags(article.expertiseNoteHtml).length < 50) {
+    issues.push('expertiseNoteHtml が不足しています。編集・検証方針を50字以上で明記してください。');
+  }
+  if (!Array.isArray(article.originalInsights) || article.originalInsights.length < 3) {
+    issues.push('originalInsights が不足しています。独自視点を3個以上にしてください。');
+  }
+  if (!Array.isArray(article.practicalExamples) || article.practicalExamples.length < 2) {
+    issues.push('practicalExamples が不足しています。実務ケースを2個以上にしてください。');
+  }
+  if (!/<table[\s>]/i.test(fullBody)) issues.push('比較表または原因別表がありません。tableを1つ以上入れてください。');
+  if (!/チェックリスト|確認項目|☐|□/.test(stripTags(fullBody))) {
+    issues.push('実務チェックリストが不足しています。');
   }
   const ids = article.sections.map((s) => s.id);
   if (new Set(ids).size !== ids.length) issues.push('セクションidが重複しています。');
@@ -639,6 +744,8 @@ async function main() {
     // 外部リンクに rel/target を付与
     for (const s of draft.sections) s.html = enforceExternalAttrs(s.html);
     draft.leadParagraphHtml = enforceExternalAttrs(draft.leadParagraphHtml);
+    draft.expertiseNoteHtml = enforceExternalAttrs(draft.expertiseNoteHtml);
+    for (const e of draft.practicalExamples || []) e.html = enforceExternalAttrs(e.html);
     draft.conclusionHtml = enforceExternalAttrs(draft.conclusionHtml);
     for (const f of draft.faq || []) f.answerHtml = enforceExternalAttrs(f.answerHtml);
     draft.slug = slug;
