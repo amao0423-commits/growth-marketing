@@ -1,5 +1,8 @@
 // 記事HTML・カード・カバーSVGのレンダラ（既存テンプレート準拠）
 export const BASE_URL = 'https://www.nishinippon-adv.jp';
+
+// 監修者（全記事共通）。変更する場合はここだけ直せばよい。
+export const SUPERVISOR = { name: '早川 葵', title: 'SEO歴5年' };
 const EDITORIAL_POLICY_URL = `${BASE_URL}/editorial-policy.html`;
 
 // カテゴリ → 表示ラベル・テーマカラー（既存サイトのブランドカラーに準拠）
@@ -156,6 +159,7 @@ export function articlePage(article, category, related, dates) {
         keywords: article.keywords,
         wordCount,
         author: { '@id': `${BASE_URL}/#editorial-team` },
+        editor: { '@type': 'Person', name: SUPERVISOR.name, jobTitle: SUPERVISOR.title, knowsAbout: ['SEO', 'コンテンツマーケティング', cat.label] },
         publisher: { '@id': `${BASE_URL}/#organization` },
         citation: (article.referencesUsed || []).map((r) => r.url),
         mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
@@ -250,7 +254,7 @@ ${JSON.stringify(schema, null, 2)}
     <span class="eyebrow">${esc(cat.label)}</span>
     <h1>${esc(article.h1)}</h1>
     <div class="article-meta">
-      <span>${esc(dates.display)}</span><span>•</span><span>読了 約${esc(article.readMinutes)}分</span><span>•</span><span>Growth Marketing 編集部</span>
+      <span>${esc(dates.display)}</span><span>•</span><span>読了 約${esc(article.readMinutes)}分</span><span>•</span><span>Growth Marketing 編集部</span><span>•</span><span>監修：${esc(SUPERVISOR.name)}（${esc(SUPERVISOR.title)}）</span>
     </div>
   </div>
 </section>

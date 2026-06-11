@@ -428,8 +428,10 @@ ${cocoList}
 ${sourceList}
 
 # 関連記事候補（Growth Marketing内）
-relatedSlugs に3つのslugを選んでください。
-本文テーマに近いものを優先してください。
+relatedSlugs に3つのslugを選んでください。本文テーマに近いものを優先してください。
+さらに【必須】本文中にも、このリストから1〜3本を文脈に合う自然なアンカーテキストで
+<a href="slug.html">語句</a> の形（slugはリストの値そのまま・.html付きの相対リンク）で挿入してください。
+リストにあるslugのみ使用し、存在しないslugやURLは作らないでください。
 
 ${gmList}
 
@@ -441,6 +443,7 @@ ${gmList}
 - metaTitle は32〜55字目安で、主要キーワードを前方に入れる
 - metaTitle は抽象タイトルにしない。検索需要がある語を2〜4個自然に含める
   例: 「とは」「設定方法」「改善」「変更点」「手順」「原因」「比較」「注意点」
+- 可能なら「〇〇とは？△△との違い・手順・効果を解説」のように、疑問形＋要素列挙の型にすると検索CTRが上がりやすい
 - h1 はmetaTitleと近い検索語を含めつつ、読者の課題解決が分かるタイトルにする
 - metaDescription は110〜130字で、主要キーワード・読者の悩み・記事で分かることを自然に含める
 - keywords は5語前後
@@ -602,7 +605,8 @@ originalInsights は3〜5個作成してください。
 本文中盤に、CTAを1箇所だけ自然に入れてください。
 
 本文中盤CTA:
-- 読者が課題を自覚したタイミングで、無料相談または関連記事へ自然につなげる
+- 読者が課題を自覚したタイミングで、<div class="callout"><p>…<a href="../contact.html">無料相談はこちら →</a></p></div> の形で無料相談へ自然につなげる（リンク先は必ず ../contact.html）
+- 記事テーマに合った相談オファー名（例「無料トピックマップ設計相談」「無料広告アカウント診断」など）を一言添える
 - 過度に売り込まず、読者の次の行動として自然に提案する
 
 重要:
@@ -638,13 +642,15 @@ FAQは5〜8問作成してください。
 
 expertiseNoteHtml に、記事上部で表示できる編集・検証方針を書いてください。
 80〜180字程度で、読者に専門性と信頼性が伝わる内容にしてください。
-必ず <a href="../editorial-policy.html">編集方針</a> へのリンクを自然に含めてください。
+本記事は「SEO歴5年の早川 葵」が監修している旨を自然に含め、
+必ず <a href="../editorial-policy.html">編集方針</a> へのリンクを入れてください。
 
 例:
-「この記事は、公式情報・管理画面で確認すべき設定項目・広告運用で見るべきKPIをもとに、Growth Marketing編集部が実務者向けに整理しています。」
+「この記事は、公式情報・管理画面で確認すべき項目・実務で見るべきKPIをもとにGrowth Marketing編集部が整理し、SEO歴5年の早川 葵が監修しています。」
 
 重要:
-- 監修者名、広告運用額、改善率、実案件実績を捏造しないでください
+- 監修者は実在します（早川 葵・SEO歴5年）。これ以外の人物名・肩書は作らないでください
+- 広告運用額、改善率、実案件実績は捏造しないでください
 - 事実として確認できない実績は書かないでください
 - 「実案件で改善しました」のような断定は、根拠データがない限り禁止です
 - 代わりに「実務で確認すべき観点」「よくある相談パターン」「仮想ケース」として独自性を出してください
@@ -727,7 +733,7 @@ GoogleのHelpful Contentの考え方に沿い、検索順位だけを狙う文�
 }
 
 // --- 品質ゲート ---
-async function qualityGate(article, cocomarke, sourceLinks, idea) {
+async function qualityGate(article, cocomarke, sourceLinks, idea, existingSlugs) {
   const issues = [];
   const fullBody = [
     article.leadParagraphHtml,
@@ -795,6 +801,18 @@ async function qualityGate(article, cocomarke, sourceLinks, idea) {
   const cocoSet = new Set(cocomarke.map((c) => c.url));
   const cocoLinks = hrefs.filter((h) => cocoSet.has(h) || hostOf(h) === 'www.cocomarke.com');
   if (cocoLinks.length < 1) issues.push('cocomarke.com への相互リンクが本文にありません（最低1本）。候補リストのURLを使ってください。');
+
+  // Growth Marketing 内部リンク（slug.html）：本文中に1本以上＋実在slugのみ
+  const slugSet = existingSlugs instanceof Set ? existingSlugs : new Set(existingSlugs || []);
+  const gmInternal = hrefs.filter((h) => /^[a-z0-9-]+\.html$/.test(h) && h !== `${article.slug}.html`);
+  const badGm = gmInternal.filter((h) => !slugSet.has(h.replace(/\.html$/, '')));
+  if (gmInternal.length < 1) issues.push('本文中に Growth Marketing の内部リンク（関連記事候補の slug.html）がありません（最低1本、自然な文脈で）。');
+  if (badGm.length) issues.push(`存在しない内部リンクがあります: ${badGm.join(', ')}。関連記事候補のslugのみ使ってください。`);
+
+  // 中盤CTA：無料相談（../contact.html）への導線が本文にあるか
+  if (!fullBody.includes('../contact.html')) {
+    issues.push('本文中盤の自然なCTA（無料相談 ../contact.html へのリンク）がありません。');
+  }
 
   const ext = hrefs.filter((h) => /^https?:\/\//.test(h) && hostOf(h) !== hostOf(BASE_URL) && hostOf(h) !== 'www.cocomarke.com');
   const auth = ext.filter(isAuthoritative);
@@ -883,7 +901,7 @@ async function main() {
     for (const f of draft.faq || []) f.answerHtml = enforceExternalAttrs(f.answerHtml);
     draft.slug = slug;
 
-    gate = await qualityGate(draft, cocomarke, sourceLinks, idea);
+    gate = await qualityGate(draft, cocomarke, sourceLinks, idea, existingSlugs);
     if (gate.ok) { article = draft; break; }
     feedback = gate.issues.join('\n');
     console.log(`  品質ゲート不通過:\n   - ${gate.issues.join('\n   - ')}`);
