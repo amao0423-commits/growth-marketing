@@ -73,15 +73,26 @@ async function claudeText(prompt, opts = {}) {
   const args = ['-p', prompt, '--output-format', 'json'];
   if (MODEL) args.push('--model', MODEL);
   if (opts.webTools) args.push('--allowedTools', 'WebSearch,WebFetch');
-  const { stdout } = await execFileP(CLAUDE_BIN, args, {
-    maxBuffer: 64 * 1024 * 1024,
-    timeout: 12 * 60 * 1000,
-    env: process.env,
-  });
+  let stdout = '';
+  try {
+    const r = await execFileP(CLAUDE_BIN, args, {
+      maxBuffer: 64 * 1024 * 1024,
+      timeout: 12 * 60 * 1000,
+      env: process.env,
+    });
+    stdout = r.stdout;
+  } catch (e) {
+    // claudeが非ゼロ終了。stderr / stdout(JSONエラー封筒) から実エラーを取り出して可視化する。
+    const out = String(e.stdout || '');
+    let detail = String(e.stderr || '').trim();
+    try { const env = JSON.parse(out); if (env?.result) detail = String(env.result); } catch { /* noop */ }
+    if (!detail) detail = out.trim() || e.message;
+    throw new Error(`claude -p 失敗 (exit ${e.code ?? '?'}): ${detail.slice(0, 600)}`);
+  }
   let envelope;
   try { envelope = JSON.parse(stdout); } catch { return String(stdout).trim(); }
   if (envelope && envelope.is_error) {
-    throw new Error('claude -p error: ' + (envelope.result || JSON.stringify(envelope)).slice(0, 300));
+    throw new Error('claude -p error: ' + String(envelope.result || JSON.stringify(envelope)).slice(0, 600));
   }
   return String(envelope?.result ?? stdout).trim();
 }
@@ -786,7 +797,28 @@ async function qualityGate(article, cocomarke, sourceLinks, idea) {
   return { ok: issues.length === 0, issues, textLen };
 }
 
+async function preflight() {
+  console.log('— preflight —');
+  console.log('  CLAUDE_CODE_OAUTH_TOKEN:', process.env.CLAUDE_CODE_OAUTH_TOKEN ? '設定あり' : '未設定');
+  console.log('  ANTHROPIC_API_KEY:', process.env.ANTHROPIC_API_KEY ? '設定あり(注意: claudeはAPIキーを優先する可能性)' : 'なし(OK)');
+  console.log('  POST_MODEL:', MODEL || '(Claude Code既定)');
+  try {
+    const v = await execFileP(CLAUDE_BIN, ['--version'], { env: process.env });
+    console.log('  claude --version:', String(v.stdout).trim());
+  } catch (e) {
+    console.log('  claude --version 取得失敗:', e.message);
+  }
+  // ごく短い疎通テスト（ツールなし）。失敗すれば認証/課金の問題が即わかる。
+  try {
+    const t = await claudeText('OKとだけ返してください。');
+    console.log('  疎通テスト応答:', JSON.stringify(String(t).slice(0, 80)));
+  } catch (e) {
+    throw new Error('claude 疎通テストに失敗（認証/サブスク課金の可能性）: ' + e.message);
+  }
+}
+
 async function main() {
+  await preflight();
   const posts = readJson('content/posts.json');
   const topics = readJson('content/topics.json');
   const existingSlugs = new Set(posts.map((p) => p.slug));
