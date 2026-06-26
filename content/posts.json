@@ -1,5 +1,29 @@
 [
   {
+    "slug": "seo-ai-overview",
+    "category": "seo",
+    "categoryLabel": "SEO",
+    "title": "AI Overview対策とは？検索流入を守るSEO戦略・引用される記事の条件・手順を解説",
+    "description": "AI Overview時代に流入を守るSEO戦略を、引用条件・E-E-A-T・構造化データの手順まで実務視点で解説。",
+    "date": "2026.06.23"
+  },
+  {
+    "slug": "ads-google-pmax",
+    "category": "ads",
+    "categoryLabel": "広告運用",
+    "title": "P-MAX 運用を改善するアセットとシグナル設計の最適化手順",
+    "description": "P-MAX運用のアセット設計・シグナル設定・失敗例・管理画面の確認順を実務目線で解説。",
+    "date": "2026.06.19"
+  },
+  {
+    "slug": "sns-ugc-strategy",
+    "category": "sns",
+    "categoryLabel": "SNS運用",
+    "title": "UGC活用とは？SNS運用で信頼と拡散を得るための手順・失敗例・改善指標",
+    "description": "UGCをSNS運用に活かす許可取り手順・拡散設計・KPIの見方を実務視点で解説。",
+    "date": "2026.06.16"
+  },
+  {
     "slug": "brand-purpose",
     "category": "brand",
     "categoryLabel": "ブランディング",
