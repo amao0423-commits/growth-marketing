@@ -95,13 +95,24 @@ function runClaude(args, input, timeoutMs) {
 // プロンプトは標準入力から渡す。opts.webTools=true のとき WebSearch / WebFetch を許可。
 async function claudeText(prompt, opts = {}) {
   // --dangerously-skip-permissions: ヘッドレスでツール許可待ちで停止しないよう許可をスキップ。
-  // --max-turns: エージェントの周回を制限（執筆は1ターン＝純粋生成で高速）。
+  // --max-turns: エージェントの周回を制限。執筆は純粋生成だが、新しいモデルは
+  // 生成途中に1回ツール使用を挟む(stop_reason:tool_use)ことがあり、上限1だと
+  // その瞬間 error_max_turns で落ちる。余裕を持って既定6に引き上げる。
   const args = ['-p', '--output-format', 'json', '--dangerously-skip-permissions'];
   if (MODEL) args.push('--model', MODEL);
-  args.push('--max-turns', String(opts.maxTurns ?? (opts.webTools ? 6 : 1)));
-  if (opts.webTools) args.push('--allowedTools', 'WebSearch,WebFetch');
-  // 失敗時に長く待たせないよう、調査8分／執筆4分で打ち切る。
-  const timeoutMs = (opts.webTools ? 8 : 4) * 60 * 1000;
+  args.push('--max-turns', String(opts.maxTurns ?? (opts.webTools ? 8 : 6)));
+  if (opts.webTools) {
+    args.push('--allowedTools', 'WebSearch,WebFetch');
+  } else {
+    // 執筆は純粋なテキスト生成。ツールを全無効化し、モデルがリポジトリ内の
+    // ファイル探索など不要なtool_useに入って error_max_turns で落ちるのを防ぐ。
+    args.push('--tools', '');
+  }
+  // 失敗時に長く待たせないよう、調査9分／執筆6分で打ち切る（長文記事で4分は不足しがち）。
+  // WRITE_TIMEOUT_MIN / RESEARCH_TIMEOUT_MIN で上書き可。
+  const writeMin = Number(process.env.WRITE_TIMEOUT_MIN || 6);
+  const researchMin = Number(process.env.RESEARCH_TIMEOUT_MIN || 9);
+  const timeoutMs = (opts.webTools ? researchMin : writeMin) * 60 * 1000;
   const { stdout, stderr, code } = await runClaude(args, prompt, timeoutMs);
   if (code !== 0) {
     let detail = String(stderr || '').trim();
@@ -132,6 +143,11 @@ const readJson = (p) => JSON.parse(read(p));
 const writeJson = (p, o) => fs.writeFileSync(path.join(ROOT, p), JSON.stringify(o, null, 2) + '\n');
 
 function jstDate() {
+  // POST_DATE=YYYY-MM-DD を指定すると公開日を上書き（未投稿分のバックフィル用）。
+  const override = (process.env.POST_DATE || '').trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(override)) {
+    return { iso: override, display: override.replace(/-/g, '.') };
+  }
   const d = new Date(Date.now() + 9 * 3600 * 1000);
   const y = d.getUTCFullYear(), m = String(d.getUTCMonth() + 1).padStart(2, '0'), day = String(d.getUTCDate()).padStart(2, '0');
   return { iso: `${y}-${m}-${day}`, display: `${y}.${m}.${day}` };
