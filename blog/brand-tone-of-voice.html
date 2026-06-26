@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>トーンオブボイスとは？定義・設計手順・全チャネル統一の方法を解説｜Growth Marketing ブログ</title>
+<meta name="description" content="トーンオブボイスとは何か、定義から設計手順・失敗例・改善指標まで実務視点で解説。ブランドの声を全SNS・Webサイト・広告で統一し、顧客信頼と問い合わせ増加につなげる具体策を紹介します。">
+<meta name="keywords" content="トーンオブボイス,ブランドの統一,ブランディング,コミュニケーション設計,チャネル統一">
+<link rel="canonical" href="https://www.nishinippon-adv.jp/blog/brand-tone-of-voice.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="トーンオブボイスとは？ブランドの「声」を定義して全チャネルで統一する手順と注意点">
+<meta property="og:description" content="トーンオブボイスとは何か、定義から設計手順・失敗例・改善指標まで実務視点で解説。ブランドの声を全SNS・Webサイト・広告で統一し、顧客信頼と問い合わせ増加につなげる具体策を紹介します。">
+<meta property="og:url" content="https://www.nishinippon-adv.jp/blog/brand-tone-of-voice.html">
+<meta property="article:section" content="ブランディング">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.nishinippon-adv.jp/blog/brand-tone-of-voice.html#article",
+      "headline": "トーンオブボイスとは？ブランドの「声」を定義して全チャネルで統一する手順と注意点",
+      "description": "トーンオブボイスとは何か、定義から設計手順・失敗例・改善指標まで実務視点で解説。ブランドの声を全SNS・Webサイト・広告で統一し、顧客信頼と問い合わせ増加につなげる具体策を紹介します。",
+      "datePublished": "2026-06-26",
+      "dateModified": "2026-06-26",
+      "articleSection": "ブランディング",
+      "keywords": [
+        "トーンオブボイス",
+        "ブランドの統一",
+        "ブランディング",
+        "コミュニケーション設計",
+        "チャネル統一"
+      ],
+      "wordCount": 9879,
+      "author": {
+        "@id": "https://www.nishinippon-adv.jp/#editorial-team"
+      },
+      "editor": {
+        "@type": "Person",
+        "name": "早川 葵",
+        "jobTitle": "SEO歴5年",
+        "knowsAbout": [
+          "SEO",
+          "コンテンツマーケティング",
+          "ブランディング"
+        ]
+      },
+      "publisher": {
+        "@id": "https://www.nishinippon-adv.jp/#organization"
+      },
+      "citation": [
+        "https://www.thinkwithgoogle.com/",
+        "https://developers.google.com/search/docs/fundamentals/creating-helpful-content"
+      ],
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.nishinippon-adv.jp/blog/brand-tone-of-voice.html"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.nishinippon-adv.jp/#organization",
+      "name": "Growth Marketing",
+      "url": "https://www.nishinippon-adv.jp",
+      "publishingPrinciples": "https://www.nishinippon-adv.jp/editorial-policy.html"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.nishinippon-adv.jp/#editorial-team",
+      "name": "Growth Marketing編集部",
+      "url": "https://www.nishinippon-adv.jp/editorial-policy.html",
+      "parentOrganization": {
+        "@id": "https://www.nishinippon-adv.jp/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.nishinippon-adv.jp/blog/brand-tone-of-voice.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://www.nishinippon-adv.jp"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "ブログ",
+          "item": "https://www.nishinippon-adv.jp/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "トーンオブボイスとは？ブランドの「声」を定義して全チャネルで統一する手順と注意点",
+          "item": "https://www.nishinippon-adv.jp/blog/brand-tone-of-voice.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.nishinippon-adv.jp/blog/brand-tone-of-voice.html#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "トーンオブボイスとは何ですか？簡単に教えてください。",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "トーンオブボイスとは、ブランドが「どのような言葉遣い・文体・雰囲気で話すか」を定めたコミュニケーションスタイルのことです。「何を伝えるか」はメッセージで、「どのように伝えるか」がトーンオブボイスと区別できます。たとえば同じ「新商品が出ました」という内容でも、「〜しました！ぜひ見てみてください♪」と「新商品を発売いたしました。詳細はこちらをご覧ください。」では、読者が受け取る印象が大きく異なります。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "トーンオブボイスとブランドボイスの違いは何ですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ブランドボイスはブランドの根本的な性格・価値観を言語化したもので、基本的に変わりません。トーンオブボイスはそのブランドボイスをどのように表現するかで、チャネルや状況によって調整されます。ブランドボイスが「誠実・親しみやすい」であれば、SNSでは「友人口調でカジュアルに誠実さを表現」し、プレスリリースでは「丁寧な文語体で誠実さを表現」するのがトーンオブボイスの使い方です。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "トーンオブボイスはどのように決めればいいですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "「ブランドが人間なら、どんな人物か？」という問いからスタートするのが実務上の最短ルートです。具体的には、①ブランドパーソナリティを3〜5語の形容詞で定義する、②フォーマリティ・ユーモア・専門性などのトーン属性軸でポジションを決める、③チャネルごとの調整幅を設定する、④禁止ワードと推奨言い回しサンプルを作成する、の4ステップで設計します。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "SNSごとにトーンを変えてもいいですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "はい、チャネルごとにトーンを調整することは推奨されます。ただし「変えてよいのは表現の形式」であり、「ブランドの根本的な価値観・中心軸」は統一することが重要です。InstagramとLinkedInで文体が違っても、「読者への誠実さ」や「専門性へのこだわり」は一貫させる、という設計が実務の正解です。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "トーンオブボイスガイドラインに何を入れるべきですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "最低限必要な要素は①ブランドパーソナリティの定義（3〜5語）、②トーン属性のポジション（フォーマリティ・ユーモアなど）、③チャネル別適用方針、④禁止ワードリスト、⑤推奨言い回しサンプル（10〜30組）、⑥良い例・悪い例の対比文章です。形容詞だけで終わらせず、実際の文章サンプルを充実させることが、現場での活用率を左右します。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "担当者が変わってもトーンを維持するにはどうすればいいですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "「禁止ワードリスト」と「推奨言い回しサンプル集」を具体的なテキスト形式で整備し、入社オンボーディング時に共有することが最も効果的です。抽象的なガイドラインは解釈の幅が大きくなるため、「この状況ではこう書く」という実例が揃っていることが継続の鍵になります。また、NotionなどのWikiツールで日常的にアクセスできる場所に置くことも重要です。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "トーンオブボイスが定まっているかどうかはどう判断しますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "「社内で誰かが書いたコンテンツを読んで、自社ブランドのものだとわかるか」が一番のチェックポイントです。また、コンテンツ承認フローでの修正回数が多い・外部ライターへの指示が毎回異なる・チャネルごとに「別の会社みたい」と言われる、これらが当てはまる場合はトーン設計が不十分なシグナルです。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "生成AIを使う場合、トーンオブボイスはどう管理すればいいですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ガイドラインをプロンプトに組み込むことが基本対策です。具体的にはシステムプロンプトにブランドパーソナリティと口調を明記し、禁止ワードを箇条書きで指定し、過去の実際のコンテンツを参照例として添付します。チャネルごとにプロンプトテンプレートを作っておくと担当者間の品質が安定します。AI生成コンテンツは必ず人間がトーンチェックするプロセスも残してください。"
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a href="../index.html" class="brand"><span class="dot"></span>Growth&nbsp;Marketing</a>
+    <nav class="nav-links">
+      <a href="../index.html#services">サービス</a>
+      <a href="../index.html#process">プロセス</a>
+      <a href="../index.html#works">実績</a>
+      <a href="index.html">ブログ</a>
+      <a href="../contact.html" class="nav-cta">無料相談</a>
+    </nav>
+    <button class="burger" onclick="toggleNav()" aria-label="メニュー"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="wrap crumb">
+  <a href="../index.html">ホーム</a><span>/</span><a href="index.html">ブログ</a><span>/</span>ブランディング
+</div>
+
+<article>
+<section class="article-hero">
+  <div class="wrap" style="max-width:820px;">
+    <span class="eyebrow">ブランディング</span>
+    <h1>トーンオブボイスとは？ブランドの「声」を定義して全チャネルで統一する手順と注意点</h1>
+    <div class="article-meta">
+      <span>2026.06.26</span><span>•</span><span>読了 約18分</span><span>•</span><span>Growth Marketing 編集部</span><span>•</span><span>監修：早川 葵（SEO歴5年）</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap" style="max-width:820px;">
+  <div class="article-cover"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#c2410c"/>
+<g opacity="0.1" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+</div>
+
+<div class="wrap article-body">
+  <div class="toc">
+    <h4>目次</h4>
+    <a href="#definition">トーンオブボイスとは何か？ブランドボイスとの違いを整理する</a>
+    <a href="#why-matters">トーンオブボイスが全チャネルで統一されないと何が起きるか</a>
+    <a href="#design-steps">トーンオブボイスを設計する5つのステップ</a>
+    <a href="#channel-guide">チャネル別トーンオブボイス適用ガイドライン</a>
+    <a href="#checklist">トーンオブボイスガイドライン整備チェックリスト</a>
+    <a href="#common-failures">トーンオブボイス設計でよくある失敗例と改善策</a>
+    <a href="#kpi-measurement">トーンオブボイス統一の効果を測るKPIと改善サイクル</a>
+    <a href="#ai-era-tone">生成AI時代のトーンオブボイス管理：ガイドラインをプロンプトに落とす方法</a>
+    <a href="#practical-examples">実務ケース別の設計例</a>
+    <a href="#faq">よくある質問</a>
+    <a href="#conclusion">まとめ</a>
+  </div>
+
+<p><strong>トーンオブボイスとは、ブランドが顧客に対して「どのように言葉を使い、どんな印象を与えるか」を規定するコミュニケーションスタイルのことです。</strong>何を言うかを定めるのが「メッセージ」なら、どのように言うかを定めるのが「トーンオブボイス」と整理できます。</p><p>「SNSの投稿とメールマガジンで文体がバラバラ」「担当者が変わるたびに表現がぶれる」「広告と公式サイトで別の会社みたいに見える」——こうした課題を抱えるマーケター・ブランド担当者は多くいます。</p><p>この記事では、トーンオブボイスの定義から設計手順・チャネル別の統一方法・よくある失敗例・改善指標まで、実務で使える形で解説します。読み終えると、自社のトーンオブボイスガイドラインの初稿を作成するための具体的なステップと判断基準を持ち帰ることができます。</p>
+
+  <div class="author-box">
+    <h2>著者・編集方針</h2>
+<div class="author-profile"><p><strong>Growth Marketing編集部</strong></p><p>SNS運用・広告運用・コンテンツSEOの記事を制作している編集チームです。記事制作にあたっては、公式情報の確認・管理画面での設定検証・KPI設計・内部導線の整合性チェックを行っています。詳しくは<a href="../editorial-policy.html">編集方針</a>をご覧ください。</p></div>
+  </div>
+
+  <div class="key-takeaways">
+    <h2>重要ポイント</h2>
+    <ul>
+      <li>トーンオブボイスとは、ブランドが「何を言うか」ではなく「どのように言うか」を規定する表現スタイルのことで、全チャネルでの一貫性がブランド信頼を左右する。</li>
+      <li>トーンオブボイスを明文化していないブランドは、担当者ごとに文体がバラつき、顧客に「別の会社かと思った」という不信感を与えるリスクがある。</li>
+      <li>設計の基本手順は「ブランドパーソナリティの定義→属性スペクトルの設定→チャネル別ガイドライン化→実例サンプル作成→定期レビュー」の5ステップ。</li>
+      <li>チャネル別に「声のトーン調整幅」を設けることが重要で、Instagramとプレスリリースで完全同一にする必要はなく、「中心軸の一致」が統一の本質。</li>
+      <li>改善指標としてはブランド認知率・顧客からのトーン評価・コンテンツの承認率（社内修正回数）・エンゲージメント率を定期的に観測することが実務上の目安となる。</li>
+    </ul>
+  </div>
+
+  <div class="expertise-note">
+    <h2>編集・検証方針</h2>
+<p>この記事は、公式情報・管理画面で確認すべき項目・実務で見るべきKPIをもとにGrowth Marketing編集部が整理し、SEO歴5年の<strong>早川 葵</strong>が監修しています。不確かな数値は断定せず「目安」として記載しています。詳細は<a href="../editorial-policy.html">編集方針</a>をご覧ください。</p>
+  </div>
+
+  <div class="original-insights">
+    <h2>Growth Marketingの実務視点</h2>
+    <ul>
+      <li>「トーンオブボイスガイドライン」は一度作れば終わりではなく、プロダクトや市場環境の変化に合わせて年1回以上見直すことを前提に設計するべき。固定化しすぎると、実態と乖離したガイドラインを誰も守らなくなる。</li>
+      <li>担当者が変わっても一貫性を保つには、「禁止ワードリスト」と「推奨言い回しサンプル集」をセットで用意することが鍵。抽象的な形容詞（「温かみのある」など）だけのガイドラインは、個人差が大きく機能しない。</li>
+      <li>SNSと公式サイト・プレスリリースで「同じトーン」を求めすぎると、どちらも中途半端になりやすい。「コアバリューは共通、表現のフォーマリティはチャネル別に調整」という二層構造で管理するのが実務上の現実解。</li>
+      <li>生成AIを使ったコンテンツ量産が増える2026年時点では、トーンオブボイスガイドラインをAIへのプロンプトに落とし込む作業も必要になっている。ガイドラインをテキスト化・構造化しておくことで、AIアウトプットの品質管理が大幅に効率化できる。</li>
+      <li>「失敗したとき・謝罪が必要なとき」のトーンガイドラインを事前に整備しているブランドは少ないが、危機対応時こそトーンの一貫性が信頼に直結する。好況時だけのガイドラインは機能が半分しかない。</li>
+    </ul>
+  </div>
+
+  <h2 id="definition">トーンオブボイスとは何か？ブランドボイスとの違いを整理する</h2>
+<p>トーンオブボイス（Tone of Voice）とは、ブランドが発信するすべてのコミュニケーションにおける「話し方のスタイル・雰囲気・感情的な質感」を指します。文体・語彙の選択・文の長短・丁寧さのレベル・ユーモアの有無など、あらゆる言語的要素が対象です。</p><h3>ブランドボイスとトーンオブボイスの違い</h3><p>混同されやすい概念に「ブランドボイス（Brand Voice）」があります。両者の関係は次のように整理できます。</p><table><thead><tr><th>概念</th><th>定義</th><th>変化するか</th></tr></thead><tbody><tr><td>ブランドボイス</td><td>ブランドの根本的な性格・個性・価値観を言語で表したもの</td><td>基本的に変化しない（コアアイデンティティ）</td></tr><tr><td>トーンオブボイス</td><td>ブランドボイスをどのように表現するか、状況・チャネル・文脈に応じた調整</td><td>状況・チャネルによって調整される</td></tr></tbody></table><p>たとえば「誠実・革新・親しみやすさ」がブランドボイスなら、プレスリリースでは「誠実さを丁寧な文語体で表現」し、SNSでは「親しみやすさをカジュアルな口語体で表現」するのがトーンオブボイスの使い分けです。</p><h3>なぜトーンオブボイスが重要なのか</h3><p>顧客はWebサイト・SNS・広告・カスタマーサポートなど複数の接点でブランドに触れます。これらの接点でトーンがバラバラだと、顧客は無意識に「信頼しにくい」「一貫性がない」という印象を持ちます。逆に統一されたトーンは、ブランド認知を高め、顧客の安心感と好感につながります。</p><p><a href="brand-consistency.html">ブランドの一貫性を保つビジュアル＆トーン設計</a>でも解説しているとおり、視覚的な統一（ロゴ・カラー）だけでなく言語的な統一がブランド体験の質を決定します。</p>
+
+  <h2 id="why-matters">トーンオブボイスが全チャネルで統一されないと何が起きるか</h2>
+<p>トーンの不統一は、実際の業務においてどのような問題を引き起こすのかを具体的に確認しておきます。</p><h3>顧客体験の観点</h3><ul><li><strong>信頼感の低下：</strong>SNSでは友人口調なのに、問い合わせ返信は堅い敬語——こうした落差は「別の会社と話しているよう」と感じさせます。</li><li><strong>ブランド記憶の曖昧化：</strong>トーンが統一されていないと、顧客の記憶にブランドの「顔」が残りにくくなります。</li><li><strong>購買・問い合わせの迷い：</strong>信頼感が低下すると、行動障壁が上がりCVRに影響します。</li></ul><h3>社内運用の観点</h3><ul><li><strong>コンテンツ制作工数の増加：</strong>判断基準がないため、担当者ごとに毎回「どう書くか」を考え直すことになります。</li><li><strong>修正・差し戻しの増加：</strong>ブランドマネージャーの主観的な判断で修正が多発します。</li><li><strong>外注先・代理店との品質ギャップ：</strong>言語化されたガイドラインがないと、外部パートナーへのオリエンテーションが属人化します。</li></ul><div class="callout"><p><strong>実務ポイント：</strong>「トーンのぶれ」は多くの場合、ガイドラインの不在ではなく「ガイドラインはあるが形容詞だけで、実例がない」ことが原因です。抽象的な形容詞を具体的なサンプル文に落とすことが改善の核心です。</p></div>
+
+  <h2 id="design-steps">トーンオブボイスを設計する5つのステップ</h2>
+<p>トーンオブボイスを実務で使えるレベルまで設計するための手順を整理します。</p><ol><li><h3>ステップ1：ブランドパーソナリティを3〜5語で定義する</h3><p>「もしブランドが人間だったら、どんな人物か？」という問いで答えを言語化します。「誠実・革新的・親しみやすい」など、形容詞3〜5語に絞り込みます。この作業を経営陣・マーケター・営業・デザイナーなど複数の職能で行い、共通認識を作ることが重要です。</p></li><li><h3>ステップ2：トーン属性のスペクトルを設定する</h3><p>以下のような対極軸でブランドのポジションを決めます。</p><table><thead><tr><th>軸</th><th>一方の端</th><th>もう一方の端</th></tr></thead><tbody><tr><td>フォーマリティ</td><td>カジュアル・口語</td><td>フォーマル・文語</td></tr><tr><td>ユーモア</td><td>真剣・シリアス</td><td>遊び心・ウィット</td></tr><tr><td>専門性</td><td>わかりやすい・平易</td><td>専門的・詳細</td></tr><tr><td>感情温度</td><td>冷静・中立</td><td>熱意・共感</td></tr><tr><td>アクティブさ</td><td>受動的・提案型</td><td>能動的・背中を押す型</td></tr></tbody></table><p>各軸で「どのあたりに位置するか」を1〜5のスケールで表すと、チーム間で認識をそろえやすくなります。</p></li><li><h3>ステップ3：チャネル別にトーン調整幅を定める</h3><p>中心軸は維持しつつ、チャネルごとに「調整幅」を設定します。例えばフォーマリティが「3（中間）」のブランドであれば、SNSでは「2〜3」の範囲、プレスリリースでは「3〜4」の範囲で動ける、という設計です。</p></li><li><h3>ステップ4：禁止ワードリストと推奨言い回しサンプルを作成する</h3><p>抽象的なガイドラインを具体化する最重要ステップです。「使ってはいけない語句」と「こう言い換える」の対比表を20〜30組以上用意します。例：「お得」→「あなたに合った選択」、「今すぐ」→「一度ご覧ください」など。</p></li><li><h3>ステップ5：実際のコンテンツでテストし、定期レビューを設定する</h3><p>ガイドラインを使って実際に数本のコンテンツを作成し、チーム内でレビューします。「このガイドラインで書けたか」「迷ったポイントはどこか」を収集し、ガイドラインを更新します。最低でも年1回は見直しのタイミングを設定してください。</p></li></ol><div class="callout"><p>トーンオブボイスの定義に迷っている段階であれば、<a href="../contact.html">無料ブランドトーン診断相談はこちら →</a>からご相談いただけます。現状のコンテンツを拝見したうえで、チャネル別のトーン設計方針をご提案します。</p></div>
+
+  <h2 id="channel-guide">チャネル別トーンオブボイス適用ガイドライン</h2>
+<p>チャネルによって読者の文脈・期待値・読み方の速度が異なるため、同一のトーンを全チャネルに機械的に適用するのは現実的ではありません。「中心軸を共有しながら、表層的な表現を調整する」が実務の正解です。</p><h3>公式Webサイト・LP</h3><p>最もフォーマリティが求められる接点です。情報の正確性・信頼性を前面に出しつつ、体言止めの多用や句読点の少ない文章は避けます。一文が長くなりすぎないよう注意し、読了率を意識した構成にします。</p><h3>SNS（Instagram・X・LinkedIn）</h3><p>Instagramは視覚情報が主体のため、キャプションは短めで感情的な共感を重視します。Xは速報性・意見性が求められ、簡潔な断言口調が機能します。LinkedInはBtoB文脈での信頼構築が目的のため、やや高めのフォーマリティが適します。<a href="https://www.cocomarke.com/blog/instagram-feed-aesthetic-consistency/" target="_blank" rel="noopener">Instagramフィードの美的一貫性</a>を保つ観点でも、キャプションのトーンとビジュアルの世界観を合わせることが重要です。</p><h3>メールマガジン・ステップメール</h3><p>受信者との関係性（初回接触か長期顧客か）に応じてフォーマリティを変えますが、件名・書き出し・CTA付近のトーンは一貫させます。件名だけ煽り系になると開封後の落差で信頼が下がります。</p><h3>広告コピー（バナー・検索広告）</h3><p>文字数制限の中でブランドらしさを出す必要があります。禁止ワードリストの遵守が特に重要で、「激安」「絶対」などの表現がブランドの世界観を壊すケースが多く見られます。</p><h3>カスタマーサポート・問い合わせ対応</h3><p>最もトーンの統一が難しいチャネルです。担当者ごとの対応にガイドラインを適用するため、「返答テンプレート集」とトーンチェックシートを整備することが効果的です。</p><p><a href="brand-story.html">選ばれ続けるブランドをつくるストーリーテリングの基本</a>でも解説しているように、各接点でのコミュニケーションが一体となってブランドの物語を形成します。</p>
+
+  <h2 id="checklist">トーンオブボイスガイドライン整備チェックリスト</h2>
+<p>以下のチェックリストを使って、自社のガイドライン整備状況を確認してください。</p><ul><li>□ ブランドパーソナリティを3〜5語の形容詞で定義している</li><li>□ トーン属性（フォーマリティ・ユーモア・専門性など）をスペクトル上でポジション付けしている</li><li>□ チャネルごとに「調整可能な幅」を明示している</li><li>□ 禁止ワードリストを20語以上作成している</li><li>□ 推奨言い回しサンプルを10〜30組以上用意している</li><li>□ 各チャネルの「良い例・悪い例」を実際の文章で示している</li><li>□ 社内の複数部署（マーケ・営業・CS・経営）で合意を取っている</li><li>□ 外部委託先（代理店・ライター）にも同じガイドラインを共有している</li><li>□ 危機対応・謝罪時のトーンガイドを含んでいる</li><li>□ 年1回以上の定期レビュータイミングを設定している</li><li>□ AI生成コンテンツを使う場合は、プロンプトへの組み込み方を整備している</li><li>□ ガイドライン自体をNotionやWikiなど、日常的に開ける場所に置いている</li></ul><div class="callout"><p><strong>判断基準：</strong>8項目以上チェックできれば実務レベルの整備が進んでいます。5項目未満の場合は「推奨言い回しサンプル集」の作成から始めるのが最短ルートです。</p></div>
+
+  <h2 id="common-failures">トーンオブボイス設計でよくある失敗例と改善策</h2>
+<p>実務でよく見られる失敗パターンと、その改善策を整理します。</p><h3>失敗1：形容詞だけのガイドラインで終わる</h3><p>「温かみのある」「プロフェッショナルな」「フレンドリーな」——これらの形容詞だけでは、書き手によって解釈が大きく異なります。</p><p><strong>改善策：</strong>「この形容詞を体現した文章がこれ」という実例を3〜5文用意する。形容詞の説明ではなく、実際の文章サンプルをガイドラインの主役にする。</p><h3>失敗2：全チャネル完全統一を目指す</h3><p>InstagramのキャプションとIR資料を同じトーンにしようとして、どちらも中途半端になるケースです。</p><p><strong>改善策：</strong>コアバリューは統一しつつ、表現の形式はチャネル別に整備する二層設計を採用する。</p><h3>失敗3：ガイドラインの存在を知らない社員がいる</h3><p>作って満足してしまい、現場に浸透していないケースです。</p><p><strong>改善策：</strong>入社オンボーディング・外部委託時のブリーフィング・コンテンツレビュー時の参照を義務化する。物理的なアクセスを容易にすることが肝心です。</p><h3>失敗4：トーン変更を全チャネルで一斉実施する</h3><p>特にリブランディング時に起こりやすく、既存顧客が「会社が変わった」と感じて離脱するリスクがあります。</p><p><strong>改善策：</strong>新規向けチャネル（広告・LP）から先行移行し、既存顧客向けチャネル（メールマガジン・SNS）は段階的に移行する。既存顧客には変化の意図を一言添えるコミュニケーションを先行させる。</p><h3>失敗5：ネガティブな状況のトーンガイドがない</h3><p>謝罪・クレーム対応・炎上リスクへの対応時に、担当者が即興で文章を作ることになり、ブランドの信頼を損なうケースが多くあります。</p><p><strong>改善策：</strong>「謝罪・訂正時の標準フォーマットとトーン」「ネガティブコメントへの返信ガイドライン」を事前に整備する。</p><p>GoogleのHelpful Content基準（参照日: 2026年6月26日）でも示されているように、<a href="https://developers.google.com/search/docs/fundamentals/creating-helpful-content" target="_blank" rel="noopener">実際の読者を助けるコンテンツ</a>こそが長期的な信頼につながります。トーンの統一は、読者に「このブランドは信頼できる」と思ってもらうための基礎条件です。</p>
+
+  <h2 id="kpi-measurement">トーンオブボイス統一の効果を測るKPIと改善サイクル</h2>
+<p>トーンオブボイスの統一効果は「ブランド認知」という無形のものに関わるため、定量的に測りにくいと感じる方も多くいます。しかし、いくつかの代理指標を組み合わせることで効果の方向性を把握できます。</p><h3>計測できるKPIの例</h3><table><thead><tr><th>KPI</th><th>測定方法</th><th>目安となるサイクル</th></tr></thead><tbody><tr><td>コンテンツ承認率（社内修正回数）</td><td>承認フローでの差し戻し数を月次集計</td><td>月次</td></tr><tr><td>エンゲージメント率の一貫性</td><td>チャネルごとのエンゲージメント率の標準偏差</td><td>月次</td></tr><tr><td>ブランド認知・好感調査</td><td>定期的な顧客アンケート（5段階評価）</td><td>半期</td></tr><tr><td>問い合わせ数・リード質</td><td>問い合わせフォームからの商談化率</td><td>月次・四半期</td></tr><tr><td>カスタマーサポート評価</td><td>CSアンケートのNPS・満足度スコア</td><td>月次</td></tr><tr><td>コンテンツ外注の修正工数</td><td>代理店・ライターへの修正指示回数</td><td>月次</td></tr></tbody></table><h3>改善サイクルの回し方</h3><ol><li><strong>月次レビュー：</strong>各チャネルの主要コンテンツ3〜5本を抽出し、ガイドラインとの乖離度を確認</li><li><strong>四半期レビュー：</strong>KPIトレンドを確認し、ガイドラインへの追記・修正を検討</li><li><strong>年次レビュー：</strong>ブランドパーソナリティ自体の再定義が必要かを経営陣含めて検討</li></ol><div class="callout"><p><strong>実務での判断軸：</strong>「修正回数が多いセクション」はガイドラインの表現が曖昧なシグナルです。修正依頼の理由を蓄積し、ガイドラインのアップデートに反映させるPDCAが最も効率的な改善方法です。</p></div><p>なお、コンテンツの効果測定全体については<a href="brand-purpose.html">パーパスブランディングとは？進め方・手順・失敗例と改善策を徹底解説</a>も参考になります。ブランドの根本的な「なぜ」と「どのように」を連動させることで、トーンオブボイスの方向性がより明確になります。</p><p>Think with Googleの調査（参照日: 2026年6月26日）でも示されているように、<a href="https://www.thinkwithgoogle.com/" target="_blank" rel="noopener">消費者は複数の接点で一貫したブランド体験</a>を期待しており、一貫性のあるコミュニケーションがブランド信頼形成の基盤となるとされています。</p>
+
+  <h2 id="ai-era-tone">生成AI時代のトーンオブボイス管理：ガイドラインをプロンプトに落とす方法</h2>
+<p>2026年時点では、多くの企業がChatGPT・Claude・Geminiなどの生成AIを使ってコンテンツ制作の一部を行っています。この流れの中で、トーンオブボイスガイドラインの「AI対応化」が実務上の新しい課題になっています。</p><h3>AIが生成するコンテンツでトーンがぶれる原因</h3><ul><li>AIへの指示が「ブログ記事を書いて」だけで、トーンの指定がない</li><li>担当者ごとにプロンプトが異なり、アウトプットに一貫性がない</li><li>AIのデフォルト出力は「一般的なビジネス文章」になりやすく、ブランド固有の声が出ない</li></ul><h3>トーンガイドラインをプロンプトに組み込む手順</h3><ol><li><strong>システムプロンプトにブランドパーソナリティを記述：</strong>「あなたは〇〇ブランドのコンテンツライターです。このブランドは【誠実・革新・親しみやすさ】を大切にし、口調は【丁寧語で、かつ友人に話しかけるような語感】です」のように設定する。</li><li><strong>禁止ワードリストをプロンプトに明記：</strong>「以下の語句は使わないでください：〜」と箇条書きで記載する。</li><li><strong>出力サンプルを参照例として添付：</strong>「過去のブログ記事の書き出し例：〜」のように実例を含めることで、AIが参照できるトーンのモデルを与える。</li><li><strong>チャネル別プロンプトテンプレートを作成：</strong>SNS用・ブログ用・メール用それぞれのプロンプトテンプレートを整備し、担当者が迷わず使えるようにする。</li></ol><div class="callout"><p><strong>注意点：</strong>AI生成コンテンツは必ず人間がトーンチェックするプロセスを残してください。AIはガイドラインを参照しても、微妙なニュアンスの逸脱が起きやすいため、最終確認は人間が行う体制が必要です。</p></div>
+
+  <h2 id="practical-examples">実務ケース別の設計例</h2>
+  <h3>BtoBの専門サービス会社：「信頼性重視」のトーン統一設計</h3>
+<h3>前提条件</h3><p>従業員30名規模のITコンサルティング会社。SNS担当（20代）・営業担当（40代）・経営陣（50代）がそれぞれ独自判断でコンテンツを発信しており、X（Twitter）・LinkedIn・公式サイト・提案資料でトーンが大きく異なっている状態。</p><h3>推奨する設計</h3><p>まず「信頼・専門性・対話」の3軸をブランドパーソナリティとして明文化し、フォーマリティ軸を「やや高め（カジュアルすぎない）」に統一。SNSは「語りかける・問いかける」文体を許容しつつ、略語・業界スラングは禁止ワードリストに登録。提案資料や公式ブログは「丁寧語・体言止め禁止・根拠付きの表現のみ」と規定する。推奨言い回しサンプル集を10〜15本用意し、各担当者がコピー&ペーストできる状態にする。</p><h3>見るべきKPI</h3><ul><li>社内コンテンツ承認フローでの修正依頼回数（月次）</li><li>SNS投稿ごとのエンゲージメント率の変動（前後3ヶ月比較）</li><li>顧客アンケートの「信頼性」評価スコア（半期ごと）</li><li>問い合わせフォーム経由のリード質（商談化率）</li></ul><h3>失敗しやすい点</h3><p>ガイドラインを「PDF1枚」で完結させると実務で参照されない。チャネルごとのサンプル文を必ずセットで添付し、Notionやスプレッドシートなど日常的に開く場所に置くことが継続利用の条件になる。</p>
+
+  <h3>BtoCのライフスタイルブランド：SNSと広告クリエイティブのトーン統一</h3>
+<h3>前提条件</h3><p>アパレル系D2Cブランド。自社EC・Instagram・X・メールマガジン・バナー広告を並走させているが、担当代理店と社内チームが別々に動いており、広告文はセールス感が強く・インスタ投稿は自然体・メールは敬語、とチャネルごとに「別ブランド」化している状態。</p><h3>推奨する設計</h3><p>「自由・等身大・背中を押す」の3キーワードをトーンの核に設定。フォーマリティ軸は「低め（友人に話しかけるようなライト感）」で統一し、代理店・社内双方に同じガイドラインを共有する。広告コピーも「限定」「今すぐ」などの煽り系ワードを禁止リストに入れ、「あなたに似合う」「毎日着たくなる」など共感ドリブンの表現に誘導。<a href="https://www.cocomarke.com/blog/instagram-feed-aesthetic-consistency/" target="_blank" rel="noopener">Instagramフィードの世界観一貫性</a>と組み合わせることで、ビジュアルとコピーの統一感が顧客体験全体を高める。</p><h3>見るべきKPI</h3><ul><li>Instagramエンゲージメント率（トーン変更前後3ヶ月比較）</li><li>広告CTR・CVRの変化（A/Bテストで旧コピーと比較）</li><li>メールマガジン開封率・クリック率の推移</li><li>ブランドSNSでのポジティブ言及数（UGC量）</li></ul><h3>失敗しやすい点</h3><p>代理店に「ガイドラインを渡した」だけで終わるケース。月1回の定例でサンプルレビューを行い、「ガイドラインに合わない表現」を具体的にフィードバックするプロセスがないと、代理店側のクリエイターに属人化してしまう。</p>
+
+  <h3>スタートアップ：資金調達後のブランド再定義に伴うトーン刷新</h3>
+<h3>前提条件</h3><p>シリーズA調達後、ユーザー数が急増したSaaSスタートアップ。創業期に作ったカジュアルなトーンが、エンタープライズ顧客への営業活動と乖離しはじめ、「ベンチャー感が強すぎて信頼を持ちにくい」と商談で指摘されるようになってきた状態。</p><h3>推奨する設計</h3><p>旧トーンを完全に捨てず、「革新性・誠実さ・頼れる専門家」の3軸に再定義。フォーマリティを「中程度」に引き上げ、スタートアップ特有のスラング（「爆速」「ぶち上げ」など）は廃止しつつ、丁寧語一辺倒にならないよう「語りかける断言口調（〜です。〜します。）」を採用。既存ユーザー向けのSNSは変化を緩やかにする一方、新規向け広告・プレスリリース・営業資料は新トーンに先行移行する段階的アプローチを取る。</p><h3>見るべきKPI</h3><ul><li>営業提案の商談通過率（トーン変更前後の四半期比較）</li><li>既存ユーザーのNPS（ブランド認識の変化を定点観測）</li><li>採用ページへの応募数（採用広報トーン変更の効果）</li><li>プレスリリースの媒体掲載率</li></ul><h3>失敗しやすい点</h3><p>トーン変更を一斉に全チャネルで行うと、既存ユーザーが「会社が変わった」と感じてチャーンリスクが高まる。変更の優先順位をチャネルごとに設定し、既存ユーザー向けのSNSやメールでは「変化を伝える一言」を添えるのが安全策。</p>
+
+
+
+  <h2 id="faq">よくある質問</h2>
+  <h3>トーンオブボイスとは何ですか？簡単に教えてください。</h3>
+<p>トーンオブボイスとは、ブランドが「どのような言葉遣い・文体・雰囲気で話すか」を定めたコミュニケーションスタイルのことです。「何を伝えるか」はメッセージで、「どのように伝えるか」がトーンオブボイスと区別できます。たとえば同じ「新商品が出ました」という内容でも、「〜しました！ぜひ見てみてください♪」と「新商品を発売いたしました。詳細はこちらをご覧ください。」では、読者が受け取る印象が大きく異なります。</p>
+
+  <h3>トーンオブボイスとブランドボイスの違いは何ですか？</h3>
+<p>ブランドボイスはブランドの根本的な性格・価値観を言語化したもので、基本的に変わりません。トーンオブボイスはそのブランドボイスをどのように表現するかで、チャネルや状況によって調整されます。ブランドボイスが「誠実・親しみやすい」であれば、SNSでは「友人口調でカジュアルに誠実さを表現」し、プレスリリースでは「丁寧な文語体で誠実さを表現」するのがトーンオブボイスの使い方です。</p>
+
+  <h3>トーンオブボイスはどのように決めればいいですか？</h3>
+<p>「ブランドが人間なら、どんな人物か？」という問いからスタートするのが実務上の最短ルートです。具体的には、①ブランドパーソナリティを3〜5語の形容詞で定義する、②フォーマリティ・ユーモア・専門性などのトーン属性軸でポジションを決める、③チャネルごとの調整幅を設定する、④禁止ワードと推奨言い回しサンプルを作成する、の4ステップで設計します。</p>
+
+  <h3>SNSごとにトーンを変えてもいいですか？</h3>
+<p>はい、チャネルごとにトーンを調整することは推奨されます。ただし「変えてよいのは表現の形式」であり、「ブランドの根本的な価値観・中心軸」は統一することが重要です。InstagramとLinkedInで文体が違っても、「読者への誠実さ」や「専門性へのこだわり」は一貫させる、という設計が実務の正解です。</p>
+
+  <h3>トーンオブボイスガイドラインに何を入れるべきですか？</h3>
+<p>最低限必要な要素は①ブランドパーソナリティの定義（3〜5語）、②トーン属性のポジション（フォーマリティ・ユーモアなど）、③チャネル別適用方針、④禁止ワードリスト、⑤推奨言い回しサンプル（10〜30組）、⑥良い例・悪い例の対比文章です。形容詞だけで終わらせず、実際の文章サンプルを充実させることが、現場での活用率を左右します。</p>
+
+  <h3>担当者が変わってもトーンを維持するにはどうすればいいですか？</h3>
+<p>「禁止ワードリスト」と「推奨言い回しサンプル集」を具体的なテキスト形式で整備し、入社オンボーディング時に共有することが最も効果的です。抽象的なガイドラインは解釈の幅が大きくなるため、「この状況ではこう書く」という実例が揃っていることが継続の鍵になります。また、NotionなどのWikiツールで日常的にアクセスできる場所に置くことも重要です。</p>
+
+  <h3>トーンオブボイスが定まっているかどうかはどう判断しますか？</h3>
+<p>「社内で誰かが書いたコンテンツを読んで、自社ブランドのものだとわかるか」が一番のチェックポイントです。また、コンテンツ承認フローでの修正回数が多い・外部ライターへの指示が毎回異なる・チャネルごとに「別の会社みたい」と言われる、これらが当てはまる場合はトーン設計が不十分なシグナルです。</p>
+
+  <h3>生成AIを使う場合、トーンオブボイスはどう管理すればいいですか？</h3>
+<p>ガイドラインをプロンプトに組み込むことが基本対策です。具体的にはシステムプロンプトにブランドパーソナリティと口調を明記し、禁止ワードを箇条書きで指定し、過去の実際のコンテンツを参照例として添付します。チャネルごとにプロンプトテンプレートを作っておくと担当者間の品質が安定します。AI生成コンテンツは必ず人間がトーンチェックするプロセスも残してください。</p>
+
+  <h2 id="conclusion">まとめ</h2>
+<p>トーンオブボイスとは、「何を言うか」ではなく「どのように言うか」を規定するブランドのコミュニケーション基盤です。形容詞だけのガイドラインでは現場に機能せず、具体的なサンプル文・禁止ワードリスト・チャネル別調整幅の三点セットで初めて実務に使えるものになります。</p><p>まず取り組むべきは「ブランドパーソナリティの3語定義」と「推奨言い回しサンプル10本の作成」です。この2つが揃えば、担当者が変わっても表現の軸がぶれない最低限の土台ができます。その後、チャネル別の適用・KPI計測・年次レビューというサイクルを回すことで、トーンオブボイスは生きたブランド資産として機能し続けます。</p>
+
+  <div class="source-history">
+    <h2>参照情報</h2>
+    <table>
+      <thead><tr><th>項目</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td>参照資料</td><td><a href="https://www.thinkwithgoogle.com/" target="_blank" rel="noopener">Think with Google – ブランド体験と消費者行動</a>（参照日: 2026年6月26日）</td></tr>
+        <tr><td>参照資料</td><td><a href="https://developers.google.com/search/docs/fundamentals/creating-helpful-content" target="_blank" rel="noopener">Google Search Central – Helpful Content の作成</a>（参照日: 2026年6月26日）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="cta-band reveal" style="margin-top:60px;">
+    <span class="eyebrow" style="color:#fff;">Free Consultation</span>
+    <h2>ブランディングに課題を感じていませんか？</h2>
+    <p>成果から逆算したご提案を、無料相談でお届けします。</p>
+    <a href="../contact.html" class="btn btn-primary">無料相談を申し込む <span class="arrow">→</span></a>
+  </div>
+
+  <div class="related">
+    <span class="eyebrow">Related</span>
+    <h2 style="font-size:1.5rem;margin:14px 0 30px;font-family:'Shippori Mincho',serif;">関連記事</h2>
+    <div class="posts-grid">
+      <a href="brand-consistency.html" class="post-card">
+        <div class="post-thumb"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#c2410c"/>
+<g opacity="0.08" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+        <div class="post-body">
+          <span class="post-cat">ブランディング</span>
+          <h3>ブランドの一貫性を保つビジュアル＆トーン設計</h3>
+          <div class="post-meta"><span>2026.01.21</span><span class="read">読む →</span></div>
+        </div>
+      </a>
+
+      <a href="brand-purpose.html" class="post-card">
+        <div class="post-thumb"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#c2410c"/>
+<g opacity="0.08" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+        <div class="post-body">
+          <span class="post-cat">ブランディング</span>
+          <h3>パーパスブランディングとは？進め方・手順・失敗例と改善策を徹底解説</h3>
+          <div class="post-meta"><span>2026.06.12</span><span class="read">読む →</span></div>
+        </div>
+      </a>
+
+      <a href="brand-story.html" class="post-card">
+        <div class="post-thumb"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#c2410c"/>
+<g opacity="0.08" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+        <div class="post-body">
+          <span class="post-cat">ブランディング</span>
+          <h3>選ばれ続けるブランドをつくるストーリーテリングの基本</h3>
+          <div class="post-meta"><span>2026.02.04</span><span class="read">読む →</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+</article>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><span class="dot"></span>Growth Marketing</div>
+        <p>SNS運用と広告運用で、ブランドの成長を成果から逆算するデジタルマーケティング代行会社です。</p>
+      </div>
+      <div class="footer-col"><h5>サービス</h5><a href="../index.html#services">SNS運用代行</a><a href="../index.html#services">広告運用代行</a><a href="../index.html#services">コンテンツ・SEO</a></div>
+      <div class="footer-col"><h5>コンテンツ</h5><a href="index.html">ブログ</a><a href="../editorial-policy.html">編集方針</a><a href="../index.html#works">実績</a><a href="../index.html#process">プロセス</a></div>
+      <div class="footer-col"><h5>会社情報</h5><a href="../contact.html">無料相談</a><a href="../contact.html">お問い合わせ</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> Growth Marketing. All rights reserved.</span>
+      <span>SNS運用 / 広告運用 / デジタルマーケティング代行</span>
+    </div>
+  </div>
+</footer>
+<script src="../main.js"></script>
+</body>
+</html>
