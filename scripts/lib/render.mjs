@@ -128,8 +128,9 @@ export function articlePage(article, category, related, dates) {
   const examples = (article.practicalExamples || []).length
     ? `  <h2 id="practical-examples">実務ケース別の設計例</h2>\n${article.practicalExamples.map((e) => `  <h3>${esc(e.title)}</h3>\n${e.html}`).join('\n\n')}\n\n`
     : '';
-  const sourceHistory = ((article.updateHistory || []).length || (article.referencesUsed || []).length)
-    ? `  <div class="source-history">\n    <h2>参照情報・更新履歴</h2>\n    <table>\n      <thead><tr><th>項目</th><th>内容</th></tr></thead>\n      <tbody>\n${(article.referencesUsed || []).map((r) => `        <tr><td>参照資料</td><td><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.label)}</a>（参照日: ${esc(r.accessedDate)}）</td></tr>`).join('\n')}\n${(article.updateHistory || []).map((u) => `        <tr><td>更新履歴</td><td>${esc(u.date)}：${esc(u.detail)}</td></tr>`).join('\n')}\n      </tbody>\n    </table>\n  </div>\n\n`
+  // 参照情報は記事最下部（まとめの後）に置く。更新履歴は表示しない。
+  const references = (article.referencesUsed || []).length
+    ? `  <div class="source-history">\n    <h2>参照情報</h2>\n    <table>\n      <thead><tr><th>項目</th><th>内容</th></tr></thead>\n      <tbody>\n${(article.referencesUsed || []).map((r) => `        <tr><td>参照資料</td><td><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.label)}</a>（参照日: ${esc(r.accessedDate)}）</td></tr>`).join('\n')}\n      </tbody>\n    </table>\n  </div>\n`
     : '';
   const faqHtml = (article.faq || []).length
     ? `\n\n  <h2 id="faq">よくある質問</h2>\n${article.faq.map((f) => `  <h3>${esc(f.question)}</h3>\n${f.answerHtml}`).join('\n\n')}`
@@ -138,12 +139,12 @@ export function articlePage(article, category, related, dates) {
     + authorProfile
     + takeaways
     + expertiseNote
-    + sourceHistory
     + insights
     + article.sections.map((s) => `  <h2 id="${esc(s.id)}">${esc(s.heading)}</h2>\n${s.html}`).join('\n\n')
     + '\n\n' + examples
     + faqHtml
-    + `\n\n  <h2 id="conclusion">まとめ</h2>\n${article.conclusionHtml}`;
+    + `\n\n  <h2 id="conclusion">まとめ</h2>\n${article.conclusionHtml}`
+    + (references ? '\n\n' + references : '');
 
   const schema = {
     '@context': 'https://schema.org',
@@ -199,8 +200,8 @@ export function articlePage(article, category, related, dates) {
     ],
   };
 
-  // 関連記事カードは一覧カードと同一マークアップ（サムネ＋説明文）に統一
-  const relatedHtml = related.map((p) => '      ' + indexCard(p).trim()).join('\n\n');
+  // 関連記事カードは説明文なし（縦長防止）。タイトルはCSSで2行クランプして読みやすく。
+  const relatedHtml = related.map((p) => '      ' + relatedCard(p).trim()).join('\n\n');
 
   return `<!DOCTYPE html>
 <html lang="ja">
