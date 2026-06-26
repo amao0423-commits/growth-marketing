@@ -7,7 +7,7 @@
     "content",
     "brand"
   ],
-  "nextRotationIndex": 3,
+  "nextRotationIndex": 4,
   "usedTopicIds": [
     "sns-reels-retention-2026",
     "ads-meta-advantage-plus",
@@ -16,7 +16,8 @@
     "brand-purpose",
     "sns-ugc-strategy",
     "ads-google-pmax",
-    "seo-ai-overview"
+    "seo-ai-overview",
+    "content-lead-nurturing"
   ],
   "clusters": {
     "sns": {
