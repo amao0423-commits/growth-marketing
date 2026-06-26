@@ -342,7 +342,7 @@ section { position: relative; }
 .article-hero h1 { font-size: clamp(2rem, 4.4vw, 3rem); max-width: 20em; margin-bottom: 22px; }
 .article-meta { display: flex; gap: 20px; font-size: 0.84rem; color: var(--ink-faint); align-items: center; }
 .article-cover { height: 360px; border-radius: 12px; overflow: hidden; margin: 10px 0 50px; position: relative; background: var(--paper-2); }
-.article-body { max-width: 720px; margin: 0 auto; }
+.article-body { max-width: 720px; margin: 0 auto; padding-bottom: 90px; }
 .article-body h2 { font-size: 1.6rem; margin: 44px 0 18px; }
 .article-body h3 { font-size: 1.22rem; margin: 32px 0 14px; }
 .article-body p { margin-bottom: 20px; color: var(--ink-soft); }
