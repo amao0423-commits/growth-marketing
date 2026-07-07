@@ -7,7 +7,7 @@
     "content",
     "brand"
   ],
-  "nextRotationIndex": 0,
+  "nextRotationIndex": 1,
   "usedTopicIds": [
     "sns-reels-retention-2026",
     "ads-meta-advantage-plus",
@@ -18,7 +18,8 @@
     "ads-google-pmax",
     "seo-ai-overview",
     "content-lead-nurturing",
-    "brand-tone-of-voice"
+    "brand-tone-of-voice",
+    "sns-tiktok-search"
   ],
   "clusters": {
     "sns": {
