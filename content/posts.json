@@ -1,5 +1,13 @@
 [
   {
+    "slug": "content-video-short",
+    "category": "content",
+    "categoryLabel": "コンテンツマーケティング",
+    "title": "ショート動画コンテンツマーケティングの組み立て方：手順・失敗例・KPIを徹底解説",
+    "description": "ショート動画を軸にしたコンテンツ設計の手順・失敗例・KPIを実務目線で解説します。",
+    "date": "2026.07.13"
+  },
+  {
     "slug": "seo-topic-cluster",
     "category": "seo",
     "categoryLabel": "SEO",
