@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// contact form validation (no backend; demo handler)
+// contact form: validate, then submit to Formspree (info@cocomake-guide.com)
 function handleContact(e) {
   e.preventDefault();
   const form = e.target;
@@ -43,7 +43,31 @@ function handleContact(e) {
     if (!valid) ok = false;
   });
   if (!ok) return false;
-  form.style.display = 'none';
-  document.querySelector('.form-success')?.classList.add('show');
+
+  // 受信メールで「どこからの・何の問い合わせか」が一目で分かるよう件名を動的生成
+  const topicMap = { sns: 'SNS運用', ads: '広告運用', seo: 'SEO・コンテンツ', other: 'その他' };
+  const topicLabel = topicMap[form.querySelector('#topic')?.value] || 'お問い合わせ';
+  const nameVal = form.querySelector('#name').value.trim();
+  const subjectField = form.querySelector('input[name="_subject"]');
+  if (subjectField) subjectField.value = `【Growth Marketingサイト】${topicLabel}のご相談 - ${nameVal}様`;
+
+  const btn = form.querySelector('button[type="submit"]');
+  const errorBox = form.querySelector('.form-error');
+  errorBox?.classList.remove('show');
+  if (btn && !btn.dataset.label) btn.dataset.label = btn.innerHTML;
+  if (btn) { btn.disabled = true; btn.textContent = '送信中…'; }
+
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { Accept: 'application/json' },
+  }).then(res => {
+    if (!res.ok) throw new Error('send failed');
+    form.style.display = 'none';
+    document.querySelector('.form-success')?.classList.add('show');
+  }).catch(() => {
+    if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.label || '送信する'; }
+    errorBox?.classList.add('show');
+  });
   return false;
 }

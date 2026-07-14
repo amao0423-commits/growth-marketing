@@ -317,6 +317,9 @@ section { position: relative; }
 .form-note { font-size: 0.78rem; color: var(--ink-faint); margin-top: 6px; }
 .form-success { display: none; background: var(--accent-wash); border: 1.5px solid var(--accent); border-radius: 8px; padding: 22px; color: var(--accent-deep); font-weight: 600; }
 .form-success.show { display: block; animation: fade 0.5s var(--ease); }
+.form-error { display: none; margin-top: 14px; background: #fdecec; border: 1.5px solid #e5484d; border-radius: 8px; padding: 14px 16px; color: #b42318; font-size: 0.86rem; line-height: 1.6; }
+.form-error.show { display: block; animation: fade 0.5s var(--ease); }
+.form-error a { color: #b42318; text-decoration: underline; }
 
 .contact-info li { list-style: none; margin-bottom: 26px; }
 .contact-info .k { font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-weight: 700; }

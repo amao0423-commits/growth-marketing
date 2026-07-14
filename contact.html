@@ -58,7 +58,13 @@
 
     <div class="reveal">
       <div class="form-card">
-        <form onsubmit="return handleContact(event)" novalidate>
+        <form action="https://formspree.io/f/xvzeojdw" method="POST" onsubmit="return handleContact(event)" novalidate>
+          <!-- メール件名（送信時にJSで相談内容・お名前を付与して上書き） -->
+          <input type="hidden" name="_subject" value="【Growth Marketingサイト】お問い合わせ">
+          <!-- 受信メール本文に問い合わせ元を明示 -->
+          <input type="hidden" name="お問い合わせ元" value="Growth Marketing サイト（nishinippon-adv.jp / お問い合わせフォーム）">
+          <!-- スパム対策のハニーポット（人間は入力しない） -->
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none !important;" aria-hidden="true">
           <div class="field">
             <label for="name">お名前 <span class="req">必須</span></label>
             <input type="text" id="name" name="name" placeholder="山田 太郎" autocomplete="name">
@@ -88,6 +94,7 @@
             <div class="err">お問い合わせ内容を入力してください。</div>
           </div>
           <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">送信する <span class="arrow">→</span></button>
+          <div class="form-error">送信に失敗しました。通信環境をご確認のうえ再度お試しいただくか、<a href="mailto:hello@nishinippon-adv.jp">hello@nishinippon-adv.jp</a> へ直接ご連絡ください。</div>
           <p class="form-note">送信いただいた内容は、ご相談対応のみに利用します。</p>
         </form>
         <div class="form-success">
