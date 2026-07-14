@@ -12,6 +12,7 @@ export const CATEGORIES = {
   seo:     { label: 'SEO',                  fill: '#2d2a26' },
   content: { label: 'コンテンツマーケティング', fill: '#ff8a5c' },
   brand:   { label: 'ブランディング',        fill: '#c2410c' },
+  compare: { label: '比較・選び方',          fill: '#b45309' },
 };
 
 function esc(s = '') {
