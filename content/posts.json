@@ -1,5 +1,13 @@
 [
   {
+    "slug": "ads-retargeting-privacy",
+    "category": "ads",
+    "categoryLabel": "広告運用",
+    "title": "リターゲティングとCookie規制｜ファーストパーティデータ活用の手順・失敗例・改善指標を徹底解説",
+    "description": "Cookie規制下でリターゲティングを維持するファーストパーティデータ活用の手順と注意点を解説。",
+    "date": "2026.07.24"
+  },
+  {
     "slug": "sns-threads-growth",
     "category": "sns",
     "categoryLabel": "SNS運用",
