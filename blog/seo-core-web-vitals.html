@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>Core Web Vitals 改善とは？指標の意味・手順・よくある失敗を解説｜Growth Marketing ブログ</title>
+<meta name="description" content="Core Web Vitalsの改善方法を実務目線で解説。LCP・INP・CLSの定義から、PageSpeed Insightsの見方、原因別の改善手順、よくある失敗例まで具体的に説明します。">
+<meta name="keywords" content="Core Web Vitals 改善,LCP,INP,CLS,ページエクスペリエンス">
+<link rel="canonical" href="https://www.nishinippon-adv.jp/blog/seo-core-web-vitals.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Core Web Vitals 改善とは？LCP・INP・CLSの手順・失敗例・KPIを徹底解説">
+<meta property="og:description" content="Core Web Vitalsの改善方法を実務目線で解説。LCP・INP・CLSの定義から、PageSpeed Insightsの見方、原因別の改善手順、よくある失敗例まで具体的に説明します。">
+<meta property="og:url" content="https://www.nishinippon-adv.jp/blog/seo-core-web-vitals.html">
+<meta property="article:section" content="SEO">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.nishinippon-adv.jp/blog/seo-core-web-vitals.html#article",
+      "headline": "Core Web Vitals 改善とは？LCP・INP・CLSの手順・失敗例・KPIを徹底解説",
+      "description": "Core Web Vitalsの改善方法を実務目線で解説。LCP・INP・CLSの定義から、PageSpeed Insightsの見方、原因別の改善手順、よくある失敗例まで具体的に説明します。",
+      "datePublished": "2026-07-28",
+      "dateModified": "2026-07-28",
+      "articleSection": "SEO",
+      "keywords": [
+        "Core Web Vitals 改善",
+        "LCP",
+        "INP",
+        "CLS",
+        "ページエクスペリエンス"
+      ],
+      "wordCount": 10769,
+      "author": {
+        "@id": "https://www.nishinippon-adv.jp/#editorial-team"
+      },
+      "editor": {
+        "@type": "Person",
+        "name": "早川 葵",
+        "jobTitle": "SEO歴5年",
+        "knowsAbout": [
+          "SEO",
+          "コンテンツマーケティング",
+          "SEO"
+        ]
+      },
+      "publisher": {
+        "@id": "https://www.nishinippon-adv.jp/#organization"
+      },
+      "citation": [
+        "https://developers.google.com/search/docs/fundamentals/seo-starter-guide",
+        "https://developers.google.com/search/docs/fundamentals/creating-helpful-content",
+        "https://www.thinkwithgoogle.com/"
+      ],
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.nishinippon-adv.jp/blog/seo-core-web-vitals.html"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.nishinippon-adv.jp/#organization",
+      "name": "Growth Marketing",
+      "url": "https://www.nishinippon-adv.jp",
+      "publishingPrinciples": "https://www.nishinippon-adv.jp/editorial-policy.html"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.nishinippon-adv.jp/#editorial-team",
+      "name": "Growth Marketing編集部",
+      "url": "https://www.nishinippon-adv.jp/editorial-policy.html",
+      "parentOrganization": {
+        "@id": "https://www.nishinippon-adv.jp/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.nishinippon-adv.jp/blog/seo-core-web-vitals.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://www.nishinippon-adv.jp"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "ブログ",
+          "item": "https://www.nishinippon-adv.jp/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Core Web Vitals 改善とは？LCP・INP・CLSの手順・失敗例・KPIを徹底解説",
+          "item": "https://www.nishinippon-adv.jp/blog/seo-core-web-vitals.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.nishinippon-adv.jp/blog/seo-core-web-vitals.html#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Core Web Vitalsとは何ですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Core Web Vitalsとは、Googleがユーザー体験を数値化してSEO順位要因に組み込んだ3つの指標（LCP・INP・CLS）のことです。LCPはページの主要コンテンツの表示速度、INPはユーザー操作への応答速度、CLSはレイアウトの視覚的安定性を計測します。2021年6月からランキングシグナルに正式採用されています。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Core Web VitalsとPageSpeed Insightsのスコアは何が違いますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PageSpeed Insightsのスコア（0〜100点）はラボ環境での計測値であり、SEO順位には直接影響しません。Core Web Vitalsは実ユーザーのブラウザで計測したフィールドデータをSearch Consoleが集計したものが順位要因になります。施策の効果確認はSearch ConsoleのCore Web Vitalsレポートで行ってください。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "LCPを改善するには何から始めればいいですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "まずPageSpeed InsightsでLCP要素（最大の画像またはテキストブロック）が何かを確認することから始めてください。LCP要素が画像であれば、WebP変換・fetchpriority=\"high\"の付与・不要なlazy loadingの除外が優先施策です。TTFB（サーバー応答時間）が長い場合はCDNやキャッシュの設定見直しも必要です。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "CLSが悪化する原因はどんなものがありますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "主な原因は、画像へのwidth・height属性の未設定、Webフォントの表示切り替え、広告・バナーの遅延挿入、A/BテストツールやSNSウィジェットなどのサードパーティスクリプトによる動的DOM追加です。「画像は全部設定した」という場合はGTM経由のサードパーティスクリプトをChrome DevToolsで調査することを推奨します。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "INPとFIDの違いは何ですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "FID（First Input Delay）はページ読み込み後の最初のユーザー操作への応答遅延だけを計測していましたが、INP（Interaction to Next Paint）はページ滞在中のすべてのインタラクション（クリック・タップ・キーボード）を対象に計測します。2024年3月にFIDがINPに置き換えられたため、現在の計測・改善対象はINPです。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Core Web Vitalsの改善後、Search Consoleに反映されるまでどれくらいかかりますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Search ConsoleのCore Web Vitalsレポートは過去28日間のデータを集計しているため、施策実施後の変化が反映されるまで最低28日かかります。それ以前はPageSpeed InsightsのラボデータとフィールドデータのAPI取得で中間確認を行うのが実務上の一般的な対応です。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Core Web Vitalsが悪くても検索順位は下がりませんか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Core Web VitalsはSEO順位の一つの要因ですが、唯一の決定因子ではありません。Googleはコンテンツの質・E-E-A-T・関連性を最優先しており、Core Web Vitalsは同程度のコンテンツ品質が競合するときに差別化要因になるとされています。ただし、指標がPoor（最低ランク）のページは不利になる可能性があるため、最低限「要改善」以上を目指すことを推奨します。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Core Web Vitalsの改善は外注できますか？どんなことを依頼できますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "可能です。一般的には、診断（PageSpeed Insights・Search Consoleの分析）、原因特定、HTML/CSS/JavaScript改善、CDN・サーバー設定の最適化、施策後のKPIモニタリングまでを一括で依頼できます。特にサードパーティスクリプトの棚卸しや、フレームワーク（React・Vueなど）の最適化は専門知識が必要なため、外注が効率的なケースが多いです。"
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a href="../index.html" class="brand"><span class="dot"></span>Growth&nbsp;Marketing</a>
+    <nav class="nav-links">
+      <a href="../index.html#services">サービス</a>
+      <a href="../index.html#process">プロセス</a>
+      <a href="../index.html#works">実績</a>
+      <a href="index.html">ブログ</a>
+      <a href="../contact.html" class="nav-cta">無料相談</a>
+    </nav>
+    <button class="burger" onclick="toggleNav()" aria-label="メニュー"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="wrap crumb">
+  <a href="../index.html">ホーム</a><span>/</span><a href="index.html">ブログ</a><span>/</span>SEO
+</div>
+
+<article>
+<section class="article-hero">
+  <div class="wrap" style="max-width:820px;">
+    <span class="eyebrow">SEO</span>
+    <h1>Core Web Vitals 改善とは？LCP・INP・CLSの手順・失敗例・KPIを徹底解説</h1>
+    <div class="article-meta">
+      <span>2026.07.28</span><span>•</span><span>読了 約18分</span><span>•</span><span>Growth Marketing 編集部</span><span>•</span><span>監修：早川 葵（SEO歴5年）</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap" style="max-width:820px;">
+  <div class="article-cover"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#2d2a26"/>
+<g opacity="0.1" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+</div>
+
+<div class="wrap article-body">
+  <div class="toc">
+    <h4>目次</h4>
+    <a href="#what-is-core-web-vitals">Core Web Vitalsとは？3指標の定義と「Good」の閾値</a>
+    <a href="#cwv-vs-pagespeed">Core Web VitalsとPageSpeedスコアの違い：比較表</a>
+    <a href="#how-to-diagnose">PageSpeed InsightsとSearch Consoleでの原因特定手順</a>
+    <a href="#lcp-improvement">LCP改善の手順：画像・サーバー・レンダーブロッキング別の対策</a>
+    <a href="#inp-cls-improvement">INP・CLS改善の手順と原因別の対策</a>
+    <a href="#search-console-check">管理画面で確認するCore Web Vitalsモニタリングの手順</a>
+    <a href="#common-mistakes">Core Web Vitals改善でよくある失敗例と対策</a>
+    <a href="#checklist-and-kpi">実務チェックリストと改善後のKPI設定</a>
+    <a href="#practical-examples">実務ケース別の設計例</a>
+    <a href="#faq">よくある質問</a>
+    <a href="#conclusion">まとめ</a>
+  </div>
+
+<p><strong>Core Web Vitalsとは、GoogleがSEOのランキング要因に組み込んだユーザー体験を数値化した3つの指標（LCP・INP・CLS）のことです。</strong></p><p>「PageSpeed InsightsでスコアをあげたのにSearch Consoleで改善が反映されない」「どの指標から手をつければいいかわからない」という声は、SEO担当者から非常によく届きます。Core Web Vitalsはスコアを追うより「実ユーザーのフィールドデータ」を改善することが本質であり、そこを理解せずに施策を重ねてしまうのが最大の落とし穴です。</p><p>この記事では、LCP・INP・CLSの定義と「Good」の閾値、PageSpeed Insightsを使った原因特定の手順、原因別の改善策、よくある失敗例、そして実務で使えるチェックリストまでを体系的に解説します。読み終えた時点で、どの指標を・どの順番で・何の施策で改善するかを自分で判断できるようになることを目標にしています。</p>
+
+  <div class="author-box">
+    <h2>著者・編集方針</h2>
+<div class="author-profile"><p><strong>Growth Marketing編集部</strong></p><p>SNS運用・広告運用・コンテンツSEOをテーマに、実務者向けの記事を制作している編集部です。記事の制作にあたっては、公式情報・管理画面で確認すべき項目・KPI・内部導線を精査したうえで執筆しています。詳しくは<a href="../editorial-policy.html">編集方針</a>をご覧ください。</p></div>
+  </div>
+
+  <div class="key-takeaways">
+    <h2>重要ポイント</h2>
+    <ul>
+      <li>Core Web Vitalsとは、GoogleがSEOの順位要因に組み込んだページ体験の3指標（LCP・INP・CLS）であり、ユーザーが実際に体感する速度・応答性・視覚的安定性を数値化したものです。</li>
+      <li>LCPは2.5秒以内、INPは200ms以内、CLSは0.1以下が「Good」の目安とされており、この閾値を超えると検索順位への悪影響が出る可能性があります。</li>
+      <li>改善の優先順位は「フィールドデータ（実ユーザー計測値）」を起点にし、PageSpeed Insightsで原因を特定してから施策を実行するのが最も効率的な手順です。</li>
+      <li>よくある失敗は「ラボデータのスコアだけを追う」ことで、実ユーザーの環境では依然として遅いままになるケースが多い点に注意が必要です。</li>
+      <li>改善後はGoogle Search ConsoleのCore Web Vitalsレポートで「Good URL」の割合推移を最低28日間モニタリングし、改善が定着していることを確認してから次の施策に進んでください。</li>
+    </ul>
+  </div>
+
+  <div class="expertise-note">
+    <h2>編集・検証方針</h2>
+<p>この記事は、Googleの公式ドキュメント・Search Console・PageSpeed Insightsで確認すべき項目と実務で見るべきKPIをもとにGrowth Marketing編集部が整理し、SEO歴5年の早川 葵が監修しています。詳細は<a href="../editorial-policy.html">編集方針</a>をご確認ください。</p>
+  </div>
+
+  <div class="original-insights">
+    <h2>Growth Marketingの実務視点</h2>
+    <ul>
+      <li>スコア100点を目指すことは目的ではなく、「フィールドデータのGood URL比率を上げる」ことが本来のゴールです。ラボ環境のスコアは改善の仮説検証に使うもので、実ユーザー体験と乖離することが多いため、両者を常に並べて見る習慣が必要です。</li>
+      <li>CLSは「画像にwidth/heightを書けば終わり」と思われがちですが、フォントの読み込み、動的バナー、A/Bテストツールが後からDOM要素を挿入するケースも頻出原因です。ツールベンダーのスクリプトが原因でCLSが悪化していると気づかないサイトが多い点は、競合記事でほとんど触れられていません。</li>
+      <li>INP（Interaction to Next Paint）はFIDの後継指標として2024年3月に正式採用されました。FIDは最初のクリックしか計測しませんでしたが、INPはページ滞在中の全インタラクションの応答遅延を計測するため、JavaScriptが多いSPAやフォームページで特に悪化しやすく、改善難度が高い指標です。</li>
+      <li>画像最適化だけでLCPが改善しないケースでは、サーバー応答速度（TTFB）とレンダーブロッキングリソースの排除が効くことが多い。この2つは「コードを書き換える」のではなくサーバー設定・CDN・キャッシュ戦略の見直しで対応できる場合があり、開発リソースが少ないサイトこそ優先度が高い施策です。</li>
+      <li>Core Web VitalsはSEO順位の唯一の決定因子ではありません。コンテンツの質・E-E-A-Tの充足・内部リンク設計と組み合わせて初めてSEO効果が最大化します。指標改善だけを追って内容の薄いページを高速化しても、検索意図との乖離があれば順位は上がりません。</li>
+    </ul>
+  </div>
+
+  <h2 id="what-is-core-web-vitals">Core Web Vitalsとは？3指標の定義と「Good」の閾値</h2>
+<p>Core Web Vitalsは、Googleが2021年6月から正式にSEO順位要因（ページエクスペリエンスシグナル）に組み込んだ3つのパフォーマンス指標です。「実際のユーザーが体感する速度・応答性・視覚的安定性」を計測する点が、従来の技術的な速度指標と異なる最大の特徴です（参照日: 2026年7月28日：<a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google検索 スターターガイド</a>）。</p><h3>LCP（Largest Contentful Paint）：表示速度</h3><p>ページのメインコンテンツ（最も大きな画像やテキストブロック）が画面に描画されるまでの時間です。</p><ul><li><strong>Good</strong>：2.5秒以内</li><li><strong>要改善</strong>：2.5〜4.0秒</li><li><strong>Poor</strong>：4.0秒超</li></ul><h3>INP（Interaction to Next Paint）：応答性</h3><p>2024年3月にFID（First Input Delay）の後継として正式採用された指標です。ページ滞在中のすべてのクリック・タップ・キーボード操作に対する応答時間のうち、最も遅いものを代表値として使います。</p><ul><li><strong>Good</strong>：200ms以内</li><li><strong>要改善</strong>：200〜500ms</li><li><strong>Poor</strong>：500ms超</li></ul><h3>CLS（Cumulative Layout Shift）：視覚的安定性</h3><p>ページ読み込み中に要素が予期せず動く量を計測します。読んでいた文字が突然ずれる、押そうとしたボタンが動くといった体験がCLSのスコアに直結します。</p><ul><li><strong>Good</strong>：0.1以下</li><li><strong>要改善</strong>：0.1〜0.25</li><li><strong>Poor</strong>：0.25超</li></ul><div class="callout"><p>3指標はすべて「フィールドデータ（実ユーザー計測値）」で評価されます。ラボデータのスコアだけを改善しても、Search Consoleのレポートが動かない場合はフィールドデータの改善に集中してください。</p></div>
+
+  <h2 id="cwv-vs-pagespeed">Core Web VitalsとPageSpeedスコアの違い：比較表</h2>
+<p>よく混同されるのが「PageSpeed Insightsのスコア（0〜100点）」と「Core Web Vitalsのフィールドデータ評価」です。両者は別の概念であり、目的も使い方も異なります。</p><table><thead><tr><th>項目</th><th>PageSpeed Insightsスコア</th><th>Core Web Vitals（フィールドデータ）</th></tr></thead><tbody><tr><td>計測環境</td><td>ラボ環境（仮想マシン）</td><td>実ユーザーのブラウザ</td></tr><tr><td>SEO順位への影響</td><td>直接影響しない</td><td>順位要因に含まれる</td></tr><tr><td>確認場所</td><td>PageSpeed Insights上部の「診断」</td><td>Search Console・PageSpeed Insights下部</td></tr><tr><td>用途</td><td>問題の仮説立案・改善前後の比較</td><td>実際のユーザー体験の評価・改善確認</td></tr><tr><td>反映速度</td><td>即時</td><td>28日間の集計後（遅延あり）</td></tr><tr><td>データ量</td><td>1回の計測</td><td>直近28日間の実ユーザーデータ</td></tr></tbody></table><p>実務上は「ラボデータで問題を特定・施策を実行 → フィールドデータで結果を確認」という流れが基本です。ラボスコア100点を取っても、実ユーザーデータが改善しなければSEO上の意味は薄いと理解してください。</p>
+
+  <h2 id="how-to-diagnose">PageSpeed InsightsとSearch Consoleでの原因特定手順</h2>
+<p>改善の第一歩は「どの指標が・どのページで・なぜ悪化しているか」を特定することです。以下の順番で確認します。</p><h3>Step 1：Search ConsoleでサイトレベルのCore Web Vitalsを確認する</h3><ol><li>Search Console（search.google.com/search-console）にログイン</li><li>左メニューの「エクスペリエンス」→「Core Web Vitals」をクリック</li><li>「モバイル」と「PC」でそれぞれ「Poor URL」「要改善URL」の数を確認</li><li>「レポートを開く」でURL一覧を取得し、影響の大きいページを特定する</li></ol><h3>Step 2：PageSpeed InsightsでページレベルのLCP・INP・CLSを確認する</h3><ol><li>PageSpeed Insights（pagespeed.web.dev）にURLを入力して計測</li><li>上部のフィールドデータ（Chrome UXレポート）を最初に確認し、Poor/要改善の指標を把握</li><li>「診断」セクションで各指標の原因候補を確認（例：「LCPを遅延させているリソース」「CLSを引き起こす要素」）</li><li>「改善の機会」セクションに表示される施策候補のスコア上昇予測を参考に優先度を決める</li></ol><h3>Step 3：Chrome DevToolsで詳細な原因を特定する</h3><ul><li>F12でDevToolsを開き、「Lighthouse」タブで再計測（モバイル設定を推奨）</li><li>「Performance」タブで「Main Thread」の処理時間を確認（INP改善に有効）</li><li>「Rendering」パネルで「Layout Shift Regions」を有効にするとCLS発生箇所が可視化される</li></ul><div class="callout"><p>Core Web VitalsのSEO改善でお困りの場合は、<a href="../contact.html">無料相談はこちら →</a> から「Core Web Vitals診断」としてご相談ください。ページ診断から優先施策の提案まで対応しています。</p></div>
+
+  <h2 id="lcp-improvement">LCP改善の手順：画像・サーバー・レンダーブロッキング別の対策</h2>
+<p>LCPが遅い原因は「何がLCP要素か」によって異なります。まずPageSpeed Insightsの「LCP要素」に表示されているHTMLタグを確認してください。</p><h3>LCP要素が画像の場合</h3><ul><li>画像をWebP・AVIF形式に変換してファイルサイズを削減する</li><li><code>fetchpriority="high"</code>属性を付与して優先読み込みを指示する</li><li><code>loading="eager"</code>を明示し、lazy loadingを除外する</li><li><code>&lt;link rel="preload" as="image"&gt;</code>をHTMLのheadに追加する</li><li>srcsetとsizesを使ってデバイスに合ったサイズを配信する</li></ul><h3>LCP要素がテキストブロックの場合</h3><ul><li>Webフォントの読み込みが遅延していないか確認する</li><li><code>font-display: swap</code>を設定してフォント読み込み中もテキストを表示する</li><li><code>&lt;link rel="preload" as="font"&gt;</code>で必要なフォントファイルを事前読み込みする</li></ul><h3>TTFB（サーバー応答時間）が長い場合</h3><p>LCP要素が画像でもテキストでも、サーバーの初期応答が遅いとLCPは改善しません。</p><ul><li>CDN（コンテンツデリバリーネットワーク）の導入・設定を見直す</li><li>サーバーサイドキャッシュを有効にする（WordPressならW3 Total Cacheなど）</li><li>共有ホスティングから専用・VPSへの移行を検討する</li></ul><h3>レンダーブロッキングリソースがある場合</h3><ul><li>headタグ内のCSSとJSのうち、初期描画に不要なものをdeferまたはasyncで後回しにする</li><li>クリティカルCSSをインライン化して最初のレンダリングを早める</li></ul>
+
+  <h2 id="inp-cls-improvement">INP・CLS改善の手順と原因別の対策</h2>
+<h3>INP改善：JavaScriptの処理量削減が基本</h3><p>INPが悪い原因のほとんどはJavaScriptのメインスレッド占有です。以下の順番で対処します。</p><ol><li>Chrome DevToolsのPerformanceタブで「Long Tasks」（50ms以上の処理）を特定する</li><li>不要なサードパーティスクリプト（トラッキング・チャットウィジェット・広告タグ）を棚卸しして削除または遅延読み込みにする</li><li>JavaScriptバンドルサイズを削減する（tree shaking・コード分割を適用）</li><li>イベントリスナーの処理を軽量化し、重い計算はWeb Workerへ移行する</li><li>React・Vue・Angularなどのフレームワークを使っている場合は、不要な再レンダリングを防ぐ最適化を行う</li></ol><h3>CLS改善：レイアウトシフト原因別の対策</h3><table><thead><tr><th>原因</th><th>対策</th></tr></thead><tbody><tr><td>画像にサイズ指定がない</td><td>width・height属性を全画像に設定する</td></tr><tr><td>Webフォントの切り替え</td><td>font-display: swapとサイズ調整CSSを使う</td></tr><tr><td>広告・バナーの遅延挿入</td><td>表示エリアをmin-heightで事前確保する</td></tr><tr><td>A/Bテストツールの動的DOM変更</td><td>ファーストビュー外での適用に変更するか、ツールを再設計する</td></tr><tr><td>iframeの遅延読み込み</td><td>aspect-ratio CSSでコンテナのサイズを事前に確保する</td></tr><tr><td>サードパーティウィジェット</td><td>読み込み完了前にスペースを確保するCSSを追加する</td></tr></tbody></table><p>なお、SEOの観点からは、<a href="seo-eeat-2026.html">E-E-A-Tを高める施策</a>とCore Web Vitalsの改善を並行して進めることで、技術面と内容面の両軸からSearch Consoleのパフォーマンスを底上げできます。</p>
+
+  <h2 id="search-console-check">管理画面で確認するCore Web Vitalsモニタリングの手順</h2>
+<p>改善施策を打った後は、定期的なモニタリングが不可欠です。確認すべき画面と項目を順番に示します。</p><h3>Google Search Console：Core Web Vitalsレポート</h3><ol><li>「エクスペリエンス」→「Core Web Vitals」を開く</li><li>「モバイル」と「PC」をそれぞれ確認（モバイルを優先）</li><li>「Poor URL数」と「Good URL数」の推移グラフを確認</li><li>「レポートを開く」でURLグループ別に「LCP」「INP」「CLS」のいずれが問題かを特定</li><li>影響URLをクリックして「同じURLグループの例」でサンプルページを取得</li></ol><h3>PageSpeed Insights：施策前後の比較</h3><ul><li>施策実施前のスコアとフィールドデータをスクリーンショット等で記録しておく</li><li>施策後に同じURLで再計測し、ラボデータの変化を確認</li><li>フィールドデータの変化はSearch Console反映まで最低28日かかるため、ラボデータを中間確認の代替として使う</li></ul><h3>初期設定で間違えやすい項目</h3><ul><li>Search Consoleのプロパティが「ドメインプロパティ」か「URLプレフィックスプロパティ」かによって表示URLが異なるため、実際のトラフィックURLと一致しているか確認する</li><li>「インデックス未登録のURL」はCore Web Vitalsレポートに表示されないため、インデックス状況も同時に確認する</li></ul><h3>変更後に見るべきKPI</h3><ul><li>Good URL比率（全URLのうち「Good」が占める割合）</li><li>Poor URL数の絶対数の減少</li><li>Search Consoleの「インプレッション数」と「平均掲載順位」の変化（Core Web Vitals改善後1〜3ヶ月でトレンド変化を確認）</li></ul>
+
+  <h2 id="common-mistakes">Core Web Vitals改善でよくある失敗例と対策</h2>
+<p>実務の相談で頻繁に登場する失敗パターンを整理します。</p><h3>失敗例1：ラボスコアを上げることが目的化する</h3><p>PageSpeed Insightsのスコア（0〜100点）を100点にすることに注力し、フィールドデータが改善しないまま施策を終了するケースです。ラボデータはあくまでも仮説検証ツールです。Search ConsoleのCore Web VitalsレポートのGood URL比率が改善しているかを最終的な判断基準にしてください。</p><h3>失敗例2：全ページに同じ施策を適用する</h3><p>サイト全体でCLSが悪いからといって、一律に全ページのCSSを変更したところ、別のページで表示崩れが発生するケースです。Search ConsoleのCore Web Vitalsレポートは「URLグループ」単位で問題を特定できるため、影響が大きいページを絞り込んでから施策を適用することを推奨します。</p><h3>失敗例3：改善後の確認を28日待たずに別の施策を重ねる</h3><p>施策を複数並行して実施すると、どの施策が効いたか（または悪化させたか）の切り分けができなくなります。施策は1つずつ実施し、最低28日間の計測期間を設けてから次に進む習慣が重要です。</p><h3>失敗例4：モバイルを後回しにする</h3><p>Googleのランキングはモバイルファーストインデックスが基本であり、Core Web VitalsもモバイルのフィールドデータがSEOに影響します。PCのスコアだけを改善しても効果が出にくいため、モバイルを優先して診断・改善してください。</p><h3>失敗例5：サードパーティスクリプトを見落とす</h3><p>GTM経由で配信されるスクリプトの影響を把握せずに施策を進め、CLSやINPが改善しないケースは非常に多いです。PageSpeed Insightsの「サードパーティコードの影響を制限する」セクションにサードパーティが表示されている場合は、必ず棚卸しを行ってください。</p><p>Webパフォーマンスの改善はSEOだけでなく<a href="ads-lp-cvr.html">ランディングページのCVR改善</a>にも直結します。表示速度が1秒改善するだけでコンバージョン率が変化するケースは多く、技術施策とビジネス指標をセットで評価することが重要です。</p>
+
+  <h2 id="checklist-and-kpi">実務チェックリストと改善後のKPI設定</h2>
+<h3>Core Web Vitals改善 実務チェックリスト</h3><ul><li>☐ Search ConsoleのCore Web VitalsレポートでPoor URLを特定したか</li><li>☐ モバイルと PCそれぞれのフィールドデータを確認したか</li><li>☐ PageSpeed InsightsでLCP要素・INP原因・CLS要素を特定したか</li><li>☐ LCP要素の画像にfetchpriority="high"を設定し、不要なlazy loadingを除外したか</li><li>☐ 全画像にwidth・height属性を付与したか（CLS対策）</li><li>☐ Webフォントにfont-display: swapを設定したか</li><li>☐ 不要なサードパーティスクリプトを棚卸しして削除・遅延化したか</li><li>☐ CDNまたはサーバーキャッシュを設定してTTFBを短縮したか</li><li>☐ レンダーブロッキングなCSSとJSをdefer/asyncまたはインライン化で対処したか</li><li>☐ 施策実施前のラボデータとフィールドデータを記録したか</li><li>☐ 施策後28日間のSearch Console推移を追う計画を立てたか</li><li>☐ 改善後のGood URL比率・インプレッション・平均順位の変化を計測しているか</li></ul><h3>改善指標とKPIの見方</h3><table><thead><tr><th>KPI</th><th>確認場所</th><th>目標の考え方</th></tr></thead><tbody><tr><td>Good URL比率（LCP）</td><td>Search Console → Core Web Vitals</td><td>サイト全体の75%以上をGoodにすることを目標とする</td></tr><tr><td>Good URL比率（INP・CLS）</td><td>同上</td><td>同様に75%以上が目安（Googleはp75での評価）</td></tr><tr><td>平均掲載順位</td><td>Search Console → 検索パフォーマンス</td><td>改善1〜3ヶ月後に対象ページの順位変化を確認</td></tr><tr><td>クリック率（CTR）</td><td>Search Console → 検索パフォーマンス</td><td>順位改善後にCTRが追随しているか確認</td></tr><tr><td>直帰率・滞在時間</td><td>GA4 → エンゲージメント</td><td>ページ速度改善後にユーザー行動指標が改善しているか確認</td></tr></tbody></table><p>GoogleのHelpful Contentガイドラインでも強調されているように、ページ体験はコンテンツの質と組み合わせて評価されます（参照日: 2026年7月28日：<a href="https://developers.google.com/search/docs/fundamentals/creating-helpful-content" target="_blank" rel="noopener">役立つコンテンツの作成</a>）。Core Web Vitalsの改善だけに集中せず、<a href="seo-topic-cluster.html">トピッククラスター構造による内部リンク設計</a>と並行して進めることでSEO効果が高まります。</p><p>また、ページのパフォーマンス計測に加えて、ウェブサイト全体の検索戦略を整理したい場合は<a href="https://www.thinkwithgoogle.com/" target="_blank" rel="noopener">Think with Google</a>のリソースも参考になります（参照日: 2026年7月28日）。</p><p>なお、SNS流入との掛け合わせで成果を見たい場合、例えば<a href="https://www.cocomarke.com/blog/instagram-reels-analytics/" target="_blank" rel="noopener">Instagramリールのアナリティクス活用</a>のように流入元ごとにユーザー行動を分析することで、ページ改善の効果をより正確に評価できます。</p>
+
+  <h2 id="practical-examples">実務ケース別の設計例</h2>
+  <h3>ECサイトのLCP改善：商品画像の遅延読み込みが逆効果になったケース</h3>
+<p><strong>前提条件</strong>：商品一覧ページが多数あるECサイト。モバイルのPageSpeed InsightsスコアはLCPが4.2秒（要改善）でフィールドデータでも「Poor URL」が多数。</p><p><strong>よくある相談パターン</strong>：「画像にloading='lazy'を全部つけたがLCPが悪化した」というご相談です。LCP要素（ファーストビューの主画像）に対してlazy loadingを適用すると、ブラウザがその画像の読み込みを後回しにするためLCPが悪化します。LCP要素には<code>fetchpriority="high"</code>と<code>loading="eager"</code>を明示し、スクロールしなければ見えない画像だけにlazy loadingを使うのが正しい設計です。</p><p><strong>推奨する設計</strong>：ファーストビューの商品メイン画像をWebP形式・適切なサイズにリサイズしたうえで<code>fetchpriority="high"</code>を付与。2枚目以降にlazy loadingを設定。さらにLinkヘッダーでプリロードを宣言する。</p><p><strong>見るべきKPI</strong>：Google Search ConsoleのCore Web Vitalsレポートで「LCP：Good URL」の割合（改善前後28日比較）。PageSpeed InsightsのLCP要素の変化。</p><p><strong>失敗しやすい点</strong>：スコアがすぐに上がらないことを懸念して別の施策を重ねがちですが、Search Consoleへの反映は数週間かかります。「ラボデータが改善したこと」を確認してから28日間待つ姿勢が重要です。</p>
+
+  <h3>コーポレートサイトのCLS改善：広告タグとA/Bテストツールが原因のレイアウトシフト</h3>
+<p><strong>前提条件</strong>：コーポレートサイトのTOPページ。CLSが0.25（Poor）。開発チームは「画像にwidth/heightは全部ある」と言うが改善しない状況。</p><p><strong>よくある相談パターン</strong>：「構造上CLSの原因が見つからない」というご相談。この場合、サードパーティスクリプトが疑われます。Google Tag Manager経由で配信されるA/Bテストツール・チャットウィジェット・広告タグがDOM要素を後から挿入することで、既存コンテンツが押し下げられCLSが発生します。</p><p><strong>推奨する設計</strong>：Chrome DevToolsのPerformanceパネルでレイアウトシフトが発生したタイミングとスクリプトのロードタイミングを照合する。原因スクリプトを特定したら、該当ウィジェットの表示領域をCSSで事前確保（min-heightを設定）するか、スクリプトの読み込み順を変更して回避する。</p><p><strong>見るべきKPI</strong>：PageSpeed Insightsの「CLSの問題のある要素」表示と、Search ConsoleのCLS URLレポートの推移。</p><p><strong>失敗しやすい点</strong>：GTMタグを整理せず「とりあえずCSSで余白を確保」しても、スクリプトの挙動が変わると再発します。根本原因の特定と不要タグの棚卸しをセットで行うことが重要です。</p>
+
+  <h3>ブログメディアのINP改善：コメント欄とソーシャル埋め込みによる応答遅延</h3>
+<p><strong>前提条件</strong>：記事数1,000本超のオウンドメディア。モバイルのINPが380ms（Poor）。ページ下部にコメントフォームとSNS埋め込みウィジェットがある。</p><p><strong>よくある相談パターン</strong>：「ページを軽くしたつもりなのにINPが改善しない」というケースです。INPはページ全体の応答遅延を計測するため、ページ下部に重いJavaScriptが存在するだけで悪化します。</p><p><strong>推奨する設計</strong>：SNS埋め込みウィジェット（X・Instagramの埋め込みなど）をIntersection Observerを使った遅延読み込みに変更する。コメントフォームは初期DOMから外し、ユーザーがスクロールしたタイミングで動的に挿入する。メインスレッドを占有する処理をWeb Workerへ移行できるか検討する。</p><p><strong>見るべきKPI</strong>：Chrome UXレポート（CrUX）のINP分布と、Search ConsoleのINP URLレポート。改善後はユーザーインタラクションの種類別（クリック・キーボード・タップ）に遅延がないかRUM（リアルユーザーモニタリング）ツールで確認するのが理想です。</p><p><strong>失敗しやすい点</strong>：「ラボデータでINPが計測されない」ことがあります。INPは実際のユーザー操作を必要とするため、自動計測ツールでは再現しにくい場合があります。手動でページを操作しながらDevToolsのINP計測を行い、原因を特定してください。</p>
+
+
+
+  <h2 id="faq">よくある質問</h2>
+  <h3>Core Web Vitalsとは何ですか？</h3>
+<p>Core Web Vitalsとは、Googleがユーザー体験を数値化してSEO順位要因に組み込んだ3つの指標（LCP・INP・CLS）のことです。LCPはページの主要コンテンツの表示速度、INPはユーザー操作への応答速度、CLSはレイアウトの視覚的安定性を計測します。2021年6月からランキングシグナルに正式採用されています。</p>
+
+  <h3>Core Web VitalsとPageSpeed Insightsのスコアは何が違いますか？</h3>
+<p>PageSpeed Insightsのスコア（0〜100点）はラボ環境での計測値であり、SEO順位には直接影響しません。Core Web Vitalsは実ユーザーのブラウザで計測したフィールドデータをSearch Consoleが集計したものが順位要因になります。施策の効果確認はSearch ConsoleのCore Web Vitalsレポートで行ってください。</p>
+
+  <h3>LCPを改善するには何から始めればいいですか？</h3>
+<p>まずPageSpeed InsightsでLCP要素（最大の画像またはテキストブロック）が何かを確認することから始めてください。LCP要素が画像であれば、WebP変換・fetchpriority="high"の付与・不要なlazy loadingの除外が優先施策です。TTFB（サーバー応答時間）が長い場合はCDNやキャッシュの設定見直しも必要です。</p>
+
+  <h3>CLSが悪化する原因はどんなものがありますか？</h3>
+<p>主な原因は、画像へのwidth・height属性の未設定、Webフォントの表示切り替え、広告・バナーの遅延挿入、A/BテストツールやSNSウィジェットなどのサードパーティスクリプトによる動的DOM追加です。「画像は全部設定した」という場合はGTM経由のサードパーティスクリプトをChrome DevToolsで調査することを推奨します。</p>
+
+  <h3>INPとFIDの違いは何ですか？</h3>
+<p>FID（First Input Delay）はページ読み込み後の最初のユーザー操作への応答遅延だけを計測していましたが、INP（Interaction to Next Paint）はページ滞在中のすべてのインタラクション（クリック・タップ・キーボード）を対象に計測します。2024年3月にFIDがINPに置き換えられたため、現在の計測・改善対象はINPです。</p>
+
+  <h3>Core Web Vitalsの改善後、Search Consoleに反映されるまでどれくらいかかりますか？</h3>
+<p>Search ConsoleのCore Web Vitalsレポートは過去28日間のデータを集計しているため、施策実施後の変化が反映されるまで最低28日かかります。それ以前はPageSpeed InsightsのラボデータとフィールドデータのAPI取得で中間確認を行うのが実務上の一般的な対応です。</p>
+
+  <h3>Core Web Vitalsが悪くても検索順位は下がりませんか？</h3>
+<p>Core Web VitalsはSEO順位の一つの要因ですが、唯一の決定因子ではありません。Googleはコンテンツの質・E-E-A-T・関連性を最優先しており、Core Web Vitalsは同程度のコンテンツ品質が競合するときに差別化要因になるとされています。ただし、指標がPoor（最低ランク）のページは不利になる可能性があるため、最低限「要改善」以上を目指すことを推奨します。</p>
+
+  <h3>Core Web Vitalsの改善は外注できますか？どんなことを依頼できますか？</h3>
+<p>可能です。一般的には、診断（PageSpeed Insights・Search Consoleの分析）、原因特定、HTML/CSS/JavaScript改善、CDN・サーバー設定の最適化、施策後のKPIモニタリングまでを一括で依頼できます。特にサードパーティスクリプトの棚卸しや、フレームワーク（React・Vueなど）の最適化は専門知識が必要なため、外注が効率的なケースが多いです。</p>
+
+  <h2 id="conclusion">まとめ</h2>
+<p>Core Web Vitalsの改善は「PageSpeed InsightsのスコアをあげるためのSEOテクニック」ではなく、「実ユーザーの体験を数値で管理するための継続的な実務プロセス」です。</p><p>LCP・INP・CLSの3指標はそれぞれ異なる原因で悪化するため、まずSearch ConsoleとPageSpeed Insightsで原因を特定し、優先度の高いページと指標から施策を1つずつ実施することが最短の改善ルートです。</p><p>施策後は最低28日間のフィールドデータ推移をSearch Consoleで確認し、Good URL比率が向上しているかを追い続けてください。技術的な改善とコンテンツの質・内部リンク設計を組み合わせることで、検索順位と問い合わせへの動線がより強固になります。</p>
+
+  <div class="source-history">
+    <h2>参照情報</h2>
+    <table>
+      <thead><tr><th>項目</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td>参照資料</td><td><a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide" target="_blank" rel="noopener">Google検索 スターターガイド</a>（参照日: 2026年7月28日）</td></tr>
+        <tr><td>参照資料</td><td><a href="https://developers.google.com/search/docs/fundamentals/creating-helpful-content" target="_blank" rel="noopener">役立つコンテンツの作成 – Google検索セントラル</a>（参照日: 2026年7月28日）</td></tr>
+        <tr><td>参照資料</td><td><a href="https://www.thinkwithgoogle.com/" target="_blank" rel="noopener">Think with Google</a>（参照日: 2026年7月28日）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="cta-band reveal" style="margin-top:60px;">
+    <span class="eyebrow" style="color:#fff;">Free Consultation</span>
+    <h2>SEOに課題を感じていませんか？</h2>
+    <p>成果から逆算したご提案を、無料相談でお届けします。</p>
+    <a href="../contact.html" class="btn btn-primary">無料相談を申し込む <span class="arrow">→</span></a>
+  </div>
+
+  <div class="related">
+    <span class="eyebrow">Related</span>
+    <h2 style="font-size:1.5rem;margin:14px 0 30px;font-family:'Shippori Mincho',serif;">関連記事</h2>
+    <div class="posts-grid">
+      <a href="seo-eeat-2026.html" class="post-card">
+        <div class="post-thumb"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#2d2a26"/>
+<g opacity="0.08" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+        <div class="post-body">
+          <span class="post-cat">SEO</span>
+          <h3>E-E-A-T 高め方とは？SEO評価を上げる具体策と手順</h3>
+          <div class="post-meta"><span>2026.06.11</span><span class="read">読む →</span></div>
+        </div>
+      </a>
+
+      <a href="seo-topic-cluster.html" class="post-card">
+        <div class="post-thumb"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#2d2a26"/>
+<g opacity="0.08" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+        <div class="post-body">
+          <span class="post-cat">SEO</span>
+          <h3>トピッククラスター構造とは？内部リンクとSEO評価を高める手順・失敗例・KPIを解説</h3>
+          <div class="post-meta"><span>2026.07.10</span><span class="read">読む →</span></div>
+        </div>
+      </a>
+
+      <a href="internal-link-seo.html" class="post-card">
+        <div class="post-thumb"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#2d2a26"/>
+<g opacity="0.08" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+        <div class="post-body">
+          <span class="post-cat">SEO</span>
+          <h3>見落とされがちな内部リンク最適化でSEOを底上げする</h3>
+          <div class="post-meta"><span>2026.03.19</span><span class="read">読む →</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+</article>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><span class="dot"></span>Growth Marketing</div>
+        <p>SNS運用と広告運用で、ブランドの成長を成果から逆算するデジタルマーケティング代行会社です。</p>
+      </div>
+      <div class="footer-col"><h5>サービス</h5><a href="../index.html#services">SNS運用代行</a><a href="../index.html#services">広告運用代行</a><a href="../index.html#services">コンテンツ・SEO</a></div>
+      <div class="footer-col"><h5>コンテンツ</h5><a href="index.html">ブログ</a><a href="../editorial-policy.html">編集方針</a><a href="../index.html#works">実績</a><a href="../index.html#process">プロセス</a></div>
+      <div class="footer-col"><h5>会社情報</h5><a href="../contact.html">無料相談</a><a href="../contact.html">お問い合わせ</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> Growth Marketing. All rights reserved.</span>
+      <span>SNS運用 / 広告運用 / デジタルマーケティング代行</span>
+    </div>
+  </div>
+</footer>
+<script src="../main.js"></script>
+</body>
+</html>

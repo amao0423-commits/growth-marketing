@@ -1,5 +1,13 @@
 [
   {
+    "slug": "seo-core-web-vitals",
+    "category": "seo",
+    "categoryLabel": "SEO",
+    "title": "Core Web Vitals 改善とは？LCP・INP・CLSの手順・失敗例・KPIを徹底解説",
+    "description": "Core Web VitalsのLCP・INP・CLSを改善するための手順・失敗例・チェックリストを実務目線で解説。",
+    "date": "2026.07.28"
+  },
+  {
     "slug": "ads-retargeting-privacy",
     "category": "ads",
     "categoryLabel": "広告運用",
