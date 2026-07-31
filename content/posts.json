@@ -1,5 +1,13 @@
 [
   {
+    "slug": "content-ai-workflow",
+    "category": "content",
+    "categoryLabel": "コンテンツマーケティング",
+    "title": "生成AI コンテンツ制作とは？品質を保ちながら効率化する手順・失敗例・改善指標を徹底解説",
+    "description": "生成AIを活用したコンテンツ制作の手順・品質管理・失敗例・KPIを実務目線で解説。",
+    "date": "2026.07.31"
+  },
+  {
     "slug": "seo-core-web-vitals",
     "category": "seo",
     "categoryLabel": "SEO",

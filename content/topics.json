@@ -7,7 +7,7 @@
     "content",
     "brand"
   ],
-  "nextRotationIndex": 3,
+  "nextRotationIndex": 4,
   "usedTopicIds": [
     "sns-reels-retention-2026",
     "ads-meta-advantage-plus",
@@ -26,7 +26,8 @@
     "brand-rebranding",
     "sns-threads-growth",
     "ads-retargeting-privacy",
-    "seo-core-web-vitals"
+    "seo-core-web-vitals",
+    "content-ai-workflow"
   ],
   "clusters": {
     "sns": {
