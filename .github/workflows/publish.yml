@@ -2,9 +2,8 @@ name: Auto-publish SEO post
 
 on:
   schedule:
-    # 週2回：火・金 09:00 JST（= 00:00 UTC）。曜日/時刻は調整可。
-    - cron: '0 0 * * 2'
-    - cron: '0 0 * * 5'
+    # 毎日 09:00 JST（= 00:00 UTC）。時刻は調整可。
+    - cron: '0 0 * * *'
   workflow_dispatch: {}   # 手動でもオンデマンド実行可能
 
 permissions:

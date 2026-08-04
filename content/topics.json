@@ -58,6 +58,46 @@
           "id": "sns-analytics-kpi",
           "primaryKeyword": "SNS 分析 KPI",
           "intent": "SNS運用の成果を正しく測るKPI設計とダッシュボードの作り方を知りたい"
+        },
+        {
+          "id": "sns-instagram-stories-engagement",
+          "primaryKeyword": "インスタ ストーリーズ 活用",
+          "intent": "Instagramストーリーズでエンゲージメントと来店・購入につなげる運用を知りたい"
+        },
+        {
+          "id": "sns-x-growth",
+          "primaryKeyword": "X 運用 伸ばす",
+          "intent": "X（旧Twitter）でフォロワーとエンゲージメントを伸ばす運用を知りたい"
+        },
+        {
+          "id": "sns-youtube-shorts",
+          "primaryKeyword": "YouTube ショート 伸ばす",
+          "intent": "YouTubeショートで登録者と再生数を伸ばす設計を知りたい"
+        },
+        {
+          "id": "sns-line-official-account",
+          "primaryKeyword": "LINE公式アカウント 運用",
+          "intent": "LINE公式アカウントで友だち追加とリピートを増やす運用を知りたい"
+        },
+        {
+          "id": "sns-influencer-marketing",
+          "primaryKeyword": "インフルエンサーマーケティング やり方",
+          "intent": "インフルエンサー施策の進め方と効果測定を知りたい"
+        },
+        {
+          "id": "sns-ugc-campaign",
+          "primaryKeyword": "UGCキャンペーン 設計",
+          "intent": "UGCを生むキャンペーンの設計と注意点を知りたい"
+        },
+        {
+          "id": "sns-social-listening",
+          "primaryKeyword": "ソーシャルリスニング とは",
+          "intent": "ソーシャルリスニングで顧客の声を運用に活かす方法を知りたい"
+        },
+        {
+          "id": "sns-crisis-management",
+          "primaryKeyword": "SNS 炎上 対策",
+          "intent": "SNS運用の炎上リスク管理と対応手順を知りたい"
         }
       ]
     },
@@ -89,6 +129,46 @@
           "id": "ads-creative-fatigue",
           "primaryKeyword": "広告 クリエイティブ 疲弊",
           "intent": "広告クリエイティブの疲弊を検知し差し替える運用フローを知りたい"
+        },
+        {
+          "id": "ads-quality-score",
+          "primaryKeyword": "リスティング 品質スコア 改善",
+          "intent": "Google検索広告の品質スコアを上げる方法を知りたい"
+        },
+        {
+          "id": "ads-youtube-ads",
+          "primaryKeyword": "YouTube広告 運用",
+          "intent": "YouTube広告の種類と成果を出す運用方法を知りたい"
+        },
+        {
+          "id": "ads-tiktok-ads-guide",
+          "primaryKeyword": "TikTok広告 運用",
+          "intent": "TikTok広告の始め方と成果を最大化する運用を知りたい"
+        },
+        {
+          "id": "ads-budget-allocation",
+          "primaryKeyword": "広告予算 配分",
+          "intent": "媒体横断での広告予算配分の考え方を知りたい"
+        },
+        {
+          "id": "ads-conversion-tracking-ga4",
+          "primaryKeyword": "コンバージョン計測 GA4",
+          "intent": "GA4と広告のコンバージョン計測を正しく設計したい"
+        },
+        {
+          "id": "ads-roas-improvement",
+          "primaryKeyword": "ROAS 改善",
+          "intent": "ROASを改善する打ち手と指標の見方を知りたい"
+        },
+        {
+          "id": "ads-display-remarketing",
+          "primaryKeyword": "ディスプレイ広告 リマーケティング",
+          "intent": "ディスプレイ広告・リマーケティングの設計を知りたい"
+        },
+        {
+          "id": "ads-microsoft-ads",
+          "primaryKeyword": "Microsoft広告 とは",
+          "intent": "Microsoft広告（Bing）の活用方法を知りたい"
         }
       ]
     },
@@ -120,6 +200,46 @@
           "id": "seo-local-mybusiness",
           "primaryKeyword": "MEO Googleビジネスプロフィール",
           "intent": "ローカルSEO/MEOでGoogleビジネスプロフィールを最適化したい"
+        },
+        {
+          "id": "seo-keyword-research",
+          "primaryKeyword": "キーワード選定 やり方",
+          "intent": "SEOのキーワード選定と検索意図の分析方法を知りたい"
+        },
+        {
+          "id": "seo-title-meta-optimization",
+          "primaryKeyword": "タイトルタグ 書き方",
+          "intent": "タイトル・メタディスクリプションの最適化を知りたい"
+        },
+        {
+          "id": "seo-content-refresh",
+          "primaryKeyword": "記事 リライト SEO",
+          "intent": "既存記事のリライトで検索順位を上げる手順を知りたい"
+        },
+        {
+          "id": "seo-technical-audit",
+          "primaryKeyword": "テクニカルSEO チェック項目",
+          "intent": "テクニカルSEOの点検項目と改善方法を知りたい"
+        },
+        {
+          "id": "seo-featured-snippet",
+          "primaryKeyword": "強調スニペット 対策",
+          "intent": "強調スニペットを獲得するコンテンツの書き方を知りたい"
+        },
+        {
+          "id": "seo-mobile-first",
+          "primaryKeyword": "モバイルフレンドリー SEO",
+          "intent": "モバイルファーストのSEO最適化を知りたい"
+        },
+        {
+          "id": "seo-structured-data",
+          "primaryKeyword": "構造化データ 実装",
+          "intent": "構造化データでリッチリザルトを狙う方法を知りたい"
+        },
+        {
+          "id": "seo-backlink-strategy",
+          "primaryKeyword": "被リンク 獲得",
+          "intent": "健全な被リンクを獲得する方法を知りたい"
         }
       ]
     },
@@ -151,6 +271,46 @@
           "id": "content-measurement-roi",
           "primaryKeyword": "コンテンツマーケティング ROI",
           "intent": "コンテンツマーケティングのROIを測定し改善する指標設計を知りたい"
+        },
+        {
+          "id": "content-whitepaper-lead",
+          "primaryKeyword": "ホワイトペーパー 作り方",
+          "intent": "リード獲得用ホワイトペーパーの作り方を知りたい"
+        },
+        {
+          "id": "content-email-newsletter",
+          "primaryKeyword": "メルマガ 開封率 改善",
+          "intent": "メルマガの開封率・クリック率を上げる方法を知りたい"
+        },
+        {
+          "id": "content-case-study",
+          "primaryKeyword": "導入事例 作り方",
+          "intent": "成果につながる導入事例コンテンツの作り方を知りたい"
+        },
+        {
+          "id": "content-storytelling",
+          "primaryKeyword": "コンテンツ ストーリーテリング",
+          "intent": "心を動かすストーリーテリングの型を知りたい"
+        },
+        {
+          "id": "content-seo-writing",
+          "primaryKeyword": "SEOライティング コツ",
+          "intent": "検索と読者に響くSEOライティングのコツを知りたい"
+        },
+        {
+          "id": "content-webinar-marketing",
+          "primaryKeyword": "ウェビナー 集客",
+          "intent": "ウェビナーの集客と商談化の方法を知りたい"
+        },
+        {
+          "id": "content-editorial-calendar",
+          "primaryKeyword": "編集カレンダー 作り方",
+          "intent": "継続運用のための編集カレンダー設計を知りたい"
+        },
+        {
+          "id": "content-ai-writing-quality",
+          "primaryKeyword": "AIライティング 品質",
+          "intent": "AI活用時の品質担保とE-E-A-Tの守り方を知りたい"
         }
       ]
     },
@@ -182,6 +342,46 @@
           "id": "brand-community",
           "primaryKeyword": "ブランドコミュニティ",
           "intent": "ファンと築くブランドコミュニティの作り方と運営を知りたい"
+        },
+        {
+          "id": "brand-visual-identity",
+          "primaryKeyword": "ビジュアルアイデンティティ 作り方",
+          "intent": "VI（ロゴ・カラー等）の作り方を知りたい"
+        },
+        {
+          "id": "brand-naming",
+          "primaryKeyword": "ネーミング 決め方",
+          "intent": "サービス・商品のネーミングの考え方を知りたい"
+        },
+        {
+          "id": "brand-personal-branding",
+          "primaryKeyword": "パーソナルブランディング やり方",
+          "intent": "個人・経営者のパーソナルブランディングの進め方を知りたい"
+        },
+        {
+          "id": "brand-b2b-branding",
+          "primaryKeyword": "BtoB ブランディング",
+          "intent": "BtoB企業のブランディングの進め方を知りたい"
+        },
+        {
+          "id": "brand-recruitment-branding",
+          "primaryKeyword": "採用ブランディング",
+          "intent": "採用力を高める採用ブランディングの進め方を知りたい"
+        },
+        {
+          "id": "brand-guidelines",
+          "primaryKeyword": "ブランドガイドライン 作り方",
+          "intent": "ブランドガイドラインの作り方を知りたい"
+        },
+        {
+          "id": "brand-customer-experience",
+          "primaryKeyword": "顧客体験 ブランド",
+          "intent": "CX（顧客体験）でブランド価値を高める方法を知りたい"
+        },
+        {
+          "id": "brand-loyalty",
+          "primaryKeyword": "ブランドロイヤルティ 高める",
+          "intent": "顧客ロイヤルティを高める施策を知りたい"
         }
       ]
     }
