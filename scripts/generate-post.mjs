@@ -21,6 +21,11 @@ const CLAUDE_BIN = process.env.CLAUDE_BIN || 'claude';
 const MAX_RETRIES = Number(process.env.MAX_RETRIES || 4);
 const ENABLE_RESEARCH = process.env.ENABLE_RESEARCH === '1';  // 既定OFF（高速化）。1で最新Web検索を有効化
 const MIN_TEXT_CHARS = Number(process.env.MIN_TEXT_CHARS || 3000);
+const WRITE_ATTEMPTS = Number(process.env.WRITE_ATTEMPTS || 3);  // 生成の試行回数（タイムアウト/一時エラー時に再試行）
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// 一時的な失敗（タイムアウト/5xx/overload）に備えた指数バックオフ（上限60秒）
+const backoffMs = (attempt) => Math.min(60000, 5000 * 2 ** attempt);
 
 // 被リンクを許可する権威ドメイン（一次情報・公式のみ）
 const AUTH_DOMAINS = [
@@ -736,15 +741,28 @@ GoogleのHelpful Contentの考え方に沿い、検索順位だけを狙う文�
     + `\n\n# 出力JSONスキーマ（この構造に完全準拠する）\n${JSON.stringify(ARTICLE_SCHEMA)}`
     + `\n\n# 出力形式（厳守）\nマークダウンのコードフェンスや前置き・後置きの説明を一切付けず、上記スキーマに完全準拠したJSONオブジェクトのみを出力してください。`;
 
-  let parsed = null, lastRaw = '';
-  for (let i = 0; i < 2; i++) {
+  // claude -p のタイムアウト/一時エラーや、JSON解析不可のいずれでも再試行する（単発の失敗でジョブ全体を落とさない）
+  let parsed = null, lastRaw = '', lastErr = null;
+  for (let i = 0; i < WRITE_ATTEMPTS; i++) {
     const p = i === 0 ? prompt
-      : prompt + '\n\n# 重要\n前回の出力はJSONとして解析できませんでした。説明やコードフェンスを付けず、JSONオブジェクトのみを返してください。';
-    lastRaw = await claudeText(p);
+      : prompt + '\n\n# 重要\n前回の生成は失敗またはJSONとして解析できませんでした。説明やコードフェンスを付けず、上記スキーマに完全準拠したJSONオブジェクトのみを返してください。';
+    try {
+      lastRaw = await claudeText(p);
+    } catch (e) {
+      lastErr = e;
+      console.log(`  記事生成の呼び出しに失敗（試行 ${i + 1}/${WRITE_ATTEMPTS}）: ${String(e?.message || e).slice(0, 200)}`);
+      if (i < WRITE_ATTEMPTS - 1) await sleep(backoffMs(i));
+      continue;
+    }
     parsed = extractJsonObject(lastRaw);
     if (parsed) break;
+    console.log(`  生成結果をJSONとして解析できませんでした（試行 ${i + 1}/${WRITE_ATTEMPTS}）`);
+    if (i < WRITE_ATTEMPTS - 1) await sleep(backoffMs(i));
   }
-  if (!parsed) throw new Error('writer returned no parseable JSON: ' + String(lastRaw).slice(0, 300));
+  if (!parsed) {
+    const detail = lastErr ? ` (last error: ${String(lastErr?.message || lastErr).slice(0, 200)})` : '';
+    throw new Error('writer returned no parseable JSON' + detail + ': ' + String(lastRaw).slice(0, 300));
+  }
   return parsed;
 }
 
@@ -895,7 +913,13 @@ async function main() {
   let findings = '';
   if (ENABLE_RESEARCH) {
     console.log('▶ Web検索で調査中…');
-    findings = await research(idea, catLabel);
+    // 調査は任意工程。失敗してもジョブ全体を落とさず、モデル知識＋公式出典で生成継続する。
+    try {
+      findings = await research(idea, catLabel);
+    } catch (e) {
+      console.log(`  調査に失敗したため調査なしで継続します: ${String(e?.message || e).slice(0, 200)}`);
+      findings = '';
+    }
   } else {
     console.log('▶ 調査スキップ（モデル知識＋カテゴリ公式出典で生成。最新Web検索が必要なら ENABLE_RESEARCH=1）');
   }
