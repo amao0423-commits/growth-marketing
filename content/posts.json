@@ -1,5 +1,13 @@
 [
   {
+    "slug": "sns-analytics-kpi",
+    "category": "sns",
+    "categoryLabel": "SNS運用",
+    "title": "SNS分析KPIの設計方法とダッシュボードの作り方｜虚栄の指標を避けて成果を可視化する",
+    "description": "SNS分析KPIの選び方から、成果につながるダッシュボードの構成手順・失敗例・改善策まで実務目線で解説。",
+    "date": "2026.08.05"
+  },
+  {
     "slug": "brand-employee-advocacy",
     "category": "brand",
     "categoryLabel": "ブランディング",

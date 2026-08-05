@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>SNS分析KPIの設計方法とは？正しい指標選び・ダッシュボードの作り方を解説｜Growth Marketing ブログ</title>
+<meta name="description" content="SNS分析のKPIをどう設計すべきか悩んでいる方へ。虚栄の指標を避けて成果につながるKPIの選び方、ダッシュボードの構成手順、よくある失敗例と改善策を実務目線で解説します。">
+<meta name="keywords" content="SNS分析,KPI設計,ダッシュボード,SNS運用,エンゲージメント率">
+<link rel="canonical" href="https://www.nishinippon-adv.jp/blog/sns-analytics-kpi.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SNS分析KPIの設計方法とダッシュボードの作り方｜虚栄の指標を避けて成果を可視化する">
+<meta property="og:description" content="SNS分析のKPIをどう設計すべきか悩んでいる方へ。虚栄の指標を避けて成果につながるKPIの選び方、ダッシュボードの構成手順、よくある失敗例と改善策を実務目線で解説します。">
+<meta property="og:url" content="https://www.nishinippon-adv.jp/blog/sns-analytics-kpi.html">
+<meta property="article:section" content="SNS運用">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.nishinippon-adv.jp/blog/sns-analytics-kpi.html#article",
+      "headline": "SNS分析KPIの設計方法とダッシュボードの作り方｜虚栄の指標を避けて成果を可視化する",
+      "description": "SNS分析のKPIをどう設計すべきか悩んでいる方へ。虚栄の指標を避けて成果につながるKPIの選び方、ダッシュボードの構成手順、よくある失敗例と改善策を実務目線で解説します。",
+      "datePublished": "2026-08-05",
+      "dateModified": "2026-08-05",
+      "articleSection": "SNS運用",
+      "keywords": [
+        "SNS分析",
+        "KPI設計",
+        "ダッシュボード",
+        "SNS運用",
+        "エンゲージメント率"
+      ],
+      "wordCount": 9237,
+      "author": {
+        "@id": "https://www.nishinippon-adv.jp/#editorial-team"
+      },
+      "editor": {
+        "@type": "Person",
+        "name": "早川 葵",
+        "jobTitle": "SEO歴5年",
+        "knowsAbout": [
+          "SEO",
+          "コンテンツマーケティング",
+          "SNS運用"
+        ]
+      },
+      "publisher": {
+        "@id": "https://www.nishinippon-adv.jp/#organization"
+      },
+      "citation": [
+        "https://business.instagram.com/",
+        "https://help.instagram.com/"
+      ],
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.nishinippon-adv.jp/blog/sns-analytics-kpi.html"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.nishinippon-adv.jp/#organization",
+      "name": "Growth Marketing",
+      "url": "https://www.nishinippon-adv.jp",
+      "publishingPrinciples": "https://www.nishinippon-adv.jp/editorial-policy.html"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.nishinippon-adv.jp/#editorial-team",
+      "name": "Growth Marketing編集部",
+      "url": "https://www.nishinippon-adv.jp/editorial-policy.html",
+      "parentOrganization": {
+        "@id": "https://www.nishinippon-adv.jp/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.nishinippon-adv.jp/blog/sns-analytics-kpi.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://www.nishinippon-adv.jp"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "ブログ",
+          "item": "https://www.nishinippon-adv.jp/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "SNS分析KPIの設計方法とダッシュボードの作り方｜虚栄の指標を避けて成果を可視化する",
+          "item": "https://www.nishinippon-adv.jp/blog/sns-analytics-kpi.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.nishinippon-adv.jp/blog/sns-analytics-kpi.html#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "SNS分析のKPIとは何ですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SNS運用の活動が事業目標にどれだけ貢献しているかを定量的に測るための指標体系です。単なるフォロワー数やいいね数ではなく、KGI（最終目標）にひもづいた「エンゲージメント率」「SNS経由CV数」「リンクタップ数」などの指標を選ぶことが重要です。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "フォロワー数はKPIとして使えますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "補助指標としては使えますが、主要KPIには適していません。フォロワー数は増えた理由（コンテンツ品質・キャンペーン・アルゴリズム変化）が分からないと意思決定に使えないためです。代わりに「フォロワー増加率」や「新規フォロワーのエンゲージメント率」を組み合わせて評価することを推奨します。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "エンゲージメント率の目安はどのくらいですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "業種・アカウント規模・プラットフォームによって大きく異なります。一般的な経験則では、Instagramのフィード投稿で1〜3%程度が中程度、3%以上は比較的高いとされることが多いですが、自社の過去データとの比較を基準にするのが最も実務的です。業界平均は参考値として使い、自社基準での改善を追うことを優先してください。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "SNSとGA4をどうやって連携させればいいですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "直接のAPI連携ではなく、UTMパラメータを使った流入計測が基本です。プロフィールURL・ストーリーズのリンクスタンプ・広告リンクすべてに「utm_source=instagram&utm_medium=social」などのパラメータを付与することで、GA4上でSNS経由の流入とCVを計測できます。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "SNS分析ダッシュボードを作るには何のツールを使えばいいですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "チーム規模と予算によります。少人数・単一プラットフォームであれば、各SNSの純正インサイトとGoogleスプレッドシートの組み合わせで十分なケースが多いです。複数プラットフォームを一元管理したい場合は、Sprout Social・Hootsuite・BufferなどのSNS管理ツールを検討してください。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "SNS経由のCV貢献が0件になってしまうのはなぜですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "最も多い原因はUTMパラメータの未設定です。SNSのリンクにUTMを設定していないと、SNS経由の流入がGA4上で「direct（直接流入）」に分類されてしまいます。また、GA4のコンバージョンイベントが未設定の場合も、CVが0件と表示されます。両方の設定を確認してください。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "月次レポートで何を報告すればいいですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "「リーチ数・エンゲージメント率・SNS経由CV数・前月比」の4点を中心に報告するのが基本です。加えて「最も成果が出た投稿とその理由」「翌月に試す改善アクション」を添えることで、レポートが意思決定の材料として機能します。数値の羅列だけでなく、解釈と次のアクションを必ずセットにしてください。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "SNS KPIを改善するには何から始めるべきですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "まず計測環境の整備から始めてください。具体的には、①UTMパラメータの設定、②GA4のコンバージョンイベント設定、③Instagramのビジネスアカウント移行、の3点を確認します。計測が正しくできていないと、どんな施策を打っても効果が測れないため、改善の前提として計測環境を整えることが最優先です。"
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a href="../index.html" class="brand"><span class="dot"></span>Growth&nbsp;Marketing</a>
+    <nav class="nav-links">
+      <a href="../index.html#services">サービス</a>
+      <a href="../index.html#process">プロセス</a>
+      <a href="../index.html#works">実績</a>
+      <a href="index.html">ブログ</a>
+      <a href="../contact.html" class="nav-cta">無料相談</a>
+    </nav>
+    <button class="burger" onclick="toggleNav()" aria-label="メニュー"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="wrap crumb">
+  <a href="../index.html">ホーム</a><span>/</span><a href="index.html">ブログ</a><span>/</span>SNS運用
+</div>
+
+<article>
+<section class="article-hero">
+  <div class="wrap" style="max-width:820px;">
+    <span class="eyebrow">SNS運用</span>
+    <h1>SNS分析KPIの設計方法とダッシュボードの作り方｜虚栄の指標を避けて成果を可視化する</h1>
+    <div class="article-meta">
+      <span>2026.08.05</span><span>•</span><span>読了 約18分</span><span>•</span><span>Growth Marketing 編集部</span><span>•</span><span>監修：早川 葵（SEO歴5年）</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap" style="max-width:820px;">
+  <div class="article-cover"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#ff5722"/>
+<g opacity="0.1" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+</div>
+
+<div class="wrap article-body">
+  <div class="toc">
+    <h4>目次</h4>
+    <a href="#what-is-sns-kpi">SNS分析KPIとは何か？虚栄の指標との違いを整理する</a>
+    <a href="#kpi-framework">SNS KPIの4フェーズ分類：認知・エンゲージメント・CV・ロイヤルティ</a>
+    <a href="#platform-metrics-comparison">プラットフォーム別の指標定義と注意点（Instagram・X・TikTok）</a>
+    <a href="#dashboard-design">SNS分析ダッシュボードの設計手順：何を・どう・どこに置くか</a>
+    <a href="#admin-screen-check">管理画面で確認する手順：Instagram Insights・GA4の連携チェック</a>
+    <a href="#common-failures">SNS KPI設計でよくある失敗例と原因別の改善策</a>
+    <a href="#kpi-checklist">実務で使えるSNS KPIチェックリスト：設計・計測・改善の確認項目</a>
+    <a href="#improvement-metrics">改善指標の見方：どの数値が動いたら何を変えるべきか</a>
+    <a href="#practical-examples">実務ケース別の設計例</a>
+    <a href="#faq">よくある質問</a>
+    <a href="#conclusion">まとめ</a>
+  </div>
+
+<p><strong>SNS分析のKPIとは、SNS運用の活動が事業目標にどれだけ貢献しているかを定量的に測るための指標体系のことです。</strong>フォロワー数やいいね数を「成果」として報告しているものの、それが売上や問い合わせにどうつながっているか分からない——そんな課題を抱えたSNS担当者は少なくありません。</p><p>この記事では、虚栄の指標（Vanity Metrics）を避けて成果につながるKPIをどう選ぶか、ダッシュボードをどう構成するか、よくある失敗とその改善策を、実務で使える粒度で解説します。読み終えると、自社のSNS運用に必要なKPI一覧の草案と、ダッシュボード設計の手順が手元に揃います。</p>
+
+  <div class="author-box">
+    <h2>著者・編集方針</h2>
+<div class="author-profile"><p><strong>Growth Marketing編集部</strong></p><p>SNS運用・広告運用・コンテンツSEOの領域で、担当者が実務で使える記事を制作しています。各記事は公式情報・管理画面で確認すべき項目・KPI・内部導線を確認したうえで構成しています。詳しくは<a href="../editorial-policy.html">編集方針</a>をご覧ください。</p></div>
+  </div>
+
+  <div class="key-takeaways">
+    <h2>重要ポイント</h2>
+    <ul>
+      <li>SNS分析のKPIとは、運用目標に対してSNSがどれだけ貢献しているかを測る定量指標のこと。フォロワー数などの「虚栄の指標」ではなく、事業目標と紐づいた指標を選ぶことが出発点です。</li>
+      <li>KPI設計は「目標→行動指標→先行指標」の3層構造で整理すると、施策の効果を因果関係で追いやすくなります。認知・エンゲージメント・CV・ロイヤルティの4フェーズで指標を分類するのが実務では有効です。</li>
+      <li>ダッシュボードは「毎日見る運用KPI」と「月次で評価する戦略KPI」を分けて設計するのが鉄則。1つの画面に詰め込むと、どの数値を見て何を判断すべきかが曖昧になります。</li>
+      <li>よくある失敗は、プラットフォームが提供するリーチやインプレッションをそのまま成果として報告すること。メディアによって定義が異なるため、自社基準での統一が必要です。</li>
+      <li>改善の優先順位は「エンゲージメント率の低下→クリック率の低下→CV率の低下」の順で上流から確認する習慣をつけると、原因特定のスピードが上がります。</li>
+    </ul>
+  </div>
+
+  <div class="expertise-note">
+    <h2>編集・検証方針</h2>
+<div class="expertise-note"><p>この記事は、各SNS公式ヘルプ・管理画面の確認項目・実務で見るべきKPIをもとにGrowth Marketing編集部が整理し、SEO歴5年の早川 葵が監修しています。詳細は<a href="../editorial-policy.html">編集方針</a>をご覧ください。</p></div>
+  </div>
+
+  <div class="original-insights">
+    <h2>Growth Marketingの実務視点</h2>
+    <ul>
+      <li>「フォロワー数」はSNS KPIの代表格に見えるが、実際には施策の善し悪しをほぼ反映しない。増えた理由がコンテンツの質なのか、外部キャンペーンなのか、アルゴリズム変化なのかを切り分けないと、フォロワー増加が「成功」なのか「偶然」なのか判断できない。</li>
+      <li>エンゲージメント率の計算基準はプラットフォームごとに異なる。Instagramはインプレッション基準、XはEngagement/Impressions、Meta Insightsはリーチ基準など、定義を統一せずに比較するとプラットフォーム間の優劣が見かけ上逆転することがある。</li>
+      <li>KPIは「計測できる」と「意思決定に使える」は別物。週次で確認するのに月次でしか集計されない指標、ダッシュボードに出ていても誰も見ていない指標は、コストになるだけのノイズになる。使わないKPIは積極的に削除する判断が必要。</li>
+      <li>SNSのCV貢献はラストタッチで見ると過小評価になりやすい。SNSで認知してから検索→直接流入でCVする導線が多いため、Google Analytics 4のコンバージョン経路レポートやアシストコンバージョンを組み合わせて評価しないと、SNSへの投資判断を誤る。</li>
+      <li>ダッシュボードは「作って終わり」にせず、毎月1回のレビューで「使っていない指標の削除」「新たに必要になった指標の追加」を繰り返すことで、運用実態に合ったものになる。設計より運用の方が難しい。</li>
+    </ul>
+  </div>
+
+  <h2 id="what-is-sns-kpi">SNS分析KPIとは何か？虚栄の指標との違いを整理する</h2>
+<p>SNSのKPI（Key Performance Indicator）とは、設定した運用目標に対して進捗を測るための具体的な指標です。「KGI（最終目標）→KPI（中間指標）→アクション指標（先行指標）」の3層で整理するのが基本です。</p><h3>虚栄の指標とアクション指標の違い</h3><p>「虚栄の指標（Vanity Metrics）」とは、数字が大きいほど良く見えるが、実際の成果との相関が薄い指標のことです。代表例はフォロワー総数・累計インプレッション数・総いいね数です。これらは文脈なしには意思決定に使えません。</p><table><thead><tr><th>指標の種類</th><th>具体例</th><th>意思決定への使いやすさ</th></tr></thead><tbody><tr><td>虚栄の指標</td><td>フォロワー総数、累計いいね数</td><td>低い（増減の理由が見えにくい）</td></tr><tr><td>運用KPI</td><td>エンゲージメント率、フォロワー増加率</td><td>中程度（週次で変動を追える）</td></tr><tr><td>事業貢献KPI</td><td>SNS経由CV数、CPC、ROAS</td><td>高い（施策の優劣を判断できる）</td></tr></tbody></table><h3>KGIとKPIの接続が重要な理由</h3><p>「SNS運用で何を達成したいか」を言語化せずにKPIを設定すると、担当者は「いかに良く見せるか」にエネルギーを使い始めます。KGIが「新規リード月50件」なら、KPIは「プロフィールアクセス数」「リンクタップ数」「フォーム到達数」の順に設計するのが自然な流れです。</p><p>SNS運用全体の目標設定や投稿戦略については、<a href="sns-algorithm-2026.html">2026年版・主要SNSアルゴリズムの変化と運用戦略</a>も合わせて参考にしてください。</p>
+
+  <h2 id="kpi-framework">SNS KPIの4フェーズ分類：認知・エンゲージメント・CV・ロイヤルティ</h2>
+<p>実務では、SNS KPIを「認知→エンゲージメント→CV→ロイヤルティ」の4フェーズに分類すると整理しやすくなります。フェーズごとに見るべき指標と改善アクションが異なるためです。</p><table><thead><tr><th>フェーズ</th><th>目的</th><th>主要KPI例</th><th>確認頻度</th></tr></thead><tbody><tr><td>認知</td><td>新規ユーザーへのリーチ拡大</td><td>リーチ数、インプレッション数、新規フォロワー数</td><td>週次</td></tr><tr><td>エンゲージメント</td><td>興味・関心の醸成</td><td>エンゲージメント率、保存数、コメント数</td><td>週次</td></tr><tr><td>CV（転換）</td><td>行動・購買・問い合わせへの転換</td><td>リンクタップ数、CVR、SNS経由収益</td><td>週次〜月次</td></tr><tr><td>ロイヤルティ</td><td>リピートと口コミの促進</td><td>UGC発生数、ブランドメンション数、リピート購買率</td><td>月次</td></tr></tbody></table><h3>フェーズごとの読み方の注意点</h3><ul><li><strong>認知フェーズ：</strong>リーチとインプレッションを混同しないこと。リーチは「何人に届いたか」、インプレッションは「何回表示されたか」であり、1人が5回見ればインプレッションは5でもリーチは1です。</li><li><strong>エンゲージメントフェーズ：</strong>「保存数」はInstagramにおいて特に重視すべき指標です。後で見返す意欲を示し、コンテンツ品質の代理指標になります。</li><li><strong>CVフェーズ：</strong>SNSからのCV数は、ラストタッチ計測だけでは過小評価になりやすい。GA4のアシストコンバージョンやコンバージョン経路を確認することを推奨します。</li><li><strong>ロイヤルティフェーズ：</strong>UGC（ユーザー生成コンテンツ）の増加は、広告費をかけずに認知を広げるための重要な先行指標です。<a href="sns-ugc-strategy.html">UGC活用とは？SNS運用で信頼と拡散を得るための手順</a>も参考にしてください。</li></ul>
+
+  <h2 id="platform-metrics-comparison">プラットフォーム別の指標定義と注意点（Instagram・X・TikTok）</h2>
+<p>SNS分析で見落としがちなのが、「同じ名称でも計算基準がプラットフォームごとに異なる」という点です。複数のSNSを横断して比較するときは、各指標の定義を確認することが不可欠です。</p><h3>エンゲージメント率の計算基準の違い</h3><table><thead><tr><th>プラットフォーム</th><th>エンゲージメント率の計算式（一般的な定義）</th><th>含まれるアクション</th></tr></thead><tbody><tr><td>Instagram</td><td>（いいね+コメント+保存+シェア）÷リーチ数×100</td><td>いいね、コメント、保存、シェア</td></tr><tr><td>X（旧Twitter）</td><td>エンゲージメント数÷インプレッション数×100</td><td>いいね、リポスト、返信、リンクタップ、プロフィールクリックなど</td></tr><tr><td>TikTok</td><td>（いいね+コメント+シェア）÷再生数×100</td><td>いいね、コメント、シェア</td></tr></tbody></table><p>※上記はプラットフォームの一般的な定義を参考にしたものです。管理画面の表記は変更されることがあるため、<a href="https://business.instagram.com/" target="_blank" rel="noopener">Instagram for Business（参照日: 2026年8月5日）</a>などの公式ページで最新の定義を確認してください。</p><h3>リールと通常投稿で見るべき指標が異なる</h3><p>Instagramでは、リール（Reels）の場合は「視聴維持率（何秒まで見たか）」「全視聴完了率」が重要な指標になります。一方、フィード投稿では「保存率」「プロフィールアクセス数」が成果との相関が高い傾向があります。投稿フォーマットごとに追う指標を分けることで、コンテンツ改善の精度が上がります。</p>
+
+  <h2 id="dashboard-design">SNS分析ダッシュボードの設計手順：何を・どう・どこに置くか</h2>
+<p>ダッシュボード設計で最初にやるべきことは「誰が・何のために・どの頻度で見るか」を定めることです。これを曖昧にすると、すべての指標を1画面に詰め込んだ「誰も見ないレポート」が生まれます。</p><h3>ダッシュボードの2層構造</h3><ul><li><strong>運用レイヤー（日次・週次）：</strong>担当者が毎日確認する運用KPI。エンゲージメント率・リーチ数・フォロワー増加数など。異常値に気づくためのモニタリングが目的。</li><li><strong>戦略レイヤー（月次・四半期）：</strong>経営や上長への報告に使う事業貢献KPI。SNS経由CV数・CPA・売上貢献額など。意思決定の材料として使う。</li></ul><h3>ダッシュボード構成の手順</h3><ol><li>KGI（最終目標）を1〜2個確認する</li><li>KGIにつながるKPIを4フェーズで列挙する</li><li>各KPIの計測元（Instagram Insights、GA4、Sprout Socialなど）を決める</li><li>確認頻度（日次/週次/月次）を設定する</li><li>担当者別・閲覧者別に表示を分ける</li><li>月次で「使っていないKPIを削除・新規追加」をレビューする</li></ol><h3>ツール選定の考え方</h3><p>予算・チーム規模・プラットフォーム数によって最適なツールは変わります。少人数・単一プラットフォームであれば各SNSの純正インサイト（Instagram Insights、Xアナリティクスなど）とGoogle スプレッドシートの組み合わせで十分なケースも多いです。複数プラットフォームを横断管理するなら、Sprout Social・Hootsuite・Bufferなどの統合ツールを検討するのが現実的です。</p><div class="callout"><p>SNS KPIの設計に迷っている場合は、現状の指標体系を整理する「無料SNS KPI診断」もご活用ください。<a href="../contact.html">無料相談はこちら →</a></p></div>
+
+  <h2 id="admin-screen-check">管理画面で確認する手順：Instagram Insights・GA4の連携チェック</h2>
+<p>SNS分析KPIを実務で運用するには、各管理画面でどの項目をどの順番で確認するかを標準化しておくことが重要です。ここではInstagram InsightsとGoogle Analytics 4（GA4）の確認手順を整理します。</p><h3>Instagram Insightsで確認する順番</h3><ol><li><strong>アカウント概要：</strong>「リーチしたアカウント数」「インタラクション数」「フォロワー」の3ブロックをまず確認。前週比で異常値がないかチェック。</li><li><strong>コンテンツ別インサイト：</strong>投稿ごとのリーチ・エンゲージメント・保存数を「保存数」で降順ソートして、最も保存された投稿のテーマと形式を記録する。</li><li><strong>フォロワーの属性：</strong>年齢・性別・地域・アクティブ時間帯を確認。施策変更後に属性が大きくずれていないかチェック。</li><li><strong>ストーリーズのインプレッションと離脱率：</strong>何枚目で離脱が多いかを確認し、コンテンツの長さを調整する材料にする。</li></ol><p>Instagram Insightsの詳細な見方は<a href="https://help.instagram.com/" target="_blank" rel="noopener">Instagramヘルプセンター（参照日: 2026年8月5日）</a>で最新の仕様を確認してください。</p><h3>GA4でSNS流入を確認する手順</h3><ol><li>「レポート」→「集客」→「トラフィック獲得」で「セッションのデフォルトチャネルグループ」を「Organic Social」でフィルタ。</li><li>「コンバージョン」列でSNS経由のCV数を確認。</li><li>「探索」→「経路データ探索」でSNS→サイト→CVの経路を可視化する。</li><li>「広告」→「アトリビューション」→「コンバージョン経路」でSNSのアシスト貢献を確認する。</li></ol><h3>初期設定で間違えやすい項目</h3><ul><li>UTMパラメータの未設定：ストーリーズのリンクスタンプやプロフィールURLにUTMを設定していないと、GA4上でSNS流入が「direct（直接流入）」に紛れ込む。</li><li>コンバージョンイベントの未定義：GA4のデフォルトではフォーム送信がCVとして計測されていないことが多い。「contact_form_submit」などのイベントを手動で設定する必要がある。</li><li>Instagramのプロアカウント未設定：ビジネスアカウントまたはクリエイターアカウントでないと、Instagram Insightsの詳細データにアクセスできない。</li></ul>
+
+  <h2 id="common-failures">SNS KPI設計でよくある失敗例と原因別の改善策</h2>
+<p>KPI設計の失敗は「指標の選び方」「計測の設定」「レポートの運用」の3つのレイヤーに分類されます。それぞれの原因と改善策を整理します。</p><h3>失敗例1：フォロワー数をKPIの中心に据える</h3><p><strong>原因：</strong>成果の可視化が難しいため、分かりやすい数字に依存してしまう。<br/><strong>改善策：</strong>フォロワー増加率よりも「新規フォロワーのエンゲージメント率」を追う。質の低いフォロワーが増えてもエンゲージメント率は下がるため、アカウントの健全性が分かる。</p><h3>失敗例2：プラットフォームのインプレッション数を「リーチ」として報告する</h3><p><strong>原因：</strong>インプレッションとリーチの定義の違いを把握していない。<br/><strong>改善策：</strong>「1人あたりの平均表示回数（インプレッション÷リーチ）」も記録し、過剰表示になっていないか確認する。</p><h3>失敗例3：SNS流入のCVを0件と判定してしまう</h3><p><strong>原因：</strong>UTMパラメータの未設定、またはGA4のコンバージョン設定の不備。<br/><strong>改善策：</strong>ストーリーズリンク・プロフィールURL・すべてのSNS起点リンクにUTMパラメータを一括設定する。設定後2〜4週間で流入データが蓄積され始める。</p><h3>失敗例4：KPIが多すぎて何も改善できない</h3><p><strong>原因：</strong>「とりあえず全部測ろう」という設計。<br/><strong>改善策：</strong>1フェーズあたりKPIは2〜3個に絞る。「この数値を見て、どう判断するか？」を言語化できない指標は外す。</p><h3>失敗例5：月次レポートだけで運用している</h3><p><strong>原因：</strong>週次確認の習慣がなく、問題の発見が遅れる。<br/><strong>改善策：</strong>週次で「エンゲージメント率・リーチ数・フォロワー増減」の3点を5分でチェックするルーティンを設ける。異常があれば即座に投稿方針を調整できる。</p><p>継続的な運用の設計には<a href="sns-content-calendar.html">継続できるSNS運用のためのコンテンツカレンダー設計術</a>と合わせて読むと、KPIと投稿スケジュールの接続が理解しやすくなります。</p>
+
+  <h2 id="kpi-checklist">実務で使えるSNS KPIチェックリスト：設計・計測・改善の確認項目</h2>
+<p>以下のチェックリストは、SNS KPIを新たに設計するとき・既存の設計を見直すとき、どちらでも活用できます。</p><h3>KPI設計フェーズのチェック</h3><ul><li>□ KGI（事業目標）が1〜2個明確に設定されている</li><li>□ KGIとKPIの因果関係が説明できる（「KPIが改善するとKGIが改善する」理由がある）</li><li>□ フェーズ（認知・エンゲージメント・CV・ロイヤルティ）別に指標が分類されている</li><li>□ 1フェーズあたりのKPIが3個以内に絞られている</li><li>□ 各KPIの計算式・計測元ツールが明記されている</li></ul><h3>計測・設定フェーズのチェック</h3><ul><li>□ 全SNSプロフィールURLとストーリーズリンクにUTMパラメータが設定されている</li><li>□ GA4にコンバージョンイベントが設定されている</li><li>□ Instagramがビジネスアカウントまたはクリエイターアカウントになっている</li><li>□ 各プラットフォームのインサイト確認頻度（日次・週次・月次）が決まっている</li><li>□ 複数プラットフォームを比較する際、指標の定義を統一している</li></ul><h3>ダッシュボード・レポートフェーズのチェック</h3><ul><li>□ 運用レイヤー（週次）と戦略レイヤー（月次）のダッシュボードを分けている</li><li>□ 前週比・前月比・前年同月比の3軸で数値を評価できる</li><li>□ 担当者・上長・経営者それぞれに適したレポート粒度になっている</li><li>□ 月次で「使っていないKPIの削除・新規追加」をレビューする日程が設定されている</li><li>□ KPIの変化に対して「何をするか」のアクションまで設定されている</li></ul><p>コンテンツ制作サイドのKPI設計については<a href="https://www.cocomarke.com/blog/how-to-use-sns-for-business-success/" target="_blank" rel="noopener">SNSをビジネスで成功させる活用方法</a>も参考になります。</p>
+
+  <h2 id="improvement-metrics">改善指標の見方：どの数値が動いたら何を変えるべきか</h2>
+<p>KPIを設定しても「数値が悪いときに何をするか」まで決めていないと、モニタリングがただの記録になります。以下は代表的なKPIの変化に対する改善アクションの対応表です。</p><table><thead><tr><th>悪化しているKPI</th><th>まず疑う原因</th><th>確認すべき項目</th><th>改善アクション例</th></tr></thead><tbody><tr><td>エンゲージメント率の低下</td><td>コンテンツ品質・投稿頻度の問題</td><td>直近10投稿の保存率・コメント数</td><td>保存数上位のコンテンツテーマを増やす</td></tr><tr><td>リーチ数の急減</td><td>アルゴリズム変化・投稿頻度の低下</td><td>投稿頻度・ハッシュタグ・投稿時間帯</td><td>投稿頻度を週1本増やし、アクティブ時間帯に合わせる</td></tr><tr><td>フォロワー増加率の停滞</td><td>発見性の低下・ターゲット外へのリーチ</td><td>非フォロワーへのリーチ率・ハッシュタグ効果</td><td>リール・コラボ投稿など発見性の高いフォーマットを試す</td></tr><tr><td>リンクタップ数の低下</td><td>CTA（行動喚起）の弱さ・プロフィールとのミスマッチ</td><td>投稿のCTA文言・リンク先LPのモバイル表示</td><td>CTA文言のA/Bテスト・LPの読み込み速度確認</td></tr><tr><td>SNS経由CVの低下</td><td>UTMズレ・LPのCV設計の問題</td><td>GA4の流入経路・LPのCVR</td><td>UTM設定の再確認・LPのCTAボタン位置・文言の見直し</td></tr></tbody></table><h3>改善の優先順位をつける考え方</h3><p>「エンゲージメント率が低い→リンクタップも少ない→CVも少ない」という状態のとき、CVを直接改善しようとするのは二次的な対策です。まずエンゲージメント率（コンテンツ品質）を改善してから、リンクタップ・CVへとアクションを進める「上流優先の改善順序」を取ると、効果が出るまでの時間が短縮されます。</p><p>KPIの改善と並行してアカウント品質を高めるには、<a href="instagram-followers-subscription.html">インスタのフォロワーを増やす方法｜運用サブスクで伸ばす手順と失敗しないやり方</a>も参考にしてください。</p>
+
+  <h2 id="practical-examples">実務ケース別の設計例</h2>
+  <h3>ECブランドの仮想ケース：購買貢献を測るKPI設計</h3>
+<p><strong>前提条件：</strong>アパレルECブランドがInstagramとXを並行運用。目標はSNS経由の購買促進と新規顧客獲得。担当者1名、月次レポートで代表に報告。</p><p><strong>推奨する設計：</strong></p><ul><li>【認知層】リーチ数・インプレッション数・フォロワー増加数（週次確認）</li><li>【関心層】エンゲージメント率・プロフィールアクセス数・保存数（週次確認）</li><li>【CV層】リンクタップ数・サイト流入数・購買CV数・SNS経由収益（月次評価）</li></ul><p><strong>見るべきKPI：</strong>保存率（保存数÷リーチ数）はInstagramで特に重要。保存されるということは「後で見返したい」意欲があることを示し、購買検討フェーズへの移行率と相関しやすい。</p><p><strong>失敗しやすい点：</strong>GA4とInstagramインサイトの流入数が一致しないことが多い。これはInstagramのリンクタップ計測とGA4のセッション計測の定義の差によるもので、どちらを「正」とするかを事前に決めておかないと月次レポートで混乱する。</p>
+
+  <h3>BtoBサービスの仮想ケース：問い合わせ貢献を測るKPI設計</h3>
+<p><strong>前提条件：</strong>BtoBのSaaSベンダーがLinkedInとXで情報発信。目標はホワイトペーパーDLと問い合わせ獲得。マーケター2名体制。</p><p><strong>推奨する設計：</strong></p><ul><li>【認知層】インプレッション数・新規フォロワー数（週次）</li><li>【信頼層】コメント数・返信数・引用数（週次。単ないいね数よりも質的関与の深さを示す）</li><li>【CV層】ランディングページへのCTR・ホワイトペーパーDL数・問い合わせ数（月次）</li><li>【ナーチャリング層】既存フォロワーの投稿滞留時間・ハイライト保存率（月次）</li></ul><p><strong>見るべきKPI：</strong>BtoBではCVまでのリードタイムが長いため、「接触回数」と「エンゲージメントの深さ」を追うことで、まだCVに至っていない見込み客の熱量を代替指標として把握できる。</p><p><strong>失敗しやすい点：</strong>「いいね数」を主要KPIに据えると、バズった投稿が高評価になる一方、地味でも見込み客に刺さる専門コンテンツの価値が見えにくくなる。コメントや問い合わせとの相関で補正することが必要。</p>
+
+  <h3>地域店舗の仮想ケース：来店貢献を測るKPI設計</h3>
+<p><strong>前提条件：</strong>飲食店グループがInstagramを中心に運用。目標は来店予約の増加とリピーター醸成。</p><p><strong>推奨する設計：</strong></p><ul><li>【認知層】ハッシュタグ経由のリーチ・地域ターゲットのリーチ（週次）</li><li>【関心層】ストーリーズへのスワイプアップ数・プロフィールアクセス数（週次）</li><li>【CV層】予約サイトへのリンクタップ数・DM経由の予約数（週次）</li><li>【ロイヤルティ層】UGC（ユーザー投稿）の発生数・ブランドタグ付き投稿数（月次）</li></ul><p><strong>見るべきKPI：</strong>来店への直接計測が難しいため、ストーリーズのリンクスタンプ経由の予約ページアクセスを中間指標として活用する。</p><p><strong>失敗しやすい点：</strong>フォロワー数の増加に注力しすぎて、既存フォロワーへのリーチ率が下がっているケースが多い。Instagramインサイトの「フォロワーへのリーチ率」を定期確認することで、アルゴリズムの変化にも気づきやすくなる。</p>
+
+
+
+  <h2 id="faq">よくある質問</h2>
+  <h3>SNS分析のKPIとは何ですか？</h3>
+<p>SNS運用の活動が事業目標にどれだけ貢献しているかを定量的に測るための指標体系です。単なるフォロワー数やいいね数ではなく、KGI（最終目標）にひもづいた「エンゲージメント率」「SNS経由CV数」「リンクタップ数」などの指標を選ぶことが重要です。</p>
+
+  <h3>フォロワー数はKPIとして使えますか？</h3>
+<p>補助指標としては使えますが、主要KPIには適していません。フォロワー数は増えた理由（コンテンツ品質・キャンペーン・アルゴリズム変化）が分からないと意思決定に使えないためです。代わりに「フォロワー増加率」や「新規フォロワーのエンゲージメント率」を組み合わせて評価することを推奨します。</p>
+
+  <h3>エンゲージメント率の目安はどのくらいですか？</h3>
+<p>業種・アカウント規模・プラットフォームによって大きく異なります。一般的な経験則では、Instagramのフィード投稿で1〜3%程度が中程度、3%以上は比較的高いとされることが多いですが、自社の過去データとの比較を基準にするのが最も実務的です。業界平均は参考値として使い、自社基準での改善を追うことを優先してください。</p>
+
+  <h3>SNSとGA4をどうやって連携させればいいですか？</h3>
+<p>直接のAPI連携ではなく、UTMパラメータを使った流入計測が基本です。プロフィールURL・ストーリーズのリンクスタンプ・広告リンクすべてに「utm_source=instagram&utm_medium=social」などのパラメータを付与することで、GA4上でSNS経由の流入とCVを計測できます。</p>
+
+  <h3>SNS分析ダッシュボードを作るには何のツールを使えばいいですか？</h3>
+<p>チーム規模と予算によります。少人数・単一プラットフォームであれば、各SNSの純正インサイトとGoogleスプレッドシートの組み合わせで十分なケースが多いです。複数プラットフォームを一元管理したい場合は、Sprout Social・Hootsuite・BufferなどのSNS管理ツールを検討してください。</p>
+
+  <h3>SNS経由のCV貢献が0件になってしまうのはなぜですか？</h3>
+<p>最も多い原因はUTMパラメータの未設定です。SNSのリンクにUTMを設定していないと、SNS経由の流入がGA4上で「direct（直接流入）」に分類されてしまいます。また、GA4のコンバージョンイベントが未設定の場合も、CVが0件と表示されます。両方の設定を確認してください。</p>
+
+  <h3>月次レポートで何を報告すればいいですか？</h3>
+<p>「リーチ数・エンゲージメント率・SNS経由CV数・前月比」の4点を中心に報告するのが基本です。加えて「最も成果が出た投稿とその理由」「翌月に試す改善アクション」を添えることで、レポートが意思決定の材料として機能します。数値の羅列だけでなく、解釈と次のアクションを必ずセットにしてください。</p>
+
+  <h3>SNS KPIを改善するには何から始めるべきですか？</h3>
+<p>まず計測環境の整備から始めてください。具体的には、①UTMパラメータの設定、②GA4のコンバージョンイベント設定、③Instagramのビジネスアカウント移行、の3点を確認します。計測が正しくできていないと、どんな施策を打っても効果が測れないため、改善の前提として計測環境を整えることが最優先です。</p>
+
+  <h2 id="conclusion">まとめ</h2>
+<p>SNS分析のKPI設計は、「どのプラットフォームで何を計測するか」という技術的な問題である前に、「何のためにSNSを運用するか」という目的の問題です。虚栄の指標を追い続けると、担当者が数字を良く見せることに時間を使い、本質的な改善が後回しになります。</p><p>この記事で整理したポイントを振り返ると、KPIは「認知→エンゲージメント→CV→ロイヤルティ」の4フェーズで設計し、ダッシュボードは運用レイヤーと戦略レイヤーを分けることが実務上の出発点です。UTMパラメータの設定とGA4のコンバージョン設定が整ってはじめて、SNSの事業貢献を数値で追える状態になります。まずはチェックリストで現状の計測設定を確認し、不備があれば設定を整えることから始めてください。</p>
+
+  <div class="source-history">
+    <h2>参照情報</h2>
+    <table>
+      <thead><tr><th>項目</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td>参照資料</td><td><a href="https://business.instagram.com/" target="_blank" rel="noopener">Instagram for Business 公式サイト</a>（参照日: 2026年8月5日）</td></tr>
+        <tr><td>参照資料</td><td><a href="https://help.instagram.com/" target="_blank" rel="noopener">Instagramヘルプセンター</a>（参照日: 2026年8月5日）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="cta-band reveal" style="margin-top:60px;">
+    <span class="eyebrow" style="color:#fff;">Free Consultation</span>
+    <h2>SNS運用に課題を感じていませんか？</h2>
+    <p>成果から逆算したご提案を、無料相談でお届けします。</p>
+    <a href="../contact.html" class="btn btn-primary">無料相談を申し込む <span class="arrow">→</span></a>
+  </div>
+
+  <div class="related">
+    <span class="eyebrow">Related</span>
+    <h2 style="font-size:1.5rem;margin:14px 0 30px;font-family:'Shippori Mincho',serif;">関連記事</h2>
+    <div class="posts-grid">
+      <a href="sns-algorithm-2026.html" class="post-card">
+        <div class="post-thumb"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#ff5722"/>
+<g opacity="0.08" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+        <div class="post-body">
+          <span class="post-cat">SNS運用</span>
+          <h3>2026年版・主要SNSアルゴリズムの変化と運用戦略</h3>
+          <div class="post-meta"><span>2026.05.28</span><span class="read">読む →</span></div>
+        </div>
+      </a>
+
+      <a href="sns-ugc-strategy.html" class="post-card">
+        <div class="post-thumb"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#ff5722"/>
+<g opacity="0.08" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+        <div class="post-body">
+          <span class="post-cat">SNS運用</span>
+          <h3>UGC活用とは？SNS運用で信頼と拡散を得るための手順・失敗例・改善指標</h3>
+          <div class="post-meta"><span>2026.06.16</span><span class="read">読む →</span></div>
+        </div>
+      </a>
+
+      <a href="sns-content-calendar.html" class="post-card">
+        <div class="post-thumb"><svg class="thumb-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="記事サムネイル">
+<rect width="400" height="220" fill="#ff5722"/>
+<g opacity="0.08" fill="#ffffff"><circle cx="14" cy="14" r="1.4"/><circle cx="38" cy="14" r="1.4"/><circle cx="62" cy="14" r="1.4"/><circle cx="86" cy="14" r="1.4"/><circle cx="110" cy="14" r="1.4"/><circle cx="134" cy="14" r="1.4"/><circle cx="158" cy="14" r="1.4"/><circle cx="182" cy="14" r="1.4"/><circle cx="206" cy="14" r="1.4"/><circle cx="230" cy="14" r="1.4"/><circle cx="254" cy="14" r="1.4"/><circle cx="278" cy="14" r="1.4"/><circle cx="302" cy="14" r="1.4"/><circle cx="326" cy="14" r="1.4"/><circle cx="350" cy="14" r="1.4"/><circle cx="374" cy="14" r="1.4"/><circle cx="398" cy="14" r="1.4"/><circle cx="14" cy="38" r="1.4"/><circle cx="38" cy="38" r="1.4"/><circle cx="62" cy="38" r="1.4"/><circle cx="86" cy="38" r="1.4"/><circle cx="110" cy="38" r="1.4"/><circle cx="134" cy="38" r="1.4"/><circle cx="158" cy="38" r="1.4"/><circle cx="182" cy="38" r="1.4"/><circle cx="206" cy="38" r="1.4"/><circle cx="230" cy="38" r="1.4"/><circle cx="254" cy="38" r="1.4"/><circle cx="278" cy="38" r="1.4"/><circle cx="302" cy="38" r="1.4"/><circle cx="326" cy="38" r="1.4"/><circle cx="350" cy="38" r="1.4"/><circle cx="374" cy="38" r="1.4"/><circle cx="398" cy="38" r="1.4"/><circle cx="14" cy="62" r="1.4"/><circle cx="38" cy="62" r="1.4"/><circle cx="62" cy="62" r="1.4"/><circle cx="86" cy="62" r="1.4"/><circle cx="110" cy="62" r="1.4"/><circle cx="134" cy="62" r="1.4"/><circle cx="158" cy="62" r="1.4"/><circle cx="182" cy="62" r="1.4"/><circle cx="206" cy="62" r="1.4"/><circle cx="230" cy="62" r="1.4"/><circle cx="254" cy="62" r="1.4"/><circle cx="278" cy="62" r="1.4"/><circle cx="302" cy="62" r="1.4"/><circle cx="326" cy="62" r="1.4"/><circle cx="350" cy="62" r="1.4"/><circle cx="374" cy="62" r="1.4"/><circle cx="398" cy="62" r="1.4"/><circle cx="14" cy="86" r="1.4"/><circle cx="38" cy="86" r="1.4"/><circle cx="62" cy="86" r="1.4"/><circle cx="86" cy="86" r="1.4"/><circle cx="110" cy="86" r="1.4"/><circle cx="134" cy="86" r="1.4"/><circle cx="158" cy="86" r="1.4"/><circle cx="182" cy="86" r="1.4"/><circle cx="206" cy="86" r="1.4"/><circle cx="230" cy="86" r="1.4"/><circle cx="254" cy="86" r="1.4"/><circle cx="278" cy="86" r="1.4"/><circle cx="302" cy="86" r="1.4"/><circle cx="326" cy="86" r="1.4"/><circle cx="350" cy="86" r="1.4"/><circle cx="374" cy="86" r="1.4"/><circle cx="398" cy="86" r="1.4"/><circle cx="14" cy="110" r="1.4"/><circle cx="38" cy="110" r="1.4"/><circle cx="62" cy="110" r="1.4"/><circle cx="86" cy="110" r="1.4"/><circle cx="110" cy="110" r="1.4"/><circle cx="134" cy="110" r="1.4"/><circle cx="158" cy="110" r="1.4"/><circle cx="182" cy="110" r="1.4"/><circle cx="206" cy="110" r="1.4"/><circle cx="230" cy="110" r="1.4"/><circle cx="254" cy="110" r="1.4"/><circle cx="278" cy="110" r="1.4"/><circle cx="302" cy="110" r="1.4"/><circle cx="326" cy="110" r="1.4"/><circle cx="350" cy="110" r="1.4"/><circle cx="374" cy="110" r="1.4"/><circle cx="398" cy="110" r="1.4"/><circle cx="14" cy="134" r="1.4"/><circle cx="38" cy="134" r="1.4"/><circle cx="62" cy="134" r="1.4"/><circle cx="86" cy="134" r="1.4"/><circle cx="110" cy="134" r="1.4"/><circle cx="134" cy="134" r="1.4"/><circle cx="158" cy="134" r="1.4"/><circle cx="182" cy="134" r="1.4"/><circle cx="206" cy="134" r="1.4"/><circle cx="230" cy="134" r="1.4"/><circle cx="254" cy="134" r="1.4"/><circle cx="278" cy="134" r="1.4"/><circle cx="302" cy="134" r="1.4"/><circle cx="326" cy="134" r="1.4"/><circle cx="350" cy="134" r="1.4"/><circle cx="374" cy="134" r="1.4"/><circle cx="398" cy="134" r="1.4"/><circle cx="14" cy="158" r="1.4"/><circle cx="38" cy="158" r="1.4"/><circle cx="62" cy="158" r="1.4"/><circle cx="86" cy="158" r="1.4"/><circle cx="110" cy="158" r="1.4"/><circle cx="134" cy="158" r="1.4"/><circle cx="158" cy="158" r="1.4"/><circle cx="182" cy="158" r="1.4"/><circle cx="206" cy="158" r="1.4"/><circle cx="230" cy="158" r="1.4"/><circle cx="254" cy="158" r="1.4"/><circle cx="278" cy="158" r="1.4"/><circle cx="302" cy="158" r="1.4"/><circle cx="326" cy="158" r="1.4"/><circle cx="350" cy="158" r="1.4"/><circle cx="374" cy="158" r="1.4"/><circle cx="398" cy="158" r="1.4"/><circle cx="14" cy="182" r="1.4"/><circle cx="38" cy="182" r="1.4"/><circle cx="62" cy="182" r="1.4"/><circle cx="86" cy="182" r="1.4"/><circle cx="110" cy="182" r="1.4"/><circle cx="134" cy="182" r="1.4"/><circle cx="158" cy="182" r="1.4"/><circle cx="182" cy="182" r="1.4"/><circle cx="206" cy="182" r="1.4"/><circle cx="230" cy="182" r="1.4"/><circle cx="254" cy="182" r="1.4"/><circle cx="278" cy="182" r="1.4"/><circle cx="302" cy="182" r="1.4"/><circle cx="326" cy="182" r="1.4"/><circle cx="350" cy="182" r="1.4"/><circle cx="374" cy="182" r="1.4"/><circle cx="398" cy="182" r="1.4"/><circle cx="14" cy="206" r="1.4"/><circle cx="38" cy="206" r="1.4"/><circle cx="62" cy="206" r="1.4"/><circle cx="86" cy="206" r="1.4"/><circle cx="110" cy="206" r="1.4"/><circle cx="134" cy="206" r="1.4"/><circle cx="158" cy="206" r="1.4"/><circle cx="182" cy="206" r="1.4"/><circle cx="206" cy="206" r="1.4"/><circle cx="230" cy="206" r="1.4"/><circle cx="254" cy="206" r="1.4"/><circle cx="278" cy="206" r="1.4"/><circle cx="302" cy="206" r="1.4"/><circle cx="326" cy="206" r="1.4"/><circle cx="350" cy="206" r="1.4"/><circle cx="374" cy="206" r="1.4"/><circle cx="398" cy="206" r="1.4"/></g>
+<line x1="70" y1="70" x2="150" y2="45" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="70" y1="70" x2="150" y2="120" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="45" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="150" y1="120" x2="230" y2="80" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="300" y2="55" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="320" y2="140" stroke="#fff" stroke-width="1.2" opacity="0.45"/><line x1="230" y1="80" x2="240" y2="165" stroke="#fff" stroke-width="1.2" opacity="0.45"/><circle cx="70" cy="70" r="18" fill="#fff"/><circle cx="150" cy="45" r="12" fill="rgba(255,255,255,0.55)"/><circle cx="150" cy="120" r="14" fill="rgba(255,255,255,0.55)"/><circle cx="230" cy="80" r="20" fill="#fff"/><circle cx="300" cy="55" r="11" fill="rgba(255,255,255,0.55)"/><circle cx="320" cy="140" r="16" fill="#fff"/><circle cx="240" cy="165" r="12" fill="rgba(255,255,255,0.55)"/>
+</svg></div>
+        <div class="post-body">
+          <span class="post-cat">SNS運用</span>
+          <h3>継続できるSNS運用のためのコンテンツカレンダー設計術</h3>
+          <div class="post-meta"><span>2026.05.07</span><span class="read">読む →</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+</article>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><span class="dot"></span>Growth Marketing</div>
+        <p>SNS運用と広告運用で、ブランドの成長を成果から逆算するデジタルマーケティング代行会社です。</p>
+      </div>
+      <div class="footer-col"><h5>サービス</h5><a href="../index.html#services">SNS運用代行</a><a href="../index.html#services">広告運用代行</a><a href="../index.html#services">コンテンツ・SEO</a></div>
+      <div class="footer-col"><h5>コンテンツ</h5><a href="index.html">ブログ</a><a href="../editorial-policy.html">編集方針</a><a href="../index.html#works">実績</a><a href="../index.html#process">プロセス</a></div>
+      <div class="footer-col"><h5>会社情報</h5><a href="../contact.html">無料相談</a><a href="../contact.html">お問い合わせ</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> Growth Marketing. All rights reserved.</span>
+      <span>SNS運用 / 広告運用 / デジタルマーケティング代行</span>
+    </div>
+  </div>
+</footer>
+<script src="../main.js"></script>
+</body>
+</html>
