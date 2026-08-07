@@ -1,5 +1,13 @@
 [
   {
+    "slug": "ads-creative-fatigue",
+    "category": "ads",
+    "categoryLabel": "広告運用",
+    "title": "広告クリエイティブの疲弊とは？検知指標・差し替えタイミング・運用フローを実務目線で解説",
+    "description": "クリエイティブ疲弊の定義から検知指標・差し替え判断・運用フローまで実務目線で解説。",
+    "date": "2026.08.07"
+  },
+  {
     "slug": "sns-analytics-kpi",
     "category": "sns",
     "categoryLabel": "SNS運用",
