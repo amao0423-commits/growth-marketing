@@ -7,7 +7,7 @@
     "content",
     "brand"
   ],
-  "nextRotationIndex": 3,
+  "nextRotationIndex": 4,
   "usedTopicIds": [
     "sns-reels-retention-2026",
     "ads-meta-advantage-plus",
@@ -31,7 +31,8 @@
     "brand-employee-advocacy",
     "sns-analytics-kpi",
     "ads-creative-fatigue",
-    "seo-local-mybusiness"
+    "seo-local-mybusiness",
+    "content-measurement-roi"
   ],
   "clusters": {
     "sns": {
