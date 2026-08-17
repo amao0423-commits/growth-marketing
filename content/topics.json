@@ -7,7 +7,7 @@
     "content",
     "brand"
   ],
-  "nextRotationIndex": 1,
+  "nextRotationIndex": 2,
   "usedTopicIds": [
     "sns-reels-retention-2026",
     "ads-meta-advantage-plus",
@@ -34,7 +34,8 @@
     "seo-local-mybusiness",
     "content-measurement-roi",
     "brand-community",
-    "sns-instagram-stories-engagement"
+    "sns-instagram-stories-engagement",
+    "ads-quality-score"
   ],
   "clusters": {
     "sns": {
