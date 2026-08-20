@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>記事を投稿する｜アドプレス</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Old+Mincho:wght@600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1F2024; --ink-2:#55575E; --ink-3:#8A8D96;
+  --paper:#FFFFFF; --mist:#F6F6F8; --line:#E7E7EC; --line-2:#D5D6DC;
+  --action-bg:#C9D3FF; --action-fg:#293A80; --action-hi:#B6C3FF;
+  --warn-bg:#FFF0C4; --warn-fg:#846412;
+  --ok-bg:#D3F0E4; --ok-fg:#1F6B52;
+  --bad:#A33A4E;
+  --r:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-size:15px;line-height:1.75}
+a{color:var(--action-fg)}
+:focus-visible{outline:2px solid var(--action-fg);outline-offset:2px;border-radius:4px}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+.mono{font-family:"Roboto Mono",monospace;font-variant-numeric:tabular-nums}
+
+.top{background:var(--paper);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;height:62px;max-width:760px;margin:0 auto;padding:0 20px}
+.mast{font-family:"Zen Old Mincho",serif;font-weight:700;font-size:20px;letter-spacing:.06em;text-decoration:none;color:var(--ink)}
+.top-in .free{margin-left:auto;font-size:12px;color:var(--ink-3)}
+
+h1{font-family:"Zen Old Mincho",serif;font-size:25px;letter-spacing:.04em;margin:30px 0 6px}
+.lede{font-size:13.5px;color:var(--ink-2);margin:0 0 24px}
+
+.sec{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-bottom:16px}
+.sec>h2{font-family:"Zen Old Mincho",serif;font-size:15px;margin:0 0 3px;letter-spacing:.04em}
+.sec>.h-note{font-size:12px;color:var(--ink-3);margin:0 0 18px}
+
+.f{margin-bottom:18px}
+.f:last-child{margin-bottom:0}
+.f label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+.req{color:var(--bad);font-size:11px;font-weight:700;margin-left:5px}
+.opt{color:var(--ink-3);font-size:11px;font-weight:400;margin-left:5px}
+.f .hint{font-size:12px;color:var(--ink-3);margin:0 0 8px;line-height:1.7}
+input[type=text],input[type=email],input[type=tel],input[type=url],textarea,select{
+  width:100%;border:1px solid var(--line-2);border-radius:8px;padding:10px 13px;font:inherit;font-size:14px;background:var(--paper);color:var(--ink)}
+input:focus,textarea:focus{border-color:var(--action-fg);outline:none}
+textarea{resize:vertical;min-height:70px}
+.err{color:var(--bad);font-size:12.5px;margin:6px 0 0;display:none}
+.err.on{display:block}
+.bad{border-color:var(--bad)!important}
+
+.cats{display:flex;flex-wrap:wrap;gap:8px}
+.cat{height:34px;padding:0 15px;border-radius:99px;border:1px solid var(--line-2);background:var(--paper);font:inherit;font-size:13px;cursor:pointer;color:var(--ink-2)}
+.cat.on{border-color:transparent;font-weight:700}
+
+/* editor */
+.tools{display:flex;flex-wrap:wrap;gap:4px;border:1px solid var(--line-2);border-bottom:none;border-radius:8px 8px 0 0;padding:7px;background:var(--mist)}
+.tools button{height:30px;min-width:32px;padding:0 10px;border:1px solid transparent;border-radius:6px;background:transparent;font:inherit;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.tools button:hover{background:var(--paper);border-color:var(--line-2)}
+.tools .sep{width:1px;background:var(--line-2);margin:4px 3px}
+.tools .h2b{font-family:"Zen Old Mincho",serif;font-size:15px;font-weight:700;color:var(--ink)}
+.tools .h3b{font-family:"Zen Old Mincho",serif;font-size:13px;font-weight:700;color:var(--ink)}
+.ed{border:1px solid var(--line-2);border-radius:0 0 8px 8px;background:var(--paper);padding:18px 20px;min-height:280px;font-size:16px;line-height:1.95;overflow-wrap:break-word}
+.ed:focus{outline:none;border-color:var(--action-fg)}
+.ed:empty::before{content:attr(data-ph);color:var(--ink-3)}
+.ed h2{font-family:"Zen Old Mincho",serif;font-size:21px;line-height:1.5;margin:1.6em 0 .5em;letter-spacing:.02em}
+.ed h3{font-family:"Zen Old Mincho",serif;font-size:17px;line-height:1.55;margin:1.4em 0 .4em}
+.ed p{margin:0 0 1.1em}
+.ed blockquote{margin:1.2em 0;padding:2px 0 2px 15px;border-left:3px solid var(--line-2);color:var(--ink-2);font-size:15px}
+.ed ul,.ed ol{margin:0 0 1.1em;padding-left:1.4em}
+.ed a{color:var(--action-fg)}
+.ed>*:first-child{margin-top:0}
+.edbar{display:flex;gap:14px;font-size:12px;color:var(--ink-3);margin-top:8px;flex-wrap:wrap}
+.edbar b{font-family:"Roboto Mono",monospace;font-weight:500;color:var(--ink-2)}
+.edbar .over{color:var(--bad)}
+
+.linkbox{display:none;border:1px solid var(--line-2);border-top:none;background:var(--mist);padding:12px;gap:8px;flex-wrap:wrap}
+.linkbox.on{display:flex}
+.linkbox input{flex:1;min-width:150px;height:36px;padding:0 11px;font-size:13px}
+.linkbox button{height:36px;padding:0 15px;border:none;border-radius:8px;background:var(--action-bg);color:var(--action-fg);font:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.linkbox .cx{background:transparent;color:var(--ink-3);border:1px solid var(--line-2)}
+
+.quota{background:var(--warn-bg);color:var(--warn-fg);border-radius:8px;padding:11px 14px;font-size:12.5px;line-height:1.75;margin-top:12px}
+.quota a{color:var(--warn-fg);font-weight:700}
+
+.reflist{display:grid;gap:8px}
+.reflist .r{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* eyecatch */
+.eye{display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:start}
+.eye .prev{border:1px solid var(--line);border-radius:8px;overflow:hidden;line-height:0}
+.eye .prev svg{width:100%;height:auto;display:block}
+.drop{border:1px dashed var(--line-2);border-radius:8px;padding:18px;text-align:center;font-size:13px;color:var(--ink-2);cursor:pointer;background:var(--mist)}
+.drop:hover{border-color:var(--ink-3)}
+.drop b{display:block;font-size:13.5px;color:var(--ink);margin-bottom:3px}
+
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.75;cursor:pointer}
+.check input{margin-top:5px;flex:0 0 auto;width:16px;height:16px;accent-color:var(--action-fg)}
+
+.submit{width:100%;height:54px;border:none;border-radius:99px;background:var(--action-bg);color:var(--action-fg);font:inherit;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px}
+.submit:hover{background:var(--action-hi)}
+.foot-note{font-size:12px;color:var(--ink-3);text-align:center;margin:12px 0 60px;line-height:1.8}
+
+/* --- 完了画面 --- */
+.done-hero{background:var(--ok-bg);color:var(--ok-fg);border-radius:14px;padding:28px;margin:30px 0 18px}
+.done-hero h1{margin:0 0 8px;color:var(--ok-fg);font-size:24px}
+.done-hero p{margin:0;font-size:13.5px;line-height:1.85}
+.timeline{display:grid;gap:0;margin:16px 0 0}
+.tl{display:grid;grid-template-columns:22px 1fr;gap:12px;padding-bottom:16px;position:relative}
+.tl:last-child{padding-bottom:0}
+.tl::before{content:"";position:absolute;left:10px;top:20px;bottom:0;width:1px;background:var(--line)}
+.tl:last-child::before{display:none}
+.tl .dot{width:21px;height:21px;border-radius:50%;background:var(--mist);border:1px solid var(--line-2);font-family:"Roboto Mono",monospace;font-size:11px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);z-index:1}
+.tl.now .dot{background:var(--action-fg);border-color:var(--action-fg);color:#fff}
+.tl h3{font-size:14px;margin:0 0 2px;font-weight:700}
+.tl p{margin:0;font-size:12.5px;color:var(--ink-2);line-height:1.8}
+.ask{background:var(--warn-bg);color:var(--warn-fg);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.ask h2{font-family:"Zen Old Mincho",serif;font-size:16px;margin:0 0 8px}
+.ask p{font-size:13px;line-height:1.85;margin:0 0 14px}
+.ways{display:grid;gap:8px;margin-bottom:16px}
+.way{background:rgba(255,255,255,.6);border-radius:8px;padding:11px 14px;font-size:12.5px;line-height:1.7}
+.way b{display:block;font-size:13px}
+.tmpl{background:var(--paper);border-radius:8px;padding:14px 16px;font-size:12.5px;line-height:1.9;color:var(--ink-2);white-space:pre-wrap;margin-bottom:10px}
+.copy{height:36px;padding:0 18px;border:none;border-radius:99px;background:var(--warn-fg);color:#fff;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.ad{background:var(--action-bg);color:var(--action-fg);border-radius:var(--r);padding:22px;margin-bottom:16px}
+.ad h2{font-family:"Zen Old Mincho",serif;font-size:15.5px;margin:0 0 10px;letter-spacing:.03em}
+.adprice{font-family:"Roboto Mono",monospace;font-size:28px;font-weight:500;line-height:1.2;margin-bottom:10px}
+.adprice em{font-style:normal;font-size:12px;font-family:"Noto Sans JP",sans-serif}
+.ad p{font-size:13px;line-height:1.85;margin:0 0 14px}
+.ad ul{list-style:none;margin:0 0 16px;padding:0;font-size:12.5px;line-height:1.85}
+.ad li{padding-left:16px;position:relative}
+.ad li::before{content:"";position:absolute;left:2px;top:12px;width:6px;height:1.5px;background:currentColor;opacity:.55}
+.adcta{display:block;text-align:center;height:44px;line-height:44px;border-radius:99px;background:var(--action-fg);color:#fff;font-weight:700;font-size:14px;text-decoration:none}
+.adnote{font-size:11.5px;opacity:.8;margin:10px 0 0!important}
+.mp{display:block;text-align:center;height:50px;line-height:50px;border-radius:99px;background:var(--action-bg);color:var(--action-fg);font-weight:700;font-size:15px;text-decoration:none;margin-bottom:10px}
+.urlbox{background:var(--mist);border:1px solid var(--line);border-radius:8px;padding:11px 14px;font-size:12.5px;word-break:break-all;margin-top:10px}
+
+@media (max-width:640px){
+  .eye{grid-template-columns:1fr}
+  .reflist .r{grid-template-columns:1fr}
+  h1{font-size:21px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a href="/" class="mast">アドプレス</a>
+    <span class="free">Googleでログイン中 ・ <b style="font-weight:500;color:var(--ink-2)">info@seoul-pantry.example.jp</b></span>
+  </div>
+</header>
+
+<div class="wrap" id="formview">
+  <h1>記事を投稿する</h1>
+  <p class="lede">送信後にAIが自動で内容を確認し、最短数十分で公開されます。掲載料はかかりません。</p>
+
+  <!-- 記事 -->
+  <section class="sec">
+    <h2>記事の内容</h2>
+    <p class="h-note">事実を中心に、いつ・誰が・何を の順で書くと読まれやすくなります。</p>
+
+    <div class="f">
+      <label for="cat">カテゴリ<span class="req">必須</span></label>
+      <div class="cats" id="cats"></div>
+      <p class="err" id="e-cat">カテゴリを選んでください。</p>
+    </div>
+
+    <div class="f">
+      <label for="title">タイトル<span class="req">必須</span></label>
+      <p class="hint">30〜60字が目安です。社名やサービス名を前半に入れると検索で見つかりやすくなります。</p>
+      <input type="text" id="title" maxlength="90" placeholder="例）韓国コスメブランド「AHUE」、日本1号店を9月12日に原宿へオープン">
+      <div class="edbar"><span>タイトル <b id="tcnt">0</b> 字</span></div>
+      <p class="err" id="e-title">タイトルを入力してください。</p>
+    </div>
+
+    <div class="f">
+      <label>本文<span class="req">必須</span></label>
+      <p class="hint">見出しはツールバーで切り替えます。文字サイズはマガジン全体で統一されます。</p>
+      <div class="tools">
+        <button type="button" class="h2b" onclick="fmt('h2')" title="大見出し">大見出し</button>
+        <button type="button" class="h3b" onclick="fmt('h3')" title="小見出し">小見出し</button>
+        <button type="button" onclick="fmt('p')">本文</button>
+        <span class="sep"></span>
+        <button type="button" onclick="cmd('bold')" style="font-weight:700">太字</button>
+        <button type="button" onclick="fmt('blockquote')">引用</button>
+        <button type="button" onclick="cmd('insertUnorderedList')">箇条書き</button>
+        <button type="button" onclick="cmd('insertOrderedList')">番号付き</button>
+        <span class="sep"></span>
+        <button type="button" onclick="openLink()">リンク</button>
+        <button type="button" onclick="addImg()">画像</button>
+      </div>
+      <div class="linkbox" id="linkbox">
+        <input type="text" id="ltext" placeholder="表示するテキスト">
+        <input type="url" id="lurl" placeholder="https://">
+        <button type="button" onclick="insLink()">挿入</button>
+        <button type="button" class="cx" onclick="closeLink()">やめる</button>
+      </div>
+      <div class="ed" id="ed" contenteditable="true" data-ph="ここに本文を入力します。"></div>
+      <div class="edbar">
+        <span>本文 <b id="ccnt">0</b> 字</span>
+        <span>リンク <b id="lcnt">0</b> / <b>2</b> 本</span>
+        <span>画像 <b id="icnt">0</b> / <b>5</b> 点</span>
+      </div>
+      <p class="err" id="e-body">本文を入力してください。</p>
+      <div class="quota" id="quota" style="display:none">
+        リンクは本文と参考リンクをあわせて2本までです。3本目以降を掲載したい場合は、<a href="#">広告枠掲載（¥20,000）</a>で5本まで挿入できます。
+      </div>
+    </div>
+
+    <div class="f">
+      <label>参考リンク<span class="opt">任意</span></label>
+      <p class="hint">記事末尾にまとめて表示されます。上のリンクと合算して2本までです。</p>
+      <div class="reflist" id="reflist">
+        <div class="r"><input type="text" placeholder="表示名（例：公式サイト）" class="rn"><input type="url" placeholder="https://" class="ru"></div>
+        <div class="r"><input type="text" placeholder="表示名" class="rn"><input type="url" placeholder="https://" class="ru"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- アイキャッチ -->
+  <section class="sec">
+    <h2>アイキャッチ画像</h2>
+    <p class="h-note">登録しない場合、タイトルとカテゴリの色から自動で作成します。</p>
+    <div class="eye">
+      <div class="prev" id="prev"></div>
+      <div>
+        <div class="drop" onclick="alert('画像選択ダイアログが開きます')">
+          <b>画像を選ぶ</b>JPG・PNG／推奨 1200×630px／5MBまで
+        </div>
+        <p class="hint" style="margin-top:10px">左のプレビューが自動生成される画像です。タイトルとカテゴリを変えると内容も変わります。この画像はSNSでシェアされたときのサムネイルにも使われます。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 投稿者 -->
+  <section class="sec">
+    <h2>投稿者の情報</h2>
+    <p class="h-note">メールアドレス以外は、公開するかどうかを選べます。</p>
+
+    <div class="f">
+      <label for="org">会社名・団体名・ニックネーム<span class="req">必須</span></label>
+      <p class="hint">記事の発信元として表示されます。個人の方はニックネームで構いません。</p>
+      <input type="text" id="org" placeholder="例）株式会社ソウルパントリー">
+      <p class="err" id="e-org">発信元の名前を入力してください。</p>
+    </div>
+
+    <div class="f">
+      <label for="mail">連絡先メールアドレス</label>
+      <p class="hint">ログイン中のアカウントのメールアドレスです。お知らせが届いた際のご案内に使用します。公開されません。</p>
+      <input type="email" id="mail" value="info@seoul-pantry.example.jp" disabled>
+    </div>
+
+    <div class="f">
+      <label for="pic">担当者名<span class="opt">任意・非公開</span></label>
+      <input type="text" id="pic" placeholder="例）安藤">
+    </div>
+
+    <div class="f">
+      <label>記事に関するお問い合わせ先<span class="opt">任意</span></label>
+      <p class="hint">記事末尾に掲載されます。読者やメディアからの問い合わせ窓口になります。ここに書いたURLはリンク本数に含みません。</p>
+      <div class="reflist">
+        <div class="r"><input type="email" placeholder="公開用メールアドレス"><input type="tel" placeholder="電話番号"></div>
+        <div class="r" style="grid-template-columns:1fr"><input type="url" placeholder="公式サイトURL"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 同意 -->
+  <section class="sec">
+    <h2>掲載条件の確認</h2>
+    <p class="h-note">すべてにチェックすると送信できます。</p>
+    <div class="f"><label class="check"><input type="checkbox" class="ag"><span>記事の内容に虚偽がなく、掲載する権利を持っていることを確認しました。画像・文章の著作権についても問題ありません。</span></label></div>
+    <div class="f"><label class="check"><input type="checkbox" class="ag"><span>掲載後は、自社サイトのお知らせやSNSなどで記事を紹介し、そのページのURLをマイページから提出します。（14日以内に提出がない場合、記事は取り下げられます）</span></label></div>
+    <div class="f"><label class="check"><input type="checkbox" class="ag"><span><a href="#">掲載ガイドライン</a>と<a href="#">利用規約</a>に同意します。</span></label></div>
+    <p class="err" id="e-ag">すべての項目にチェックしてください。</p>
+    <button type="button" class="submit" onclick="send()">審査に出して掲載する</button>
+  </section>
+
+  <p class="foot-note">送信すると自動審査が始まります。掲載料はかかりません。<br>審査で修正が必要になった場合は、理由とあわせてメールでお知らせします。</p>
+</div>
+
+<!-- ===== 完了画面 ===== -->
+<div class="wrap" id="doneview" style="display:none">
+  <div class="done-hero">
+    <h1>受け付けました</h1>
+    <p>自動審査を開始しました。結果はマイページの<strong>お知らせ</strong>に届きます。このページを閉じても審査は進みます。</p>
+  </div>
+
+  <section class="sec">
+    <h2>これからの流れ</h2>
+    <div class="timeline">
+      <div class="tl now"><div class="dot">1</div><div><h3>AI自動審査</h3><p>ただいま確認中です。通常30分以内に終わります。</p></div></div>
+      <div class="tl"><div class="dot">2</div><div><h3>公開</h3><p>審査を通過すると、そのまま記事が公開されます。公開のお知らせと記事URLがマイページのお知らせに届きます。</p></div></div>
+      <div class="tl"><div class="dot">3</div><div><h3>記事を紹介してURLを提出</h3><p>掲載日から14日以内に、紹介したページのURLをマイページから提出してください。</p></div></div>
+      <div class="tl"><div class="dot">4</div><div><h3>掲載レポート</h3><p>掲載から1ヶ月後、PV数とリンククリック数をマイページで確認できます。</p></div></div>
+    </div>
+  </section>
+
+  <div class="ask">
+    <h2>掲載されたら、記事の紹介をお願いします</h2>
+    <p>アドプレスの記事は、発信元ご自身の告知によって最初の読者が集まります。紹介いただくことで記事が読まれ、検索でも見つかりやすくなります。あわせて、取引先や採用候補者に向けた信頼の材料にもなります。</p>
+    <div class="ways">
+      <div class="way"><b>自社サイトのお知らせ欄・プレスルーム</b>「メディア掲載」として、記事タイトルとリンクを掲載してください。</div>
+      <div class="way"><b>SNS（X・Instagram・Facebook・LINE）</b>個人の方はこちらだけで結構です。記事のURLを添えて投稿してください。</div>
+      <div class="way"><b>メールマガジン・社内報・採用ページ</b>掲載実績としてご活用いただけます。</div>
+    </div>
+    <p style="margin-bottom:8px"><b>そのまま使える紹介文</b></p>
+    <div class="tmpl" id="tmpl">■メディア掲載実績
+
+「該当タイトル名」が、プレスリリースサイト「アドプレス」に掲載されました。
+
+アドプレス掲載ページ：記事リンク</div>
+    <button class="copy" onclick="cp(this)">紹介文をコピー</button>
+  </div>
+
+  <section class="sec">
+    <h2>マイページ</h2>
+    <p class="h-note">記事の編集、紹介リンクの提出、掲載レポートの確認ができます。</p>
+    <a href="#" class="mp">マイページを開く</a>
+    <p class="hint" style="text-align:center;margin:0">公開後の本文とアイキャッチ画像は変更できません。内容に誤りがあった場合は、記事を取り下げてから投稿し直してください。</p>
+  </section>
+
+  <section class="ad">
+    <h2>■ ここ一番で届けたいプレスリリースに｜広告枠掲載のご案内</h2>
+    <div class="adprice">¥20,000<em> / 1本（税別）</em></div>
+    <p>月額費用ではなく、1回ごとの掲載としてご利用いただけます。今回または今後のプレスリリースの中で、特に見せたい1本がございましたらご検討いただけますと幸いです。</p>
+    <ul>
+      <li>記事の作成代行（1,500字程度・任意）</li>
+      <li>リンクを5本まで挿入可（通常は2本まで）</li>
+      <li>トップページのPR枠に7日間固定表示</li>
+      <li>カテゴリ上部に14日間表示</li>
+      <li>画像5点まで／記事は恒久掲載</li>
+      <li>掲載1ヶ月後にPVレポートを公開</li>
+      <li>紹介リンクの提出は不要</li>
+    </ul>
+    <a href="mailto:a-ando@hotseller.jp?subject=%E3%82%A2%E3%83%89%E3%83%97%E3%83%AC%E3%82%B9%20%E5%BA%83%E5%91%8A%E6%9E%A0%E6%8E%B2%E8%BC%89%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87" class="adcta">広告枠の掲載を相談する</a>
+    <p class="adnote">お支払いは掲載後の請求書払いです。</p>
+  </section>
+
+  <p class="foot-note">この案内は、公開時にマイページのお知らせにも届きます。</p>
+</div>
+
+<script>
+var CATS={
+  kpop :{label:'K-POP',      bg:'#FFD9E4', fg:'#8A3A55'},
+  korea:{label:'韓国情報',    bg:'#FFE2CC', fg:'#94502A'},
+  ent  :{label:'エンタメ',    bg:'#E7DCFF', fg:'#5B429B'},
+  tech :{label:'IT・テック',  bg:'#D6E7FF', fg:'#2B5A93'},
+  sns  :{label:'SNS・マーケ', bg:'#D3F0E4', fg:'#1F6B52'},
+  life :{label:'ライフ',      bg:'#FFF0C4', fg:'#846412'},
+  trip :{label:'旅行',        bg:'#CDECF2', fg:'#1F6A76'},
+  biz  :{label:'ビジネス',    bg:'#E3E5EA', fg:'#474E5C'}
+};
+var cat=null, ed=document.getElementById('ed'), imgs=0, savedRange=null;
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* --- カテゴリ --- */
+var ch='';
+Object.keys(CATS).forEach(function(k){ch+='<button type="button" class="cat" data-c="'+k+'" onclick="pick(\''+k+'\')">'+CATS[k].label+'</button>';});
+document.getElementById('cats').innerHTML=ch;
+function pick(k){
+  cat=k;
+  document.querySelectorAll('.cat').forEach(function(b){
+    var on=b.dataset.c===k;
+    b.classList.toggle('on',on);
+    b.style.background=on?CATS[k].bg:'';
+    b.style.color=on?CATS[k].fg:'';
+  });
+  hide('e-cat');drawPrev();
+}
+
+/* --- アイキャッチ自動生成 --- */
+function drawPrev(){
+  var t=document.getElementById('title').value.trim()||'タイトルを入力するとここに反映されます',
+      C=cat?CATS[cat]:{bg:'#EDEEF2',fg:'#3A3D45',label:'カテゴリ未選択'},
+      w=400,h=210,per=15,lines=[],s=t;
+  while(s.length&&lines.length<3){lines.push(s.slice(0,per));s=s.slice(per);}
+  if(s.length)lines[2]=lines[2].slice(0,per-1)+'…';
+  var dots='';
+  for(var y=16;y<h;y+=22)for(var x=16;x<w;x+=22)dots+='<circle cx="'+x+'" cy="'+y+'" r="1.3"/>';
+  var fs=21,ly=h/2-(lines.length-1)*fs*0.78,tx='';
+  for(var i=0;i<lines.length;i++)
+    tx+='<text x="28" y="'+(ly+i*fs*1.5)+'" font-family="Zen Old Mincho,serif" font-weight="700" font-size="'+fs+'" fill="'+C.fg+'">'+esc(lines[i])+'</text>';
+  document.getElementById('prev').innerHTML=
+    '<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg"><rect width="'+w+'" height="'+h+'" fill="'+C.bg+'"/>'
+    +'<g fill="'+C.fg+'" opacity=".13">'+dots+'</g>'+tx
+    +'<text x="28" y="'+(h-20)+'" font-family="Roboto Mono,monospace" font-size="12" letter-spacing="4" fill="'+C.fg+'" opacity=".65">ADPRESS / '+C.label+'</text></svg>';
+}
+
+/* --- エディタ --- */
+function cmd(c){ed.focus();document.execCommand(c,false,null);count();}
+function fmt(t){ed.focus();document.execCommand('formatBlock',false,'<'+t+'>');count();}
+function saveSel(){var s=window.getSelection();if(s.rangeCount&&ed.contains(s.anchorNode))savedRange=s.getRangeAt(0).cloneRange();}
+ed.addEventListener('keyup',saveSel);ed.addEventListener('mouseup',saveSel);
+
+function openLink(){
+  saveSel();
+  if(links()>=2){bump();return;}
+  var s=window.getSelection();
+  document.getElementById('ltext').value=(savedRange&&!savedRange.collapsed)?savedRange.toString():'';
+  document.getElementById('linkbox').classList.add('on');
+  document.getElementById('lurl').focus();
+}
+function closeLink(){document.getElementById('linkbox').classList.remove('on');}
+function insLink(){
+  var u=document.getElementById('lurl').value.trim(),t=document.getElementById('ltext').value.trim()||u;
+  if(!/^https?:\/\/.+\..+/.test(u)){alert('https:// から始まるURLを入力してください。');return;}
+  ed.focus();
+  if(savedRange){var s=window.getSelection();s.removeAllRanges();s.addRange(savedRange);}
+  document.execCommand('insertHTML',false,'<a href="'+u.replace(/"/g,'&quot;')+'" rel="nofollow">'+esc(t)+'</a>&nbsp;');
+  document.getElementById('lurl').value='';document.getElementById('ltext').value='';
+  closeLink();count();
+}
+function addImg(){
+  if(imgs>=5){alert('画像は5点までです。');return;}
+  imgs++;ed.focus();
+  document.execCommand('insertHTML',false,
+   '<figure style="margin:1.4em 0"><div style="background:#EDEEF2;border-radius:8px;height:150px;display:flex;align-items:center;justify-content:center;color:#8A8D96;font-size:13px">画像 '+imgs+'</div></figure><p><br></p>');
+  count();
+}
+function links(){
+  var n=ed.querySelectorAll('a').length;
+  document.querySelectorAll('#reflist .ru').forEach(function(i){if(i.value.trim())n++;});
+  return n;
+}
+function bump(){
+  var q=document.getElementById('quota');q.style.display='block';
+  q.scrollIntoView({block:'center',behavior:'smooth'});
+}
+function count(){
+  var n=links();
+  document.getElementById('ccnt').textContent=ed.textContent.trim().length;
+  document.getElementById('lcnt').textContent=n;
+  document.getElementById('icnt').textContent=imgs;
+  document.getElementById('lcnt').className=n>2?'over':'';
+  document.getElementById('quota').style.display=n>=2?'block':'none';
+  if(ed.textContent.trim())hide('e-body');
+}
+ed.addEventListener('input',count);
+document.querySelectorAll('#reflist .ru').forEach(function(i){i.addEventListener('input',count);});
+document.getElementById('title').addEventListener('input',function(){
+  document.getElementById('tcnt').textContent=this.value.length;
+  hide('e-title');drawPrev();
+});
+['org'].forEach(function(id){document.getElementById(id).addEventListener('input',function(){hide('e-'+id);this.classList.remove('bad');});});
+document.querySelectorAll('.ag').forEach(function(c){c.addEventListener('change',function(){hide('e-ag');});});
+
+function hide(id){document.getElementById(id).classList.remove('on');}
+function show(id,el){
+  var e=document.getElementById(id);e.classList.add('on');
+  if(el){el.classList.add('bad');}
+  return e;
+}
+
+/* --- 送信 --- */
+function send(){
+  var first=null,ok=true;
+  document.querySelectorAll('.err').forEach(function(e){e.classList.remove('on');});
+  document.querySelectorAll('.bad').forEach(function(e){e.classList.remove('bad');});
+
+  if(!cat){show('e-cat');first=first||document.getElementById('cats');ok=false;}
+  var t=document.getElementById('title');
+  if(!t.value.trim()){show('e-title',t);first=first||t;ok=false;}
+  if(!ed.textContent.trim()){show('e-body',ed);first=first||ed;ok=false;}
+  if(links()>2){
+    var q=document.getElementById('e-body');
+    q.textContent='リンクが'+links()+'本あります。無料掲載では2本までです。';
+    q.classList.add('on');first=first||ed;ok=false;bump();
+  }
+  var o=document.getElementById('org');
+  if(!o.value.trim()){show('e-org',o);first=first||o;ok=false;}
+  var all=true;document.querySelectorAll('.ag').forEach(function(c){if(!c.checked)all=false;});
+  if(!all){show('e-ag');first=first||document.querySelector('.ag');ok=false;}
+
+  if(!ok){if(first)first.scrollIntoView({block:'center',behavior:'smooth'});return;}
+
+  document.getElementById('formview').style.display='none';
+  document.getElementById('doneview').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function cp(b){
+  var t=document.getElementById('tmpl').textContent;
+  navigator.clipboard.writeText(t).then(function(){
+    b.textContent='コピーしました';setTimeout(function(){b.textContent='紹介文をコピー';},1800);
+  },function(){b.textContent='コピーできませんでした';});
+}
+
+drawPrev();count();
+</script>
+<footer style="text-align:center;padding:0 20px 44px;font-size:11.5px;color:var(--ink-3);line-height:1.9">
+  <a href="/guideline/" style="color:inherit">掲載ガイドライン</a> ・
+  <a href="/terms/" style="color:inherit">利用規約</a> ・
+  運営：<a href="https://www.cocomarke.com/about/" rel="noopener" style="color:var(--ink-2)">株式会社ホットセラー</a>
+  <div style="margin-top:8px;font-family:'Roboto Mono',monospace">© 2026 ADPRESS</div>
+</footer>
+</body>
+</html>

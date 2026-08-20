@@ -1,10 +1,29 @@
 {
-  "name": "growth-marketing-autopublish",
-  "version": "1.0.0",
+  "name": "adpress",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "週2回のSEO記事自動生成パイプライン（Claude Code サブスク実行 + Web検索）",
+  "description": "アドプレス（ADPRESS）— 誰でも無料でプレスリリースを掲載できるメディア。Next.js + Supabase。",
   "scripts": {
-    "generate": "node scripts/generate-post.mjs"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "generate": "node legacy-static/scripts/generate-post.mjs",
+    "migrate:legacy": "tsx scripts/migrate-legacy-articles.ts"
+  },
+  "dependencies": {
+    "next": "^16.3.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@supabase/supabase-js": "^2.47.10",
+    "@supabase/ssr": "^0.5.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "tsx": "^4.19.2"
   }
 }

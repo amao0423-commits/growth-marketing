@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マイページ｜アドプレス</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Old+Mincho:wght@600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1F2024; --ink-2:#55575E; --ink-3:#8A8D96;
+  --paper:#FFFFFF; --mist:#F6F6F8; --line:#E7E7EC; --line-2:#D5D6DC;
+  --action-bg:#C9D3FF; --action-fg:#293A80;
+  --warn-bg:#FFF0C4; --warn-fg:#846412;
+  --ok-bg:#D3F0E4; --ok-fg:#1F6B52;
+  --stop-bg:#FFD9E4; --stop-fg:#8A3A55;
+  --wait-bg:#E3E5EA; --wait-fg:#474E5C;
+  --r:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-size:15px;line-height:1.75}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--action-fg);outline-offset:2px;border-radius:4px}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px}
+.mono{font-family:"Roboto Mono",monospace;font-variant-numeric:tabular-nums}
+
+.top{background:var(--paper);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:14px;height:62px;max-width:820px;margin:0 auto;padding:0 20px}
+.mast{font-family:"Zen Old Mincho",serif;font-weight:700;font-size:20px;letter-spacing:.06em;text-decoration:none}
+.top-in .who{margin-left:auto;font-size:12px;color:var(--ink-3);text-align:right}
+.top-in .who b{display:block;color:var(--ink-2);font-weight:500;font-size:12.5px}
+
+h1{font-family:"Zen Old Mincho",serif;font-size:24px;letter-spacing:.04em;margin:28px 0 4px}
+.lede{font-size:13px;color:var(--ink-2);margin:0 0 20px}
+
+.tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);margin:26px 0 0;font-size:14px}
+.tabs a{padding:0 0 11px;color:var(--ink-3);border-bottom:2px solid transparent;text-decoration:none}
+.tabs a:hover{color:var(--ink-2)}
+.tabs a[aria-current="page"]{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
+.tabs .dot{display:inline-block;width:16px;height:16px;border-radius:50%;background:var(--action-fg);color:#fff;font-size:10px;line-height:16px;text-align:center;margin-left:5px;font-family:"Roboto Mono",monospace}
+.alert{background:var(--warn-bg);color:var(--warn-fg);border-radius:var(--r);padding:14px 17px;font-size:13.5px;line-height:1.75;margin-bottom:22px}
+.alert b{font-weight:700}
+.tip{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px 17px;font-size:12.5px;color:var(--ink-2);line-height:1.8;margin-bottom:26px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);margin-bottom:16px;overflow:hidden}
+.card.attn{border-color:#E6C97A}
+.card-head{padding:16px 18px 14px}
+.st{display:inline-block;padding:2px 10px;border-radius:5px;font-size:11.5px;font-weight:700;margin-bottom:8px}
+.s-live{background:var(--ok-bg);color:var(--ok-fg)}
+.s-need{background:var(--warn-bg);color:var(--warn-fg)}
+.s-check{background:var(--wait-bg);color:var(--wait-fg)}
+.s-back{background:var(--stop-bg);color:var(--stop-fg)}
+.pr{display:inline-block;padding:2px 8px;border-radius:5px;background:var(--ink);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;margin-left:5px}
+.card h2{font-size:16px;line-height:1.6;margin:0 0 8px;font-weight:700}
+.sub{font-size:12px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:10px}
+.sub a{color:var(--action-fg);text-decoration:none}
+.sub a:hover{text-decoration:underline}
+
+.block{border-top:1px solid var(--line);padding:16px 18px}
+.block h3{font-size:13px;margin:0 0 4px;font-weight:700}
+.block p{margin:0 0 12px;font-size:12.5px;color:var(--ink-2);line-height:1.8}
+.row{display:flex;gap:8px}
+.row input{flex:1;height:40px;border:1px solid var(--line-2);border-radius:8px;padding:0 13px;font:inherit;font-size:13.5px;min-width:0}
+.row input::placeholder{color:var(--ink-3)}
+.row button{height:40px;padding:0 20px;border:none;border-radius:8px;background:var(--action-bg);color:var(--action-fg);font:inherit;font-weight:700;font-size:13.5px;cursor:pointer;white-space:nowrap}
+.row button:hover{background:#B6C3FF}
+.err{color:#A33A4E;font-size:12.5px;margin:8px 0 0;display:none}
+.err.on{display:block}
+.done{background:var(--ok-bg);color:var(--ok-fg);border-radius:8px;padding:11px 14px;font-size:13px;display:none}
+.done.on{display:block}
+.deadline{font-size:12px;color:var(--warn-fg);background:var(--warn-bg);border-radius:6px;padding:6px 11px;display:inline-block;margin-bottom:12px}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.stat{background:var(--mist);border-radius:8px;padding:11px 13px}
+.stat .n{font-family:"Roboto Mono",monospace;font-size:21px;font-weight:500;line-height:1.3}
+.stat .l{font-size:11px;color:var(--ink-3)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:64px;margin-bottom:6px}
+.bars i{flex:1;background:var(--action-bg);border-radius:2px 2px 0 0;min-height:2px}
+.axis{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3)}
+.locked{background:var(--mist);border-radius:8px;padding:16px;text-align:center;font-size:12.5px;color:var(--ink-2)}
+.locked b{display:block;font-family:"Roboto Mono",monospace;font-size:15px;color:var(--ink);font-weight:500;margin-top:3px}
+
+.reasons{margin:0;padding-left:18px;font-size:12.5px;color:var(--ink-2);line-height:1.9}
+.acts{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line);padding:12px 18px;background:#FCFCFD}
+.acts button{height:34px;padding:0 15px;border:1px solid var(--line-2);border-radius:99px;background:var(--paper);font:inherit;font-size:12.5px;cursor:pointer}
+.acts button:hover{border-color:var(--ink-3)}
+.grace{font-size:11.5px;color:var(--warn-fg);background:var(--warn-bg);border-radius:99px;padding:6px 13px;align-self:center}
+.grace.off{color:var(--ink-3);background:var(--mist)}
+.acts .del{margin-left:auto;color:#A33A4E;border-color:#EED0D6}
+
+.ways{display:grid;gap:7px;margin:0 0 14px}
+.way{background:var(--mist);border-radius:8px;padding:10px 13px;font-size:12.5px;line-height:1.7;color:var(--ink-2)}
+.way b{display:block;font-size:12.5px;color:var(--ink);font-weight:700;margin-bottom:1px}
+.tmpl{background:var(--mist);border:1px solid var(--line);border-radius:8px;padding:13px 15px;font-size:12.5px;line-height:1.9;color:var(--ink-2);white-space:pre-wrap;margin:0 0 10px}
+.copy{height:34px;padding:0 16px;border:1px solid var(--line-2);border-radius:99px;background:var(--paper);font:inherit;font-size:12.5px;cursor:pointer;margin-bottom:16px}
+.copy:hover{border-color:var(--ink-3)}
+.pf{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.pf label{display:block;font-size:12.5px;font-weight:700;margin-bottom:5px}
+.pf .hint{font-size:11.5px;color:var(--ink-3);font-weight:400;margin:0 0 5px}
+.pf input{width:100%;height:38px;border:1px solid var(--line-2);border-radius:8px;padding:0 12px;font:inherit;font-size:13.5px}
+.pf input:disabled{background:var(--mist);color:var(--ink-3)}
+.pf .full{grid-column:1/-1}
+.save{height:38px;padding:0 20px;border:none;border-radius:99px;background:var(--action-bg);color:var(--action-fg);font:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.save:hover{background:#B6C3FF}
+footer{padding:30px 0 50px;font-size:11.5px;color:var(--ink-3)}
+@media (max-width:560px){
+  .stats{grid-template-columns:1fr 1fr}
+  .row{flex-direction:column}
+  .row button{width:100%}
+  .acts .del{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a href="/" class="mast">アドプレス</a>
+    <div class="who">Googleでログイン中<b>info@seoul-pantry.example.jp</b></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="tabs">
+    <a href="/mypage/" aria-current="page">投稿した記事</a>
+    <a href="/mypage/notifications/">お知らせ<span class="dot">2</span></a>
+    <a href="/mypage/profile/">プロフィール</a>
+  </nav>
+
+  <h1>投稿した記事</h1>
+  <p class="lede">投稿した記事の状況を確認できます。</p>
+
+  <div class="alert">
+    <b>紹介リンクが未提出の記事が1件あります。</b><br>
+    掲載した記事を自社サイトのお知らせやSNSで紹介し、そのURLを提出してください。9月2日までに提出がない場合、記事を取り下げます。
+  </div>
+
+  <!-- 1: 紹介リンク未提出 -->
+  <article class="card attn">
+    <div class="card-head">
+      <span class="st s-need">紹介リンク未提出</span>
+      <h2>韓国食品専門EC「ソウルパントリー」、常温配送に切り替え送料を一律550円へ</h2>
+      <div class="sub"><span class="mono">2026.08.19 11:20 公開</span><a href="#">記事を見る</a><span>韓国情報</span></div>
+    </div>
+    <div class="block">
+      <h3>記事の紹介と、URLの提出</h3>
+      <p>アドプレスの記事は、発信元ご自身の告知によって最初の読者が集まります。紹介いただくことで記事が読まれ、検索でも見つかりやすくなります。</p>
+      <div class="ways">
+        <div class="way"><b>自社サイトのお知らせ欄・プレスルーム</b>「メディア掲載」として、記事タイトルとリンクを掲載してください。</div>
+        <div class="way"><b>SNS（X・Instagram・Facebook・LINE）</b>個人の方はこちらだけで結構です。</div>
+        <div class="way"><b>メールマガジン・社内報・採用ページ</b>掲載実績としてご活用いただけます。</div>
+      </div>
+      <div class="tmpl" id="tmpl">■メディア掲載実績
+
+「韓国食品専門EC「ソウルパントリー」、常温配送に切り替え送料を一律550円へ」が、プレスリリースサイト「アドプレス」に掲載されました。
+
+アドプレス掲載ページ：https://www.nishinippon-adv.jp/news/12480/</div>
+      <button class="copy" onclick="cp(this)">紹介文をコピー</button>
+      <div class="deadline">提出期限：2026年9月2日（残り13日）</div>
+      <div class="row">
+        <input id="u1" type="url" placeholder="https://example.com/news/2026/08/19/" aria-label="紹介したページのURL">
+        <button onclick="sub(1)">提出する</button>
+      </div>
+      <p class="err" id="e1"></p>
+      <div class="done" id="d1"></div>
+    </div>
+    <div class="block">
+      <h3>掲載レポート</h3>
+      <div class="locked">紹介リンクの確認後、掲載1ヶ月で公開されます<b>2026.09.19</b></div>
+    </div>
+    <div class="acts">
+      <button>本文を編集する</button><button>アイキャッチを差し替える</button>
+      <span class="grace">編集できる期間：2026年9月19日まで（残り30日）</span>
+      <button class="del">記事を取り下げる</button>
+    </div>
+  </article>
+
+  <!-- 2: 確認済み・レポート公開済み -->
+  <article class="card">
+    <div class="card-head">
+      <span class="st s-live">掲載中</span>
+      <h2>韓国コスメの定期便「ソウルボックス」、8月号のラインナップを公開</h2>
+      <div class="sub"><span class="mono">2026.07.16 10:05 公開</span><a href="#">記事を見る</a><span>韓国情報</span></div>
+    </div>
+    <div class="block">
+      <h3>紹介リンク</h3>
+      <p>確認済み — <a href="#">https://seoul-pantry.example.jp/news/20260716/</a>（2026.07.18 提出）</p>
+    </div>
+    <div class="block">
+      <h3>掲載レポート</h3>
+      <div class="stats">
+        <div class="stat"><div class="n">4,182</div><div class="l">記事PV（30日間）</div></div>
+        <div class="stat"><div class="n">311</div><div class="l">リンククリック</div></div>
+        <div class="stat"><div class="n">2:14</div><div class="l">平均滞在時間</div></div>
+      </div>
+      <div class="bars">
+        <i style="height:22%"></i><i style="height:78%"></i><i style="height:100%"></i><i style="height:64%"></i>
+        <i style="height:41%"></i><i style="height:33%"></i><i style="height:28%"></i><i style="height:36%"></i>
+        <i style="height:24%"></i><i style="height:19%"></i><i style="height:22%"></i><i style="height:17%"></i>
+        <i style="height:14%"></i><i style="height:16%"></i><i style="height:12%"></i>
+      </div>
+      <div class="axis"><span class="mono">07/16</span><span class="mono">08/15</span></div>
+    </div>
+    <div class="acts">
+      <button>レポートをPDFで保存</button>
+      <span class="grace off">編集できる期間は終了しました（2026年8月16日まで）</span>
+      <button class="del">記事を取り下げる</button>
+    </div>
+  </article>
+
+  <!-- 3: AI審査中 -->
+  <article class="card">
+    <div class="card-head">
+      <span class="st s-check">AI審査中</span>
+      <h2>「ソウルパントリー」、秋の新商品としてトッポギ6種を追加</h2>
+      <div class="sub"><span class="mono">2026.08.20 09:41 受付</span><span>公開予定 10:20頃</span></div>
+    </div>
+    <div class="acts"><button>内容を確認する</button><button class="del">投稿を取り消す</button></div>
+  </article>
+
+  <!-- 4: 差し戻し -->
+  <article class="card">
+    <div class="card-head">
+      <span class="st s-back">修正が必要です</span>
+      <h2>【最安値保証】業界No.1の韓国食品ECがついに送料無料キャンペーン開始</h2>
+      <div class="sub"><span class="mono">2026.08.12 14:22 受付</span></div>
+    </div>
+    <div class="block">
+      <h3>審査結果</h3>
+      <ul class="reasons">
+        <li>「業界No.1」「最安値保証」は客観的な根拠の記載が必要です（景品表示法）。調査元と調査時点を本文に明記するか、表現を削除してください。</li>
+        <li>リンクが4本含まれています。無料掲載では本文中・記事末尾をあわせて2本までです。</li>
+      </ul>
+      <p style="margin-top:12px">修正して再送信すると、あらためて審査されます。</p>
+    </div>
+    <div class="acts"><button>修正して再送信する</button><button class="del">投稿を取り下げる</button></div>
+  </article>
+
+  <!-- 5: PR記事 -->
+  <article class="card">
+    <div class="card-head">
+      <span class="st s-live">掲載中</span><span class="pr">PR</span>
+      <h2>韓国食品専門EC「ソウルパントリー」、公式アプリのポイント還元を最大10%へ</h2>
+      <div class="sub"><span class="mono">2026.08.04 12:00 公開</span><a href="#">記事を見る</a><span>韓国情報</span><span>リンク 5本</span></div>
+    </div>
+    <div class="block">
+      <h3>紹介リンク</h3>
+      <p>PR記事のため提出は不要です。</p>
+    </div>
+    <div class="block">
+      <h3>掲載レポート</h3>
+      <div class="locked">掲載1ヶ月で公開されます<b>2026.09.04</b></div>
+    </div>
+    <div class="acts"><button>掲載内容の修正を依頼する</button></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head" style="padding-bottom:0">
+      <h2 style="margin-bottom:4px">プロフィール</h2>
+      <p style="font-size:12.5px;color:var(--ink-3);margin:0">ここで設定した表示名が、今後投稿する記事の発信元として使われます。</p>
+    </div>
+    <div class="block" style="border-top:none;padding-top:16px">
+      <div class="pf">
+        <div class="full">
+          <label for="dn">表示名（会社名・団体名・ニックネーム）</label>
+          <p class="hint">記事に発信元として表示されます。個人の方はニックネームで構いません。</p>
+          <input type="text" id="dn" value="株式会社ソウルパントリー">
+        </div>
+        <div>
+          <label for="pn">担当者名</label>
+          <p class="hint">公開されません</p>
+          <input type="text" id="pn" value="安藤">
+        </div>
+        <div>
+          <label for="em">連絡先メールアドレス</label>
+          <p class="hint">変更には確認メールが必要です</p>
+          <input type="email" id="em" value="info@seoul-pantry.example.jp" disabled>
+        </div>
+        <div class="full">
+          <label for="su">公式サイトURL<span style="font-weight:400;color:var(--ink-3)">（任意）</span></label>
+          <p class="hint">記事末尾のお問い合わせ先に表示されます。リンク本数には含みません。</p>
+          <input type="url" id="su" placeholder="https://">
+        </div>
+      </div>
+      <button class="save" onclick="sv(this)">プロフィールを保存</button>
+    </div>
+  </article>
+
+  <div class="tip">
+    <b>公開後の編集について</b><br>
+    本文とアイキャッチ画像は、公開日から1ヶ月間に限り編集できます。URLは変わりません。<br>
+    編集した内容は、あらためてAIの自動審査を通ります。審査中も記事は公開されたままです。<br>
+    1ヶ月を過ぎたあとの訂正は、お問い合わせからご相談ください。
+  </div>
+</div>
+
+<footer><div class="wrap">
+  <a href="#">掲載ガイドライン</a> ・ <a href="#">紹介リンクについて</a> ・ <a href="#">お問い合わせ</a>
+  <p class="op">運営：<a href="https://www.cocomarke.com/about/" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px">株式会社ホットセラー</a></p>
+  <p class="mono">© 2026 ADPRESS</p>
+</div></footer>
+
+<script>
+function sub(n){
+  var i=document.getElementById('u'+n),e=document.getElementById('e'+n),d=document.getElementById('d'+n),v=i.value.trim();
+  e.className='err';d.className='done';
+  if(!v){e.textContent='紹介したページのURLを入力してください。';e.className='err on';i.focus();return;}
+  if(!/^https?:\/\/.+\..+/.test(v)){e.textContent='URLの形式が正しくありません。https:// から始まるアドレスを入力してください。';e.className='err on';i.focus();return;}
+  d.textContent='提出しました。編集部が確認し、2営業日以内に結果をメールでお知らせします。';
+  d.className='done on';
+  i.disabled=true;
+}
+function cp(b){
+  navigator.clipboard.writeText(document.getElementById('tmpl').textContent).then(function(){
+    b.textContent='コピーしました';setTimeout(function(){b.textContent='紹介文をコピー';},1800);
+  },function(){b.textContent='コピーできませんでした';});
+}
+function sv(b){
+  var d=document.getElementById('dn');
+  if(!d.value.trim()){d.style.borderColor='#A33A4E';d.focus();b.textContent='表示名を入力してください';setTimeout(function(){b.textContent='プロフィールを保存';},2200);return;}
+  d.style.borderColor='';
+  b.textContent='保存しました';setTimeout(function(){b.textContent='プロフィールを保存';},1800);
+}
+document.querySelectorAll('.row input').forEach(function(i){
+  i.addEventListener('input',function(){
+    var e=document.getElementById('e'+i.id.slice(1));if(e)e.className='err';
+  });
+});
+</script>
+</body>
+</html>

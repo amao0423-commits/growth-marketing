@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お知らせ｜アドプレス</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Old+Mincho:wght@600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1F2024; --ink-2:#55575E; --ink-3:#8A8D96;
+  --paper:#FFFFFF; --mist:#F6F6F8; --line:#E7E7EC; --line-2:#D5D6DC;
+  --action-bg:#C9D3FF; --action-fg:#293A80;
+  --warn-bg:#FFF0C4; --warn-fg:#846412;
+  --ok-bg:#D3F0E4; --ok-fg:#1F6B52;
+  --stop-bg:#FFD9E4; --stop-fg:#8A3A55;
+  --r:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-size:15px;line-height:1.75}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--action-fg);outline-offset:2px;border-radius:4px}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+.mono{font-family:"Roboto Mono",monospace;font-variant-numeric:tabular-nums}
+
+.top{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
+.top-in{display:flex;align-items:center;gap:14px;height:62px;max-width:880px;margin:0 auto;padding:0 20px}
+.mast{font-family:"Zen Old Mincho",serif;font-weight:700;font-size:20px;letter-spacing:.06em}
+.who{margin-left:auto;font-size:12px;color:var(--ink-3);text-align:right}
+.who b{display:block;color:var(--ink-2);font-weight:500;font-size:12.5px}
+
+.tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);margin:26px 0 0;font-size:14px}
+.tabs a{padding:0 0 11px;color:var(--ink-3);border-bottom:2px solid transparent}
+.tabs a:hover{color:var(--ink-2)}
+.tabs a[aria-current="page"]{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
+.tabs .dot{display:inline-block;width:16px;height:16px;border-radius:50%;background:var(--action-fg);color:#fff;font-size:10px;line-height:16px;text-align:center;margin-left:5px;font-family:"Roboto Mono",monospace}
+
+h1{font-family:"Zen Old Mincho",serif;font-size:23px;letter-spacing:.04em;margin:26px 0 4px}
+.lede{font-size:12.5px;color:var(--ink-3);margin:0 0 20px}
+
+.layout{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start;padding-bottom:60px}
+
+/* 通知リスト */
+.list{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;position:sticky;top:78px}
+.n{display:block;width:100%;text-align:left;border:none;background:transparent;font:inherit;
+   padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer;position:relative}
+.n:last-child{border-bottom:none}
+.n:hover{background:#FCFCFD}
+.n.on{background:#F2F5FF}
+.n.unread::before{content:"";position:absolute;left:6px;top:20px;width:6px;height:6px;border-radius:50%;background:var(--action-fg)}
+.n .k{font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:4px;display:inline-block;margin-bottom:5px}
+.k-pub{background:var(--ok-bg);color:var(--ok-fg)}
+.k-ref{background:var(--warn-bg);color:var(--warn-fg)}
+.k-rev{background:var(--stop-bg);color:var(--stop-fg)}
+.k-rep{background:var(--action-bg);color:var(--action-fg)}
+.n .t{font-size:13px;line-height:1.6;font-weight:500;margin:0 0 3px}
+.n .d{font-size:11px;color:var(--ink-3);font-family:"Roboto Mono",monospace}
+
+/* 詳細 */
+.detail{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:26px 28px}
+.detail .head{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:20px}
+.detail h2{font-family:"Zen Old Mincho",serif;font-size:21px;line-height:1.5;margin:10px 0 6px;letter-spacing:.03em}
+.detail .when{font-size:12px;color:var(--ink-3);font-family:"Roboto Mono",monospace}
+.detail p{font-size:14px;line-height:1.9;margin:0 0 14px}
+.detail h3{font-size:14px;margin:26px 0 8px;font-weight:700}
+.detail h3:first-of-type{margin-top:0}
+
+.article-card{background:var(--mist);border-radius:10px;padding:16px 18px;margin-bottom:20px}
+.article-card .cat{display:inline-block;background:#FFE2CC;color:#94502A;font-size:11px;font-weight:700;padding:2px 9px;border-radius:5px}
+.article-card h4{font-family:"Zen Old Mincho",serif;font-size:16px;line-height:1.6;margin:9px 0 8px;font-weight:700}
+.article-card .u{font-size:12px;color:var(--ink-3);word-break:break-all;font-family:"Roboto Mono",monospace}
+.btn{display:inline-flex;align-items:center;height:42px;padding:0 22px;border-radius:99px;background:var(--action-bg);color:var(--action-fg);font-weight:700;font-size:14px;margin-top:14px;border:none;font-family:inherit;cursor:pointer}
+.btn:hover{background:#B6C3FF}
+.btn.solid{background:var(--action-fg);color:#fff}
+.btn.warn{background:var(--warn-fg);color:#fff}
+
+.ways{display:grid;gap:7px;margin:0 0 16px}
+.way{background:var(--mist);border-radius:8px;padding:11px 14px;font-size:12.5px;line-height:1.7;color:var(--ink-2)}
+.way b{display:block;font-size:12.5px;color:var(--ink);font-weight:700;margin-bottom:1px}
+.tmpl{background:var(--mist);border:1px solid var(--line);border-radius:8px;padding:14px 16px;font-size:12.5px;line-height:1.95;color:var(--ink-2);white-space:pre-wrap;margin:0 0 10px}
+.copy{height:34px;padding:0 16px;border:1px solid var(--line-2);border-radius:99px;background:var(--paper);font:inherit;font-size:12.5px;cursor:pointer}
+.copy:hover{border-color:var(--ink-3)}
+
+.deadlines{width:100%;border-collapse:collapse;font-size:13px;margin:0 0 6px}
+.deadlines td{padding:10px 0;border-top:1px solid var(--line);vertical-align:top;line-height:1.75}
+.deadlines tr:first-child td{border-top:none}
+.deadlines td:first-child{width:130px;color:var(--ink-3);font-size:12.5px;font-family:"Roboto Mono",monospace}
+
+.ad{background:var(--action-bg);color:var(--action-fg);border-radius:10px;padding:22px;margin-top:26px}
+.ad h3{font-family:"Zen Old Mincho",serif;font-size:15.5px;margin:0 0 10px;letter-spacing:.03em;color:var(--action-fg)}
+.ad .price{font-family:"Roboto Mono",monospace;font-size:28px;font-weight:500;line-height:1.2}
+.ad .price em{font-style:normal;font-size:12px;font-family:"Noto Sans JP",sans-serif}
+.ad p{font-size:13px;line-height:1.9;margin:10px 0 14px}
+.ad ul{list-style:none;margin:0 0 16px;padding:0;font-size:12.5px;line-height:1.85}
+.ad li{padding-left:16px;position:relative}
+.ad li::before{content:"";position:absolute;left:2px;top:12px;width:6px;height:1.5px;background:currentColor;opacity:.55}
+.ad .note{font-size:11.5px;opacity:.8;margin:10px 0 0}
+
+.pref{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-top:20px;font-size:12.5px;color:var(--ink-2);line-height:1.85}
+.pref b{color:var(--ink)}
+
+footer{padding:0 0 44px;font-size:11.5px;color:var(--ink-3)}
+footer a:hover{color:var(--ink-2)}
+
+@media (max-width:760px){
+  .layout{grid-template-columns:1fr}
+  .list{position:static}
+  .detail{padding:20px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a href="/" class="mast">アドプレス</a>
+    <div class="who">Googleでログイン中<b>info@seoul-pantry.example.jp</b></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="tabs">
+    <a href="/mypage/">投稿した記事</a>
+    <a href="/mypage/notifications/" aria-current="page">お知らせ<span class="dot">2</span></a>
+    <a href="/mypage/profile/">プロフィール</a>
+  </nav>
+
+  <h1>お知らせ</h1>
+  <p class="lede">審査結果、公開のご連絡、掲載レポートの公開はすべてこちらに届きます。</p>
+
+  <div class="layout">
+    <nav class="list" aria-label="お知らせ一覧">
+      <button class="n on unread" onclick="show('pub',this)">
+        <span class="k k-pub">公開</span>
+        <p class="t">記事が公開されました</p>
+        <span class="d">2026.08.19 11:20</span>
+      </button>
+      <button class="n unread" onclick="show('ref',this)">
+        <span class="k k-ref">要対応</span>
+        <p class="t">紹介リンクの提出期限が近づいています</p>
+        <span class="d">2026.08.30 09:00</span>
+      </button>
+      <button class="n" onclick="show('rep',this)">
+        <span class="k k-rep">レポート</span>
+        <p class="t">掲載レポートを公開しました</p>
+        <span class="d">2026.08.16 06:00</span>
+      </button>
+      <button class="n" onclick="show('rev',this)">
+        <span class="k k-rev">差し戻し</span>
+        <p class="t">記事の修正をお願いします</p>
+        <span class="d">2026.08.12 14:31</span>
+      </button>
+    </nav>
+
+    <div>
+      <!-- 公開のお知らせ -->
+      <section class="detail" id="d-pub">
+        <div class="head">
+          <span class="k k-pub" style="font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:4px;display:inline-block;">公開</span>
+          <h2>記事が公開されました</h2>
+          <span class="when">2026.08.19 11:20</span>
+        </div>
+
+        <p>ご投稿いただいた記事が、審査を通過して公開されました。</p>
+
+        <div class="article-card">
+          <span class="cat">韓国情報</span>
+          <h4>韓国食品専門EC「ソウルパントリー」、常温配送に切り替え送料を一律550円へ</h4>
+          <div class="u">https://www.nishinippon-adv.jp/news/12480/</div>
+          <a href="#" class="btn">記事を見る</a>
+        </div>
+
+        <h3>掲載記事の紹介をお願いします</h3>
+        <p>アドプレスの記事は、発信元ご自身の告知によって最初の読者が集まります。紹介いただくことで記事が読まれ、検索でも見つかりやすくなります。あわせて、取引先や採用候補者に向けた信頼の材料にもなります。</p>
+        <div class="ways">
+          <div class="way"><b>自社サイトのお知らせ欄・プレスルーム</b>「メディア掲載」として、記事タイトルとリンクを掲載してください。</div>
+          <div class="way"><b>SNS（X・Instagram・Facebook・LINE）</b>個人の方はこちらだけで結構です。記事のURLを添えて投稿してください。</div>
+          <div class="way"><b>メールマガジン・社内報・採用ページ</b>掲載実績としてご活用いただけます。</div>
+        </div>
+
+        <h3>そのままお使いいただける紹介文</h3>
+        <div class="tmpl" id="tmpl">■メディア掲載実績
+
+「韓国食品専門EC「ソウルパントリー」、常温配送に切り替え送料を一律550円へ」が、プレスリリースサイト「アドプレス」に掲載されました。
+
+アドプレス掲載ページ：https://www.nishinippon-adv.jp/news/12480/</div>
+        <button class="copy" onclick="cp(this)">紹介文をコピー</button>
+
+        <h3>これからの予定</h3>
+        <table class="deadlines">
+          <tr><td>9月2日 まで</td><td>紹介リンクのご提出。ご提出がない場合、記事を取り下げます。</td></tr>
+          <tr><td>9月19日 まで</td><td>本文とアイキャッチ画像の編集が可能です。編集後はあらためて審査されます。</td></tr>
+          <tr><td>9月19日</td><td>掲載レポート（PV数・リンククリック数）を公開します。</td></tr>
+        </table>
+        <a href="/mypage/" class="btn warn">紹介リンクを提出する</a>
+
+        <div class="ad">
+          <h3>■ ここ一番で届けたいプレスリリースに｜広告枠掲載のご案内</h3>
+          <div class="price">¥20,000<em> / 1本（税別）</em></div>
+          <p>月額費用ではなく、1回ごとの掲載としてご利用いただけますので、今回または今後のプレスリリースの中で、特に見せたい1本がございましたらご検討いただけますと幸いです。</p>
+          <ul>
+            <li>記事の作成代行（1,500字程度・任意）</li>
+            <li>リンクを5本まで挿入可（通常は2本まで）</li>
+            <li>トップページのPR枠に7日間固定表示</li>
+            <li>カテゴリ上部に14日間表示</li>
+            <li>画像5点まで／記事は恒久掲載</li>
+            <li>掲載1ヶ月後にPVレポートを公開</li>
+            <li>紹介リンクの提出は不要</li>
+          </ul>
+          <a href="mailto:a-ando@hotseller.jp?subject=%E3%82%A2%E3%83%89%E3%83%97%E3%83%AC%E3%82%B9%20%E5%BA%83%E5%91%8A%E6%9E%A0%E6%8E%B2%E8%BC%89%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87" class="btn solid">広告枠の掲載を相談する</a>
+          <p class="note">お支払いは掲載後の請求書払いです。</p>
+        </div>
+      </section>
+
+      <!-- 紹介リンクの督促 -->
+      <section class="detail" id="d-ref" hidden>
+        <div class="head">
+          <span class="k k-ref" style="font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:4px;display:inline-block;">要対応</span>
+          <h2>紹介リンクの提出期限が近づいています</h2>
+          <span class="when">2026.08.30 09:00</span>
+        </div>
+        <p>下記の記事について、紹介リンクのご提出をお待ちしています。<strong>9月2日</strong>までにご提出がない場合、記事を取り下げます。</p>
+        <div class="article-card">
+          <span class="cat">韓国情報</span>
+          <h4>韓国食品専門EC「ソウルパントリー」、常温配送に切り替え送料を一律550円へ</h4>
+          <div class="u">https://www.nishinippon-adv.jp/news/12480/</div>
+        </div>
+        <p>すでに紹介済みの場合は、そのページのURLをマイページからご提出ください。ご事情がある場合は、お問い合わせからご相談いただけます。</p>
+        <a href="/mypage/" class="btn warn">紹介リンクを提出する</a>
+      </section>
+
+      <!-- レポート公開 -->
+      <section class="detail" id="d-rep" hidden>
+        <div class="head">
+          <span class="k k-rep" style="font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:4px;display:inline-block;">レポート</span>
+          <h2>掲載レポートを公開しました</h2>
+          <span class="when">2026.08.16 06:00</span>
+        </div>
+        <p>掲載から1ヶ月が経過したため、下記の記事のレポートを公開しました。</p>
+        <div class="article-card">
+          <span class="cat">韓国情報</span>
+          <h4>韓国コスメの定期便「ソウルボックス」、8月号のラインナップを公開</h4>
+          <div class="u">記事PV 4,182 ／ リンククリック 311 ／ 平均滞在 2:14</div>
+        </div>
+        <p>日別の推移とリンク別のクリック数は、マイページの記事カードから確認できます。</p>
+        <a href="/mypage/" class="btn">レポートを見る</a>
+      </section>
+
+      <!-- 差し戻し -->
+      <section class="detail" id="d-rev" hidden>
+        <div class="head">
+          <span class="k k-rev" style="font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:4px;display:inline-block;">差し戻し</span>
+          <h2>記事の修正をお願いします</h2>
+          <span class="when">2026.08.12 14:31</span>
+        </div>
+        <p>ご投稿いただいた記事について、掲載前に修正が必要な点が見つかりました。</p>
+        <div class="article-card">
+          <h4>【最安値保証】業界No.1の韓国食品ECがついに送料無料キャンペーン開始</h4>
+        </div>
+        <h3>修正が必要な点</h3>
+        <ul style="font-size:13.5px;line-height:1.95;color:var(--ink-2);padding-left:18px;margin:0 0 16px">
+          <li>「業界No.1」「最安値保証」は客観的な根拠の記載が必要です（景品表示法）。調査元と調査時点を本文に明記するか、表現を削除してください。</li>
+          <li>リンクが4本含まれています。無料掲載では本文中・記事末尾をあわせて2本までです。</li>
+        </ul>
+        <p>修正して再送信すると、あらためて審査されます。</p>
+        <a href="/mypage/" class="btn">修正して再送信する</a>
+      </section>
+
+      <div class="pref">
+        <b>通知の受け取りについて</b><br>
+        アドプレスからのご連絡は、原則としてこのお知らせページでお届けしています。メールでの個別のご連絡は行っておりません。<br>
+        記事の公開や差し戻しなど重要なご連絡がある場合のみ、ご登録のメールアドレスへ「お知らせが届いています」という短いご案内をお送りします（<a href="/mypage/profile/" style="color:var(--action-fg)">プロフィール</a>から停止できます）。
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><div class="wrap">
+  <a href="/guideline/">掲載ガイドライン</a> ・
+  <a href="/terms/">利用規約</a> ・
+  <a href="https://www.cocomarke.com/about/" rel="noopener">運営会社</a> ・
+  <a href="/contact/">お問い合わせ</a>
+  <p class="op">運営：<a href="https://www.cocomarke.com/about/" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px">株式会社ホットセラー</a></p>
+  <p class="mono">© 2026 ADPRESS</p>
+</div></footer>
+
+<script>
+function show(id,btn){
+  ['pub','ref','rep','rev'].forEach(function(k){
+    document.getElementById('d-'+k).hidden = (k!==id);
+  });
+  document.querySelectorAll('.n').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  btn.classList.remove('unread');
+  var left=document.querySelectorAll('.n.unread').length;
+  var dot=document.querySelector('.tabs .dot');
+  if(left){dot.textContent=left;}else{dot.remove();}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function cp(b){
+  navigator.clipboard.writeText(document.getElementById('tmpl').textContent).then(function(){
+    b.textContent='コピーしました';setTimeout(function(){b.textContent='紹介文をコピー';},1800);
+  },function(){b.textContent='コピーできませんでした';});
+}
+</script>
+</body>
+</html>

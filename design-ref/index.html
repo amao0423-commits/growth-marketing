@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>アドプレス｜誰でも無料で掲載できるプレスリリースマガジン</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Old+Mincho:wght@600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1F2024; --ink-2:#55575E; --ink-3:#8A8D96;
+  --paper:#FFFFFF; --mist:#F6F6F8; --line:#E7E7EC; --line-2:#D5D6DC;
+  --action-bg:#C9D3FF; --action-fg:#293A80; --action-bg-hi:#B6C3FF;
+  --warn-bg:#FFF0C4; --warn-fg:#846412;
+  --r:10px; --wrap:1120px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-size:15px;line-height:1.75;letter-spacing:.01em}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--action-fg);outline-offset:2px;border-radius:4px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.mono{font-family:"Roboto Mono",monospace;font-variant-numeric:tabular-nums}
+
+.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:16px;height:62px}
+.mast{font-family:"Zen Old Mincho",serif;font-weight:700;font-size:21px;letter-spacing:.06em;white-space:nowrap}
+.mast small{display:block;font-family:"Roboto Mono",monospace;font-weight:400;font-size:9.5px;letter-spacing:.2em;color:var(--ink-3);margin-top:-4px}
+.search{flex:1;max-width:290px;margin-left:auto}
+.search input{width:100%;height:36px;border:1px solid var(--line-2);border-radius:99px;background:var(--paper);padding:0 14px;font:inherit;font-size:13px}
+.post-btn{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 18px;border-radius:99px;background:var(--action-bg);color:var(--action-fg);font-weight:700;font-size:13.5px;white-space:nowrap;transition:background .15s;border:none;cursor:pointer;font-family:inherit}
+.post-btn:hover{background:var(--action-bg-hi)}
+.post-btn span{font-size:10px;font-weight:500;opacity:.75}
+
+.cats{background:var(--paper);border-bottom:1px solid var(--line)}
+.cats-in{display:flex;gap:8px;overflow-x:auto;padding:12px 20px;scrollbar-width:none}
+.cats-in::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;height:32px;padding:0 15px;border-radius:99px;border:1px solid transparent;background:var(--mist);color:var(--ink-2);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;transition:.15s}
+.chip:hover{border-color:var(--line-2)}
+.chip.on{background:var(--ink);color:#fff}
+
+.tag{display:inline-block;padding:2px 9px;border-radius:5px;font-size:11px;font-weight:700;line-height:1.7}
+.pr{display:inline-block;padding:2px 8px;border-radius:5px;background:var(--ink);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;line-height:1.7}
+
+/* category hero */
+.cathero{padding:30px 0 4px}
+.cathero-in{border-radius:14px;padding:26px 28px}
+.cathero h1{font-family:"Zen Old Mincho",serif;font-size:27px;margin:0 0 6px;letter-spacing:.04em}
+.cathero p{margin:0;font-size:13.5px;max-width:640px;opacity:.85}
+.crumb{font-size:11.5px;color:var(--ink-3);padding:16px 0 0}
+.crumb a:hover{color:var(--ink-2)}
+
+/* featured */
+.feat{padding:26px 0 6px}
+.feat-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:block;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.card svg{display:block;width:100%;height:auto}
+.card-body{padding:14px 16px 16px}
+.card-lead h2{font-family:"Zen Old Mincho",serif;font-size:22px;line-height:1.45;margin:9px 0 6px;font-weight:700}
+.card-sub h3{font-size:14px;line-height:1.6;margin:8px 0 5px;font-weight:700}
+.card p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.7}
+.meta{display:flex;align-items:center;gap:9px;font-size:11.5px;color:var(--ink-3);margin-top:9px}
+.right-col{display:grid;grid-template-rows:1fr 1fr;gap:14px}
+.card-sub{display:grid;grid-template-columns:112px 1fr}
+.card-sub .th{overflow:hidden;display:flex}
+.card-sub .th svg{height:100%;width:auto;min-width:100%;object-fit:cover}
+.card-sub .card-body{padding:12px 14px}
+
+.main{display:grid;grid-template-columns:1fr 296px;gap:34px;padding:30px 0 60px;align-items:start}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;padding-bottom:9px;border-bottom:2px solid var(--ink)}
+.sec-head h2{font-family:"Zen Old Mincho",serif;font-size:16px;font-weight:700;margin:0;letter-spacing:.04em}
+.sec-head .count{font-size:11px;color:var(--ink-3);margin-left:auto}
+
+.daygroup{display:grid;grid-template-columns:74px 1fr;margin-bottom:6px}
+.daymark{position:sticky;top:78px;align-self:start;padding-top:14px}
+.daymark .d{font-family:"Roboto Mono",monospace;font-size:19px;font-weight:500;line-height:1}
+.daymark .m{font-family:"Roboto Mono",monospace;font-size:10.5px;color:var(--ink-3);letter-spacing:.1em}
+.daymark .w{font-size:10.5px;color:var(--ink-3)}
+.items{border-left:1px solid var(--line)}
+.item{display:grid;grid-template-columns:56px 1fr 96px;gap:14px;align-items:start;padding:14px 14px 14px 18px;border-bottom:1px solid var(--line);position:relative;background:var(--paper)}
+.items .item:first-child{border-top-right-radius:var(--r)}
+.items .item:last-child{border-bottom:none;border-bottom-right-radius:var(--r)}
+.item::before{content:"";position:absolute;left:-4px;top:22px;width:7px;height:7px;border-radius:50%;background:var(--line-2)}
+.item.fresh::before{background:var(--action-fg)}
+.item:hover{background:#FCFCFD}
+.item .time{font-family:"Roboto Mono",monospace;font-size:12.5px;color:var(--ink-3);padding-top:2px}
+.item.fresh .time{color:var(--action-fg);font-weight:500}
+.item h3{margin:0 0 4px;font-size:15px;line-height:1.6;font-weight:500}
+.item .src{font-size:11.5px;color:var(--ink-3)}
+.item .badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px}
+.item .th{border-radius:6px;overflow:hidden;line-height:0}
+.more{width:100%;height:44px;margin-top:16px;border:1px solid var(--line-2);background:var(--paper);border-radius:99px;font:inherit;font-size:13.5px;font-weight:500;cursor:pointer}
+.more:hover{border-color:var(--ink-3)}
+.empty{background:var(--paper);border:1px dashed var(--line-2);border-radius:var(--r);padding:34px 20px;text-align:center;color:var(--ink-2);font-size:13.5px}
+
+.side{display:grid;gap:20px;position:sticky;top:78px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.panel h3{font-family:"Zen Old Mincho",serif;font-size:14px;margin:0 0 12px;letter-spacing:.04em}
+.adslot{background:var(--action-bg);border:none}
+.adslot h3{color:var(--action-fg)}
+.adslot .price{font-family:"Roboto Mono",monospace;font-size:27px;font-weight:500;color:var(--action-fg);line-height:1.2}
+.adslot .price em{font-style:normal;font-size:12px;font-family:"Noto Sans JP",sans-serif}
+.adslot ul{list-style:none;margin:12px 0 14px;padding:0;font-size:12.5px;color:var(--action-fg);line-height:1.8}
+.adslot li{padding-left:16px;position:relative}
+.adslot li::before{content:"";position:absolute;left:2px;top:12px;width:6px;height:1.5px;background:currentColor;opacity:.55}
+.adslot a{display:block;text-align:center;height:40px;line-height:40px;border-radius:99px;background:var(--action-fg);color:#fff;font-size:13.5px;font-weight:700}
+.rank{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+.rank li{display:grid;grid-template-columns:20px 1fr;gap:9px;font-size:13px;line-height:1.55;padding-bottom:11px;border-bottom:1px solid var(--line)}
+.rank li:last-child{border:none;padding-bottom:0}
+.rank .n{font-family:"Roboto Mono",monospace;font-size:13px;color:var(--ink-3);padding-top:1px}
+.rank li:nth-child(-n+3) .n{color:var(--action-fg);font-weight:500}
+.biz-list{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:12.5px;line-height:1.6}
+.biz-list a{color:var(--ink-2)}
+.biz-list a:hover{color:var(--ink)}
+.note{font-size:11.5px;color:var(--ink-3);line-height:1.7;margin:10px 0 0}
+
+.band{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:44px 0}
+.band-in{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center}
+.band h2{font-family:"Zen Old Mincho",serif;font-size:24px;margin:0 0 8px;letter-spacing:.03em}
+.band p{margin:0;font-size:13.5px;color:var(--ink-2);max-width:580px}
+.steps{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.step{font-size:11.5px;color:var(--ink-2);background:var(--mist);border-radius:99px;padding:5px 13px}
+.step b{font-family:"Roboto Mono",monospace;color:var(--action-fg);margin-right:5px}
+.band .post-btn{height:48px;padding:0 26px;font-size:15px}
+.cond{margin-top:14px;background:var(--warn-bg);color:var(--warn-fg);border-radius:8px;padding:12px 15px;font-size:12.5px;line-height:1.75;max-width:580px}
+
+footer{padding:38px 0 46px;font-size:12px;color:var(--ink-3)}
+.f-links{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px}
+.f-links a:hover{color:var(--ink-2)}
+
+@media (max-width:900px){
+  .main{grid-template-columns:1fr;gap:26px}
+  .side{position:static}
+  .feat-grid{grid-template-columns:1fr}
+  .band-in{grid-template-columns:1fr}
+  .search{display:none}
+}
+@media (max-width:600px){
+  .daygroup{grid-template-columns:56px 1fr}
+  .item{grid-template-columns:48px 1fr;padding:13px 12px 13px 14px}
+  .item .th{display:none}
+  .mast{font-size:18px}
+  .card-lead h2{font-size:19px}
+  .cathero h1{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a href="/" class="mast" onclick="return go('all')">アドプレス<small>ADPRESS</small></a>
+    <div class="search"><input type="search" placeholder="キーワードで記事を探す" aria-label="記事を検索"></div>
+    <a href="#submit" class="post-btn">記事を投稿する<span>無料</span></a>
+  </div>
+</header>
+
+<nav class="cats" aria-label="カテゴリ"><div class="cats-in" id="chips"></div></nav>
+
+<div id="view"></div>
+
+<section class="band" id="submit">
+  <div class="wrap band-in">
+    <div>
+      <h2>その日のうちに、記事になる。</h2>
+      <p>ログインして入稿フォームに記事を入力するだけ。AIによる自動審査を通過すると、最短数十分で公開されます。掲載料はかかりません。</p>
+      <div class="steps">
+        <span class="step"><b>1</b>ログインして記事を入力</span>
+        <span class="step"><b>2</b>AI自動審査</span>
+        <span class="step"><b>3</b>公開・お知らせメールが届く</span>
+        <span class="step"><b>4</b>掲載記事を紹介してリンクを提出</span>
+      </div>
+      <div class="cond">
+        <b>掲載後のお願い</b><br>
+        掲載された記事は、自社サイトのお知らせ欄などで記事タイトルとリンクを掲載して紹介してください。個人の方はSNSでリンク付きで紹介いただければ結構です。紹介したページのURLをマイページから提出してください。<br>
+        掲載日から14日以内に提出がない場合、記事を取り下げます。
+      </div>
+    </div>
+    <a href="#" class="post-btn">記事を投稿する<span>無料</span></a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-links">
+      <a href="https://www.cocomarke.com/about/" rel="noopener">運営会社</a><a href="#">掲載ガイドライン</a><a href="#">禁止事項</a>
+      <a href="#">紹介リンクについて</a><a href="#">PR記事の掲載</a><a href="#">ログイン</a><a href="#">マイページ</a>
+      <a href="#">利用規約</a><a href="#">プライバシーポリシー</a><a href="#">お問い合わせ</a>
+    </div>
+    <p>掲載記事の内容は各投稿者に帰属します。「PR」表記のある記事は、掲載費用を受け取って掲載しています。</p>
+    <p class="op">運営：<a href="https://www.cocomarke.com/about/" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px">株式会社ホットセラー</a></p>
+  <p class="mono" style="margin-top:10px">© 2026 ADPRESS</p>
+  </div>
+</footer>
+
+<script>
+var CATS={
+  all  :{label:'すべて',      bg:'#EDEEF2', fg:'#3A3D45', desc:''},
+  kpop :{label:'K-POP',      bg:'#FFD9E4', fg:'#8A3A55', desc:'アーティストのリリース、来日公演、ファンイベントの告知をまとめています。'},
+  korea:{label:'韓国情報',    bg:'#FFE2CC', fg:'#94502A', desc:'コスメ、food、カルチャーまで。日本上陸のニュースを毎日更新しています。'},
+  ent  :{label:'エンタメ',    bg:'#E7DCFF', fg:'#5B429B', desc:'映像、音楽、舞台、イベント。作品と公演の発表をお届けします。'},
+  tech :{label:'IT・テック',  bg:'#D6E7FF', fg:'#2B5A93', desc:'新サービス、アップデート、資金調達。プロダクトの動きを追えます。'},
+  sns  :{label:'SNS・マーケ', bg:'#D3F0E4', fg:'#1F6B52', desc:'SNS運用、広告、SEO。編集部の解説記事と企業のリリースを並べています。'},
+  life :{label:'ライフ',      bg:'#FFF0C4', fg:'#846412', desc:'暮らし、健康、お金。毎日の判断に使える情報を集めました。'},
+  trip :{label:'旅行',        bg:'#CDECF2', fg:'#1F6A76', desc:'国内外の観光、交通、宿泊。渡航前に確認したい発表を掲載しています。'},
+  biz  :{label:'ビジネス',    bg:'#E3E5EA', fg:'#474E5C', desc:'業務システム、人材、経営。分類しづらいリリースもこちらへ。'}
+};
+var EDIT={bg:'#E4EDD6', fg:'#54682F'};
+
+var POSTS=[
+ {d:'20',m:'AUG',w:'水',t:'11:48',c:'tech',title:'会議記録AI「ノートリー」、日韓の同時通訳付き議事録機能を正式提供開始',src:'株式会社ノートリー',fresh:1},
+ {d:'20',m:'AUG',w:'水',t:'11:24',c:'kpop',title:'新人ガールズグループ「LUMIÈRE」、日本デビューシングルを10月8日に全国リリース',src:'ブライトエンタテインメント株式会社',fresh:1,lead:1,desc:'韓国で活動する5人組が日本デビュー。先行配信曲は全編日本語詞で、収録の3曲すべてにメンバーが作詞で参加している。'},
+ {d:'20',m:'AUG',w:'水',t:'10:37',c:'ent',title:'配信ドラマ『真夜中のレシピ』、シーズン2の制作決定と主要キャストを発表',src:'株式会社スタジオ蜜柑',fresh:1,pr:1},
+ {d:'20',m:'AUG',w:'水',t:'10:02',c:'trip',title:'ソウル発着の深夜バス、10月から福岡・大阪行きフェリーと連携予約に対応',src:'コリアラインツアーズ株式会社',fresh:1,sub:1},
+ {d:'20',m:'AUG',w:'水',t:'09:55',c:'sns',title:'SNS運用支援のCOCOマーケ、Qoo10出店ブランド向け韓国語運用プランを新設',src:'株式会社ホットセラー'},
+ {d:'20',m:'AUG',w:'水',t:'09:15',c:'life',title:'共働き世帯向け作り置き宅配「ツクリオキ」、9月より首都圏全域へ配送エリア拡大',src:'株式会社ツクリオキ',pr:1,sub:1},
+ {d:'20',m:'AUG',w:'水',t:'08:30',c:'life',title:'睡眠計測アプリ「ネムログ」、寝室の温湿度連携で入眠時刻の予測に対応',src:'合同会社スリープラボ'},
+ {d:'20',m:'AUG',w:'水',t:'07:40',c:'sns',title:'リールの視聴維持率を高める構成と冒頭3秒の設計',src:'アドプレス編集部',ed:1},
+ {d:'19',m:'AUG',w:'火',t:'18:12',c:'kpop',title:'ソロアーティストHAJIN、初のアジアツアー全8都市の日程を公開',src:'NOVA ENTERTAINMENT'},
+ {d:'19',m:'AUG',w:'火',t:'16:40',c:'trip',title:'釜山観光公社、秋の食フェス開催に合わせ日本語ガイドマップを無料配布',src:'釜山観光公社 日本事務所'},
+ {d:'19',m:'AUG',w:'火',t:'14:05',c:'tech',title:'中小企業向け請求書SaaS「セイキュウ」、インボイス対応の一括点検機能を追加',src:'株式会社セイキュウ'},
+ {d:'19',m:'AUG',w:'火',t:'13:20',c:'sns',title:'AI Overview対策とは？検索流入を守るSEO戦略と引用される記事の条件',src:'アドプレス編集部',ed:1},
+ {d:'19',m:'AUG',w:'火',t:'11:20',c:'korea',title:'韓国コスメブランド「AHUE」、日本1号店を9月12日に原宿へオープン',src:'AHUE JAPAN合同会社',pr:1},
+ {d:'19',m:'AUG',w:'火',t:'09:48',c:'biz',title:'採用管理システム「ハイヤーボード」、リファラル採用の紹介報酬管理に対応',src:'株式会社ハイヤーボード'},
+ {d:'19',m:'AUG',w:'火',t:'09:02',c:'ent',title:'横浜の複合劇場「ベイサイドホール」、こけら落とし公演のラインナップを発表',src:'一般財団法人ベイサイド文化振興会'},
+ {d:'18',m:'AUG',w:'月',t:'17:30',c:'biz',title:'物流DXのハコブ、庫内作業の実績データを自動集計するダッシュボードを公開',src:'株式会社ハコブ'},
+ {d:'18',m:'AUG',w:'月',t:'15:12',c:'korea',title:'韓国食品専門EC「ソウルパントリー」、常温配送に切り替え送料を一律550円へ',src:'株式会社ソウルパントリー',pr:1},
+ {d:'18',m:'AUG',w:'月',t:'10:44',c:'trip',title:'長崎県、離島4島をめぐる周遊フェリーパスを9月1日から通年販売へ',src:'長崎県観光振興課'}
+];
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* --- 自動生成アイキャッチ --- */
+function eyecatch(p,w,h){
+  w=w||400;h=h||220;
+  if(p.ed){
+    return '<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="アドプレス編集部の記事">'
+      +'<rect width="'+w+'" height="'+h+'" fill="'+EDIT.bg+'"/>'
+      +'<g opacity=".3" fill="none" stroke="'+EDIT.fg+'" stroke-width="1">'
+      +'<circle cx="'+(w/2)+'" cy="'+(h/2)+'" r="'+(h*0.42)+'"/><circle cx="'+(w/2)+'" cy="'+(h/2)+'" r="'+(h*0.5)+'"/></g>'
+      +'<text x="'+(w/2)+'" y="'+(h/2+2)+'" text-anchor="middle" font-family="Zen Old Mincho,serif" font-weight="700" font-size="'+(h*0.155)+'" letter-spacing="'+(h*0.03)+'" fill="'+EDIT.fg+'">アドプレス</text>'
+      +'<text x="'+(w/2)+'" y="'+(h/2+h*0.16)+'" text-anchor="middle" font-family="Roboto Mono,monospace" font-size="'+(h*0.05)+'" letter-spacing="'+(h*0.025)+'" fill="'+EDIT.fg+'" opacity=".7">EDITORIAL</text>'
+      +'</svg>';
+  }
+  var C=CATS[p.c],per=Math.floor(w/26),lines=[],s=p.title;
+  while(s.length&&lines.length<3){lines.push(s.slice(0,per));s=s.slice(per);}
+  if(s.length)lines[2]=lines[2].slice(0,per-1)+'…';
+  var dots='';
+  for(var y=16;y<h;y+=22)for(var x=16;x<w;x+=22)dots+='<circle cx="'+x+'" cy="'+y+'" r="1.3"/>';
+  var tx='',fs=w*0.052,ly=h/2-(lines.length-1)*fs*0.78;
+  for(var i=0;i<lines.length;i++)
+    tx+='<text x="'+(w*0.07)+'" y="'+(ly+i*fs*1.55)+'" font-family="Zen Old Mincho,serif" font-weight="700" font-size="'+fs+'" fill="'+C.fg+'">'+esc(lines[i])+'</text>';
+  return '<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+esc(p.title)+'">'
+    +'<rect width="'+w+'" height="'+h+'" fill="'+C.bg+'"/>'
+    +'<g fill="'+C.fg+'" opacity=".13">'+dots+'</g>'
+    +tx
+    +'<text x="'+(w*0.07)+'" y="'+(h-w*0.045)+'" font-family="Roboto Mono,monospace" font-size="'+(w*0.031)+'" letter-spacing="'+(w*0.011)+'" fill="'+C.fg+'" opacity=".65">ADPRESS / '+CATS[p.c].label+'</text>'
+    +'</svg>';
+}
+
+function tag(p){
+  var C=CATS[p.c];
+  return (p.pr?'<span class="pr">PR</span> ':'')
+   +'<span class="tag" style="background:'+C.bg+';color:'+C.fg+'">'+C.label+'</span>';
+}
+
+var cur='all';
+
+function render(){
+  var C=CATS[cur],list=POSTS.filter(function(p){return cur==='all'||p.c===cur;}),h='';
+
+  document.querySelectorAll('.chip').forEach(function(b){b.classList.toggle('on',b.dataset.c===cur);});
+
+  if(cur==='all'){
+    var lead=POSTS.filter(function(p){return p.lead;})[0],
+        subs=POSTS.filter(function(p){return p.sub;}).slice(0,2);
+    h+='<section class="feat wrap"><div class="feat-grid">'
+      +'<a href="#" class="card card-lead">'+eyecatch(lead,760,390)+'<div class="card-body">'+tag(lead)
+      +'<h2>'+esc(lead.title)+'</h2><p>'+esc(lead.desc)+'</p>'
+      +'<div class="meta"><span>'+esc(lead.src)+'</span><span>·</span><span class="mono">08/'+lead.d+' '+lead.t+'</span></div></div></a>'
+      +'<div class="right-col">';
+    subs.forEach(function(p){
+      h+='<a href="#" class="card card-sub"><div class="th">'+eyecatch(p,240,300)+'</div>'
+        +'<div class="card-body">'+tag(p)+'<h3>'+esc(p.title)+'</h3>'
+        +'<div class="meta"><span class="mono">08/'+p.d+' '+p.t+'</span></div></div></a>';
+    });
+    h+='</div></div></section>';
+  }else{
+    h+='<div class="wrap crumb"><a href="#" onclick="return go(\'all\')">ホーム</a> / '+C.label+'</div>'
+      +'<section class="cathero wrap"><div class="cathero-in" style="background:'+C.bg+';color:'+C.fg+'">'
+      +'<h1>'+C.label+'</h1><p>'+C.desc+'</p></div></section>';
+  }
+
+  h+='<div class="wrap main"><main><div class="sec-head"><h2>'
+    +(cur==='all'?'新着リリース':C.label+'の新着')
+    +'</h2><span class="count">全 '+list.length+' 件</span></div>';
+
+  if(!list.length){
+    h+='<div class="empty">このカテゴリの新着リリースはまだありません。<br>最初の1本を投稿してみてください。</div>';
+  }else{
+    var day=null;
+    list.forEach(function(p,i){
+      if(p.d!==day){
+        if(day!==null)h+='</div></div>';
+        day=p.d;
+        h+='<div class="daygroup"><div class="daymark"><div class="d">'+p.d+'</div><div class="m">'+p.m+'</div><div class="w">'+p.w+'</div></div><div class="items">';
+      }
+      h+='<article class="item'+(p.fresh?' fresh':'')+'"><div class="time">'+p.t+'</div>'
+        +'<div><div class="badges">'+tag(p)+'</div><h3>'+esc(p.title)+'</h3><div class="src">'+esc(p.src)+'</div></div>'
+        +'<div class="th">'+eyecatch(p,200,124)+'</div></article>';
+    });
+    h+='</div></div><button class="more">もっと読み込む</button>';
+  }
+
+  h+='</main><aside class="side">'
+    +'<div class="panel adslot"><h3>広告枠掲載のご案内</h3>'
+    +'<div class="price">¥20,000<em> / 1本（税別）</em></div>'
+    +'<p style="font-size:12.5px;color:var(--action-fg);margin:8px 0 0;line-height:1.8">月額費用ではなく、1回ごとの掲載としてご利用いただけます。</p><ul>'
+    +'<li>記事の作成代行（1,500字程度・任意）</li>'
+    +'<li>リンクを<b>5本まで</b>挿入可（通常は2本まで）</li>'
+    +'<li>トップのPR枠に7日間固定表示</li>'
+    +'<li>カテゴリ上部に14日間表示</li>'
+    +'<li>画像5点まで／記事は恒久掲載</li>'
+    +'<li>掲載1ヶ月後にPVレポートを公開</li>'
+    +'<li>紹介リンクの提出は不要</li>'
+    +'</ul><a href="mailto:a-ando@hotseller.jp?subject=%E3%82%A2%E3%83%89%E3%83%97%E3%83%AC%E3%82%B9%20%E5%BA%83%E5%91%8A%E6%9E%A0%E6%8E%B2%E8%BC%89%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">広告枠の掲載を相談する</a>'
+    +'<p class="note" style="color:'+'var(--action-fg)'+';opacity:.75">お支払いは掲載後の請求書払いです。</p></div>'
+
+    +'<div class="panel"><h3>今週よく読まれた記事</h3><ol class="rank">'
+    +'<li><span class="n">1</span><a href="#">韓国コスメブランド「AHUE」、日本1号店を9月12日に原宿へオープン</a></li>'
+    +'<li><span class="n">2</span><a href="#">新人ガールズグループ「LUMIÈRE」、日本デビューシングルを全国リリース</a></li>'
+    +'<li><span class="n">3</span><a href="#">ソウル発着の深夜バス、フェリー連携予約に対応</a></li>'
+    +'<li><span class="n">4</span><a href="#">会議記録AI「ノートリー」、日韓の同時通訳付き議事録機能を提供開始</a></li>'
+    +'<li><span class="n">5</span><a href="#">釜山観光公社、秋の食フェスで日本語ガイドマップを無料配布</a></li>'
+    +'</ol></div>'
+
+    +'<div class="panel"><h3>編集部の解説記事</h3><ul class="biz-list">'
+    +'<li><a href="/blog/sns-algorithm-2026.html">2026年版・主要SNSアルゴリズムの変化と運用戦略</a></li>'
+    +'<li><a href="/blog/seo-ai-overview.html">AI Overview対策とは？検索流入を守るSEO戦略</a></li>'
+    +'<li><a href="/blog/instagram-agency-comparison.html">Instagram運用代行 比較10選｜料金・実績と選び方</a></li>'
+    +'<li><a href="/blog/seo-core-web-vitals.html">Core Web Vitals 改善とは？LCP・INP・CLSの手順</a></li>'
+    +'</ul><p class="note">既存37記事は著者を「アドプレス編集部」に統一し、URLは <span class="mono">/blog/</span> のまま維持します。</p></div>'
+    +'</aside></div>';
+
+  document.getElementById('view').innerHTML=h;
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function go(c){cur=c;location.hash=(c==='all'?'':'category/'+c);render();return false;}
+
+var cb='';
+Object.keys(CATS).forEach(function(k){
+  cb+='<button class="chip" data-c="'+k+'" onclick="go(\''+k+'\')">'+CATS[k].label+'</button>';
+});
+document.getElementById('chips').innerHTML=cb;
+
+var hm=(location.hash||'').match(/category\/(\w+)/);
+cur=(hm&&CATS[hm[1]])?hm[1]:'all';
+render();
+</script>
+</body>
+</html>
