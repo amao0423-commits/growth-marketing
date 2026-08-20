@@ -20,6 +20,7 @@ export default function Footer() {
           <Link href="/ad/">広告枠掲載のお願い</Link>
           <Link href="/terms/">利用規約</Link>
           <Link href="/privacy/">プライバシーポリシー</Link>
+          <Link href="/contact/">お問い合わせ</Link>
         </div>
         <p>
           掲載記事の内容は各投稿者に帰属します。「PR」表記のある記事は、掲載費用を受け取って掲載しています。

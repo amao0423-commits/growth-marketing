@@ -13,3 +13,7 @@ next-env.d.ts
 
 # TypeScript
 *.tsbuildinfo
+
+# Next.js dev server auto-generated
+AGENTS.md
+CLAUDE.md

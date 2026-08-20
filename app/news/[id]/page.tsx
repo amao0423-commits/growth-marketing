@@ -1,0 +1,139 @@
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import type { Metadata } from "next";
+import { createClient } from "@/lib/supabase/server";
+import { categoryDef } from "@/lib/categories";
+import { generateEyecatchSvg } from "@/lib/eyecatch";
+import { ARTICLE_LIST_SELECT, formatDate, type ArticleListItem } from "@/lib/articles";
+import PostCard from "@/components/PostCard";
+
+export const revalidate = 60;
+
+async function getArticle(id: number) {
+  const supabase = await createClient();
+  const { data: article } = await supabase
+    .from("articles")
+    .select(
+      "id, title, body_html, excerpt, category_slug, contact_org, contact_email, contact_tel, contact_url, contact_public, cover_url, is_sponsored, published_at, status"
+    )
+    .eq("id", id)
+    .eq("status", "published")
+    .single();
+  return article;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const id = Number((await params).id);
+  const article = await getArticle(id);
+  if (!article) return {};
+  return {
+    title: article.title,
+    description: article.excerpt ?? undefined,
+    alternates: { canonical: `/news/${article.id}/` },
+  };
+}
+
+export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
+  const id = Number((await params).id);
+  if (!Number.isFinite(id)) notFound();
+
+  const article = await getArticle(id);
+  if (!article) notFound();
+
+  const cat = categoryDef(article.category_slug);
+  const supabase = await createClient();
+  const { data: related } = await supabase
+    .from("articles")
+    .select(ARTICLE_LIST_SELECT)
+    .eq("status", "published")
+    .eq("category_slug", article.category_slug)
+    .neq("id", article.id)
+    .order("published_at", { ascending: false })
+    .limit(3)
+    .returns<ArticleListItem[]>();
+
+  const svg = article.cover_url
+    ? null
+    : generateEyecatchSvg({ title: article.title, bg: cat.bg, fg: cat.fg, categoryLabel: cat.label, width: 1000, height: 520 });
+
+  return (
+    <div data-cat={article.category_slug}>
+      <nav className="crumb">
+        <Link href="/">ホーム</Link> <span>/</span> <Link href={`/category/${article.category_slug}/`}>{cat.label}</Link>
+      </nav>
+
+      <article>
+        <div className="article-hero">
+          <div className="wrap">
+            <span className="eyebrow">{cat.label}</span>
+            <h1>{article.title}</h1>
+            <div className="article-meta">
+              {article.is_sponsored && <span className="pr-badge">PR</span>}
+              <span>{formatDate(article.published_at)}</span>
+              <span>{article.contact_org}</span>
+            </div>
+          </div>
+          <div className="article-cover">
+            {article.cover_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={article.cover_url} alt="" />
+            ) : (
+              <div dangerouslySetInnerHTML={{ __html: svg! }} />
+            )}
+          </div>
+        </div>
+
+        <div className="article-body" dangerouslySetInnerHTML={{ __html: article.body_html }} />
+
+        {article.contact_public && (article.contact_tel || article.contact_url) && (
+          <div className="article-body">
+            <div className="callout">
+              <h3>お問い合わせ</h3>
+              <p>
+                {article.contact_org}
+                {article.contact_tel && <> ／ {article.contact_tel}</>}
+                {article.contact_url && (
+                  <>
+                    {" "}
+                    ／{" "}
+                    <a href={article.contact_url} target="_blank" rel="noopener noreferrer">
+                      {article.contact_url}
+                    </a>
+                  </>
+                )}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {article.is_sponsored && (
+          <div className="article-body">
+            <p className="pr-note">この記事は広告枠掲載（PR）です。掲載費用は投稿者から受け取っています。</p>
+          </div>
+        )}
+
+        <div className="article-body">
+          <div className="ap-cta">
+            <h2>お知らせしたいニュースはありますか。</h2>
+            <p>ログインして投稿するだけ。掲載料はかかりません。</p>
+            <Link className="ap-cta-btn" href="/submit/">
+              記事を投稿する
+            </Link>
+          </div>
+        </div>
+      </article>
+
+      {related && related.length > 0 && (
+        <section className="related">
+          <div className="eyebrow">RELATED</div>
+          <h2>{cat.label}の他の記事</h2>
+          <div className="posts-grid">
+            {related.map((a) => (
+              <PostCard key={a.id} article={a} />
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}

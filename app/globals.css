@@ -334,6 +334,34 @@ body[data-cat="editorial"]{--cbg:var(--c-edit-bg);--cfg:var(--c-edit-fg)}
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
 
+/* ---------- 12. 法務ページ（利用規約・ガイドライン等） ---------- */
+.legal-page .updated{font-size:12px;color:var(--ink-3);font-family:var(--font-mono);padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:26px}
+.legal-page .intro{font-size:15px;line-height:2;margin:0 0 1.2em}
+.legal-page ol.art{counter-reset:item;list-style:none;padding-left:0;margin:0 0 1.2em}
+.legal-page ol.art > li{counter-increment:item;padding-left:2.1em;position:relative;margin-bottom:.7em;font-size:14.5px;line-height:1.95}
+.legal-page ol.art > li::before{content:counter(item)".";position:absolute;left:0;top:0;color:var(--ink-3);font-family:var(--font-mono);font-size:13.5px}
+.legal-page ol.art ol{list-style:none;counter-reset:sub;padding-left:0;margin:.5em 0 0}
+.legal-page ol.art ol > li{counter-increment:sub;padding-left:2em;position:relative;margin-bottom:.35em;font-size:14px}
+.legal-page ol.art ol > li::before{content:"("counter(sub)")";position:absolute;left:0;top:0;color:var(--ink-3);font-size:12.5px;font-family:var(--font-mono)}
+.legal-page .note{background:#FFF0C4;color:#846412;border-radius:10px;padding:16px 20px;margin:0 0 1.4em;font-size:13.5px;line-height:1.9}
+.legal-page .legal-note{background:#FCEBEB;color:#A32D2D;border-radius:10px;padding:16px 20px;font-size:13px;line-height:1.9;margin:0 0 2em}
+.legal-page .legal-note strong{font-weight:700}
+.legal-page .sig,
+.legal-page .contact-box{background:var(--mist);border-radius:10px;padding:20px 22px;margin-top:2.4em;font-size:14px;line-height:1.95}
+.legal-page .sig dl,
+.legal-page .contact-box dl{display:grid;grid-template-columns:100px 1fr;gap:4px 16px;margin:10px 0 0}
+.legal-page .sig dt,
+.legal-page .contact-box dt{color:var(--ink-3);font-size:13px}
+.legal-page .sig dd,
+.legal-page .contact-box dd{margin:0}
+.legal-page table{width:100%;border-collapse:collapse;font-size:14px;margin:0 0 1.5em}
+.legal-page th,.legal-page td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+.legal-page th{background:var(--mist);font-weight:700;white-space:nowrap}
+@media (max-width:640px){
+  .legal-page .sig dl,.legal-page .contact-box dl{grid-template-columns:1fr;gap:2px}
+  .legal-page .sig dd,.legal-page .contact-box dd{margin-bottom:8px}
+}
+
 /* ---------- Next.js next/font 変数を adpress.css のトークンへ接続 ---------- */
 :root {
   --font-body: var(--font-body-loaded), "Noto Sans JP", system-ui, -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif;
