@@ -10,13 +10,10 @@ export default async function MyPage() {
 
   if (!user) {
     return (
-      <div className="ap-wrap" style={{ maxWidth: 480, padding: "60px 20px 100px", textAlign: "center" }}>
-        <h1 style={{ marginBottom: 8 }}>マイページ</h1>
-        <p style={{ color: "#55575E", fontSize: 13.5, marginBottom: 28 }}>ログインが必要です。</p>
-        <Link
-          href="/login/"
-          style={{ display: "inline-block", padding: "14px 32px", borderRadius: 99, background: "#C9D3FF", color: "#293A80", fontWeight: 700, textDecoration: "none" }}
-        >
+      <div className="mp-wrap" style={{ paddingTop: 60, textAlign: "center" }}>
+        <h1 className="mp-h1">マイページ</h1>
+        <p className="mp-lede">ログインが必要です。</p>
+        <Link href="/login/" className="post-btn" style={{ height: 50, fontSize: 15 }}>
           ログインする
         </Link>
       </div>
@@ -26,7 +23,7 @@ export default async function MyPage() {
   const [{ data: articles }, { data: unreadNotifs }] = await Promise.all([
     supabase
       .from("articles")
-      .select("id, title, category_slug, status, published_at, link_count")
+      .select("id, title, category_slug, status, published_at")
       .eq("author_id", user.id)
       .order("created_at", { ascending: false }),
     supabase.from("notifications").select("id").eq("profile_id", user.id).eq("is_read", false),
@@ -38,92 +35,88 @@ export default async function MyPage() {
     : { data: [] as { article_id: number; status: string; due_at: string }[] };
 
   const referralByArticle = new Map((referrals ?? []).map((r) => [r.article_id, r]));
+  const needsReferral = (articles ?? []).filter((a) => referralByArticle.get(a.id)?.status === "pending");
+  const unreadCount = unreadNotifs?.length ?? 0;
 
   return (
-    <div className="ap-wrap" style={{ maxWidth: 760, padding: "40px 20px 100px" }}>
-      <h1 style={{ marginBottom: 6 }}>マイページ</h1>
-      <p style={{ color: "#55575E", fontSize: 13.5, marginBottom: 24 }}>{user.email}</p>
+    <div className="mp-wrap">
+      <h1 className="mp-h1">マイページ</h1>
+      <p className="mp-lede">{user.email}</p>
 
-      <Link
-        href="/mypage/notifications/"
-        style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13.5, marginBottom: 24, color: "#293A80" }}
-      >
-        お知らせ
-        {unreadNotifs && unreadNotifs.length > 0 && (
-          <span style={{ background: "#A33A4E", color: "#fff", borderRadius: 99, fontSize: 11, padding: "1px 7px" }}>
-            {unreadNotifs.length}
-          </span>
-        )}
-      </Link>
+      <nav className="tabs">
+        <Link href="/mypage/" aria-current="page">
+          投稿した記事
+        </Link>
+        <Link href="/mypage/notifications/">
+          お知らせ
+          {unreadCount > 0 && <span className="dot">{unreadCount}</span>}
+        </Link>
+      </nav>
 
-      <section className="sec" style={{ border: "1px solid #E7E7EC", borderRadius: 10, padding: 22 }}>
-        <h2 style={{ marginBottom: 4 }}>投稿した記事</h2>
-        <p style={{ fontSize: 12, color: "#8A8D96", marginBottom: 16 }}>
-          公開から14日以内に、記事を紹介したページのURLを提出してください。未提出のまま期限を過ぎると、記事が取り下げられることがあります。
-        </p>
-
-        {(!articles || articles.length === 0) && (
-          <p style={{ fontSize: 13.5, color: "#8A8D96" }}>
-            まだ投稿がありません。<Link href="/submit/">記事を投稿する</Link>
-          </p>
-        )}
-
-        <div style={{ display: "grid", gap: 12 }}>
-          {(articles ?? []).map((a) => {
-            const referral = referralByArticle.get(a.id);
-            return (
-              <div key={a.id} style={{ border: "1px solid #E7E7EC", borderRadius: 8, padding: "14px 16px" }}>
-                <div style={{ fontSize: 11, color: "#8A8D96", marginBottom: 4 }}>
-                  {categoryLabel(a.category_slug)} ・ {statusLabel(a.status)}
-                </div>
-                <Link href={`/news/${a.id}/`} style={{ fontWeight: 700, fontSize: 14.5 }}>
-                  {a.title}
-                </Link>
-                {referral && referral.status === "pending" && (
-                  <div style={{ marginTop: 8 }}>
-                    <ReferralBadge dueAt={referral.due_at} />
-                    <Link
-                      href={`/mypage/articles/${a.id}/referral/`}
-                      style={{ marginLeft: 10, fontSize: 12.5, color: "#293A80" }}
-                    >
-                      紹介リンクを提出する
-                    </Link>
-                  </div>
-                )}
-                {referral && referral.status === "submitted" && (
-                  <p style={{ fontSize: 12, color: "#846412", marginTop: 6 }}>紹介リンク：確認待ち</p>
-                )}
-                {referral && referral.status === "verified" && (
-                  <p style={{ fontSize: 12, color: "#1F6B52", marginTop: 6 }}>紹介リンク：確認済み</p>
-                )}
-              </div>
-            );
-          })}
+      {needsReferral.length > 0 && (
+        <div className="alert">
+          <b>紹介リンクが未提出の記事が{needsReferral.length}件あります</b>
+          <br />
+          掲載した記事を自社サイトのお知らせやSNSで紹介し、そのURLを提出してください。期限までに提出がない場合、記事を取り下げます。
         </div>
-      </section>
+      )}
+
+      {(!articles || articles.length === 0) && (
+        <p style={{ fontSize: 13.5, color: "var(--ink-3)" }}>
+          まだ投稿がありません。<Link href="/submit/">記事を投稿する</Link>
+        </p>
+      )}
+
+      {(articles ?? []).map((a) => {
+        const referral = referralByArticle.get(a.id);
+        const isPending = referral?.status === "pending";
+        return (
+          <article className={`mp-card${isPending ? " attn" : ""}`} key={a.id}>
+            <div className="card-head">
+              <StatusBadge status={a.status} referralStatus={referral?.status} />
+              <h2>{a.title}</h2>
+              <div className="mp-sub">
+                <span className="mono">{new Date(a.published_at).toLocaleString("ja-JP")} 公開</span>
+                <Link href={`/news/${a.id}/`}>記事を見る</Link>
+                <span>{categoryLabel(a.category_slug)}</span>
+              </div>
+            </div>
+
+            {isPending && referral && (
+              <div className="mp-block">
+                <h3>紹介リンクの提出</h3>
+                <p>掲載日から14日以内に、紹介したページのURLを提出してください。</p>
+                <div className="deadline">
+                  提出期限：{new Date(referral.due_at).toLocaleDateString("ja-JP")}（残り{daysLeft(referral.due_at)}日）
+                </div>
+                <div>
+                  <Link href={`/mypage/articles/${a.id}/referral/`} className="post-btn" style={{ height: 40, fontSize: 13.5 }}>
+                    紹介リンクを提出する
+                  </Link>
+                </div>
+              </div>
+            )}
+            {referral?.status === "submitted" && (
+              <div className="mp-block">
+                <h3>紹介リンク</h3>
+                <p>提出済み（編集部の確認をお待ちください）</p>
+              </div>
+            )}
+          </article>
+        );
+      })}
     </div>
   );
 }
 
-function statusLabel(status: string) {
-  switch (status) {
-    case "published":
-      return "公開中";
-    case "withdrawn":
-      return "取り下げ済み";
-    case "removed":
-      return "削除済み";
-    default:
-      return status;
-  }
+function StatusBadge({ status, referralStatus }: { status: string; referralStatus?: string }) {
+  if (status === "removed") return <span className="st s-back">削除済み</span>;
+  if (status === "withdrawn") return <span className="st s-check">取り下げ済み</span>;
+  if (referralStatus === "pending") return <span className="st s-need">紹介リンク未提出</span>;
+  if (referralStatus === "submitted") return <span className="st s-check">確認待ち</span>;
+  return <span className="st s-live">掲載中</span>;
 }
 
-function ReferralBadge({ dueAt }: { dueAt: string }) {
-  const due = new Date(dueAt);
-  const daysLeft = Math.ceil((due.getTime() - Date.now()) / 86400000);
-  return (
-    <span style={{ fontSize: 12, color: daysLeft <= 3 ? "#A33A4E" : "#846412" }}>
-      紹介リンク未提出（あと{daysLeft}日）
-    </span>
-  );
+function daysLeft(dueAt: string) {
+  return Math.max(0, Math.ceil((new Date(dueAt).getTime() - Date.now()) / 86400000));
 }

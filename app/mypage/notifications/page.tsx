@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import NotificationsList from "@/components/NotificationsList";
 
 export default async function NotificationsPage() {
   const supabase = await createClient();
@@ -9,7 +10,7 @@ export default async function NotificationsPage() {
 
   if (!user) {
     return (
-      <div className="ap-wrap" style={{ maxWidth: 480, padding: "60px 20px 100px", textAlign: "center" }}>
+      <div className="mp-wrap" style={{ paddingTop: 60, textAlign: "center" }}>
         <p>
           <Link href="/login/">ログイン</Link>が必要です。
         </p>
@@ -30,33 +31,18 @@ export default async function NotificationsPage() {
   }
 
   return (
-    <div className="ap-wrap" style={{ maxWidth: 640, padding: "40px 20px 100px" }}>
-      <h1 style={{ marginBottom: 24 }}>お知らせ</h1>
+    <div className="mp-wrap">
+      <nav className="tabs">
+        <Link href="/mypage/">投稿した記事</Link>
+        <Link href="/mypage/notifications/" aria-current="page">
+          お知らせ
+        </Link>
+      </nav>
 
-      {(!notifications || notifications.length === 0) && (
-        <p style={{ fontSize: 13.5, color: "#8A8D96" }}>お知らせはありません。</p>
-      )}
+      <h1 className="mp-h1">お知らせ</h1>
+      <p className="mp-lede">公開・審査結果・紹介リンクの提出期限などをお知らせします。</p>
 
-      <div style={{ display: "grid", gap: 10 }}>
-        {(notifications ?? []).map((n) => (
-          <div
-            key={n.id}
-            style={{
-              border: "1px solid #E7E7EC",
-              borderRadius: 8,
-              padding: "14px 16px",
-              background: n.is_read ? "#fff" : "#F6F6F8",
-            }}
-          >
-            <div style={{ fontSize: 11, color: "#8A8D96", marginBottom: 4 }}>
-              {new Date(n.created_at).toLocaleString("ja-JP")}
-            </div>
-            <p style={{ margin: 0, fontSize: 14 }}>
-              {n.article_id ? <Link href={`/news/${n.article_id}/`}>{n.message}</Link> : n.message}
-            </p>
-          </div>
-        ))}
-      </div>
+      <NotificationsList notifications={notifications ?? []} />
     </div>
   );
 }
