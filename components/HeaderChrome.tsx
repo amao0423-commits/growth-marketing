@@ -50,14 +50,33 @@ export default function HeaderChrome({ isLoggedIn }: { isLoggedIn: boolean }) {
         </header>
         <nav className="cats" aria-label="カテゴリ">
           <div className="cats-in">
-            <Link href="/" className="chip" aria-current={!activeCategory ? "page" : undefined}>
+            <Link
+              href="/"
+              className="chip"
+              aria-current={!activeCategory ? "page" : undefined}
+              style={!activeCategory ? { background: "var(--ink)", color: "#fff" } : undefined}
+            >
               すべて
             </Link>
-            {CATEGORIES.map((c) => (
-              <Link key={c.slug} href={`/category/${c.slug}/`} className="chip" aria-current={activeCategory === c.slug ? "page" : undefined}>
-                {c.label}
-              </Link>
-            ))}
+            {CATEGORIES.map((c) => {
+              const active = activeCategory === c.slug;
+              return (
+                <Link
+                  key={c.slug}
+                  href={`/category/${c.slug}/`}
+                  className="chip"
+                  aria-current={active ? "page" : undefined}
+                  style={{
+                    background: c.bg,
+                    color: c.fg,
+                    fontWeight: active ? 700 : 500,
+                    boxShadow: active ? `inset 0 0 0 1.5px ${c.fg}` : undefined,
+                  }}
+                >
+                  {c.label}
+                </Link>
+              );
+            })}
           </div>
         </nav>
       </>
