@@ -52,6 +52,10 @@
   --font-disp:"Zen Old Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
   --font-mono:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 
+  --warn-bg:#FFF0C4; --warn-fg:#846412;
+  --ok-bg:#D3F0E4;   --ok-fg:#1F6B52;
+  --stop-bg:#FFD9E4; --stop-fg:#8A3A55;
+
   --r:10px;
   --wrap:1120px;
   --col:720px;
@@ -360,6 +364,124 @@ body[data-cat="editorial"]{--cbg:var(--c-edit-bg);--cfg:var(--c-edit-fg)}
 @media (max-width:640px){
   .legal-page .sig dl,.legal-page .contact-box dl{grid-template-columns:1fr;gap:2px}
   .legal-page .sig dd,.legal-page .contact-box dd{margin-bottom:8px}
+}
+
+/* ---------- 13. ホーム／カテゴリ一覧の専用チェロム（design-ref/index.html・category-korea.html 準拠） ---------- */
+/* 検索付きヘッダー・カテゴリチップ・注目枠・日付グルーピングのタイムライン・サイドバー。
+   article/terms/guideline/submit等の他ページは引き続き .ap-header の簡易ヘッダーを使う。 */
+
+.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:16px;height:62px}
+.search{flex:1;max-width:290px;margin-left:auto}
+.search input{width:100%;height:36px;border:1px solid var(--line-2);border-radius:99px;background:var(--paper);padding:0 14px;font:inherit;font-size:13px;color:var(--ink)}
+
+.cats{background:var(--paper);border-bottom:1px solid var(--line)}
+.cats-in{display:flex;gap:8px;overflow-x:auto;padding:12px 20px;scrollbar-width:none;max-width:var(--wrap);margin:0 auto}
+.cats-in::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;height:32px;padding:0 15px;border-radius:99px;border:1px solid transparent;background:var(--mist);color:var(--ink-2);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;transition:.15s;text-decoration:none}
+.chip:hover{border-color:var(--line-2)}
+.chip[aria-current="page"],.chip.on{background:var(--ink);color:#fff}
+
+.tag{display:inline-block;padding:2px 9px;border-radius:5px;font-size:11px;font-weight:700;line-height:1.7}
+
+/* カテゴリヒーロー */
+.cathero{padding:30px 0 4px}
+.cathero-in{border-radius:14px;padding:26px 28px}
+.cathero h1{font-family:var(--font-disp);font-size:27px;margin:0 0 6px;letter-spacing:.04em}
+.cathero p{margin:0;font-size:13.5px;max-width:640px;opacity:.85}
+
+/* 注目枠（ホームのみ） */
+.feat{padding:26px 0 6px}
+.feat-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:14px}
+.feat .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:block;transition:border-color .15s,transform .15s;text-decoration:none;color:inherit}
+.feat .card:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.feat .card svg{display:block;width:100%;height:auto}
+.card-body{padding:14px 16px 16px}
+.card-lead h2{font-family:var(--font-disp);font-size:22px;line-height:1.45;margin:9px 0 6px;font-weight:700}
+.card-sub h3{font-size:14px;line-height:1.6;margin:8px 0 5px;font-weight:700}
+.feat .card p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.7}
+.feat-meta{display:flex;align-items:center;gap:9px;font-size:11.5px;color:var(--ink-3);margin-top:9px}
+.right-col{display:grid;grid-template-rows:1fr 1fr;gap:14px}
+.card-sub{display:grid;grid-template-columns:112px 1fr}
+.card-sub .th{overflow:hidden;display:flex}
+.card-sub .th svg{height:100%;width:auto;min-width:100%;object-fit:cover}
+.card-sub .card-body{padding:12px 14px}
+
+/* メイン2カラム */
+.main2{display:grid;grid-template-columns:1fr 296px;gap:34px;padding:30px 0 60px;align-items:start}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;padding-bottom:9px;border-bottom:2px solid var(--ink)}
+.sec-head h2{font-family:var(--font-disp);font-size:16px;font-weight:700;margin:0;letter-spacing:.04em}
+.sec-head .count{font-size:11px;color:var(--ink-3);margin-left:auto}
+
+/* 日付グルーピングのタイムライン */
+.daygroup{display:grid;grid-template-columns:74px 1fr;margin-bottom:6px}
+.daymark{position:sticky;top:78px;align-self:start;padding-top:14px}
+.daymark .d{font-family:var(--font-mono);font-size:19px;font-weight:500;line-height:1}
+.daymark .m{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-3);letter-spacing:.1em}
+.daymark .w{font-size:10.5px;color:var(--ink-3)}
+.items{border-left:1px solid var(--line)}
+.item{display:grid;grid-template-columns:56px 1fr 96px;gap:14px;align-items:start;padding:14px 14px 14px 18px;border-bottom:1px solid var(--line);position:relative;background:var(--paper);text-decoration:none;color:inherit}
+.items .item:first-child{border-top-right-radius:var(--r)}
+.items .item:last-child{border-bottom:none;border-bottom-right-radius:var(--r)}
+.item::before{content:"";position:absolute;left:-4px;top:22px;width:7px;height:7px;border-radius:50%;background:var(--line-2)}
+.item.fresh::before{background:var(--action-fg)}
+.item:hover{background:#FCFCFD}
+.item .time{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-3);padding-top:2px}
+.item.fresh .time{color:var(--action-fg);font-weight:500}
+.item h3{margin:0 0 4px;font-size:15px;line-height:1.6;font-weight:500}
+.item .src{font-size:11.5px;color:var(--ink-3)}
+.item .badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px}
+.item .th{border-radius:6px;overflow:hidden;line-height:0}
+.item .th svg{width:100%;height:auto;display:block}
+.empty{background:var(--paper);border:1px dashed var(--line-2);border-radius:var(--r);padding:34px 20px;text-align:center;color:var(--ink-2);font-size:13.5px}
+
+/* サイドバー */
+.side{display:grid;gap:20px;position:sticky;top:78px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.panel h3{font-family:var(--font-disp);font-size:14px;margin:0 0 12px;letter-spacing:.04em}
+.adslot{background:var(--action-bg);border:none}
+.adslot h3{color:var(--action-fg)}
+.adslot .price{font-family:var(--font-mono);font-size:27px;font-weight:500;color:var(--action-fg);line-height:1.2}
+.adslot .price em{font-style:normal;font-size:12px;font-family:var(--font-body)}
+.adslot ul{list-style:none;margin:12px 0 14px;padding:0;font-size:12.5px;color:var(--action-fg);line-height:1.8}
+.adslot li{padding-left:16px;position:relative}
+.adslot li::before{content:"";position:absolute;left:2px;top:12px;width:6px;height:1.5px;background:currentColor;opacity:.55}
+.adslot a{display:block;text-align:center;height:40px;line-height:40px;border-radius:99px;background:var(--action-fg);color:#fff;font-size:13.5px;font-weight:700;text-decoration:none}
+.adslot .note{font-size:11.5px;color:var(--action-fg);opacity:.75;margin:10px 0 0}
+.rank{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+.rank li{display:grid;grid-template-columns:20px 1fr;gap:9px;font-size:13px;line-height:1.55;padding-bottom:11px;border-bottom:1px solid var(--line)}
+.rank li:last-child{border:none;padding-bottom:0}
+.rank .n{font-family:var(--font-mono);font-size:13px;color:var(--ink-3);padding-top:1px}
+.rank li:nth-child(-n+3) .n{color:var(--action-fg);font-weight:500}
+.rank a{color:inherit;text-decoration:none}
+.biz-list{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:12.5px;line-height:1.6}
+.biz-list a{color:var(--ink-2);text-decoration:none}
+.biz-list a:hover{color:var(--ink)}
+.subcats{display:flex;flex-wrap:wrap;gap:7px}
+.subcats a{font-size:12px;background:var(--mist);border-radius:99px;padding:5px 12px;color:var(--ink-2);text-decoration:none}
+.subcats a:hover{background:var(--line)}
+
+/* 投稿バンド */
+.band{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:44px 0}
+.band-in{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center}
+.band h2{font-family:var(--font-disp);font-size:24px;margin:0 0 8px;letter-spacing:.03em}
+.band p{margin:0;font-size:13.5px;color:var(--ink-2);max-width:580px}
+.band .post-btn{height:48px;padding:0 26px;font-size:15px}
+.cond{margin-top:14px;background:var(--warn-bg);color:var(--warn-fg);border-radius:8px;padding:12px 15px;font-size:12.5px;line-height:1.75;max-width:580px}
+
+@media (max-width:900px){
+  .main2{grid-template-columns:1fr;gap:26px}
+  .side{position:static}
+  .feat-grid{grid-template-columns:1fr}
+  .band-in{grid-template-columns:1fr}
+  .search{display:none}
+}
+@media (max-width:600px){
+  .daygroup{grid-template-columns:56px 1fr}
+  .item{grid-template-columns:48px 1fr;padding:13px 12px 13px 14px}
+  .item .th{display:none}
+  .card-lead h2{font-size:19px}
+  .cathero h1{font-size:22px}
 }
 
 /* ---------- Next.js next/font 変数を adpress.css のトークンへ接続 ---------- */

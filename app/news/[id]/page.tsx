@@ -111,16 +111,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
             <p className="pr-note">この記事は広告枠掲載（PR）です。掲載費用は投稿者から受け取っています。</p>
           </div>
         )}
-
-        <div className="article-body">
-          <div className="ap-cta">
-            <h2>お知らせしたいニュースはありますか。</h2>
-            <p>ログインして投稿するだけ。掲載料はかかりません。</p>
-            <Link className="ap-cta-btn" href="/submit/">
-              記事を投稿する
-            </Link>
-          </div>
-        </div>
       </article>
 
       {related && related.length > 0 && (
