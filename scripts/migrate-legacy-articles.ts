@@ -159,10 +159,16 @@ async function ensureEditorialProfile(): Promise<string> {
 }
 
 async function main() {
+  // カンマ区切りで除外したいファイル名を渡せる（同一トピックが既に別記事として
+  // 公開済みの場合の重複回避など）。例: SKIP_FILES=brand-employee-advocacy.html
+  const skipFiles = new Set(
+    (process.env.SKIP_FILES || "").split(",").map((s) => s.trim()).filter(Boolean)
+  );
   const files = fs
     .readdirSync(BLOG_DIR)
-    .filter((f) => f.endsWith(".html") && f !== "index.html")
+    .filter((f) => f.endsWith(".html") && f !== "index.html" && !skipFiles.has(f))
     .sort();
+  if (skipFiles.size > 0) console.log(`除外指定: ${[...skipFiles].join(", ")}`);
 
   console.log(`対象ファイル: ${files.length}件`);
 
