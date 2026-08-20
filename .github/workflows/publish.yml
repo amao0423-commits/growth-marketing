@@ -1,4 +1,4 @@
-name: Auto-publish SEO post
+name: Auto-publish editorial post
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch: {}   # 手動でもオンデマンド実行可能
 
 permissions:
-  contents: write   # 生成記事を commit & push する
+  contents: write   # content/topics.json（トピック消化状況の台帳）を commit & push する
 
 concurrency:
   group: auto-publish
@@ -23,6 +23,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install dependencies
+        run: npm ci
+
       # Claude Code を入れて、Maxプランのサブスク課金（OAuthトークン）で記事生成する。
       # APIキー従量課金は使わない。トークンは `claude setup-token` で発行し、
       # GitHub Secrets の CLAUDE_CODE_OAUTH_TOKEN に登録しておく。
@@ -34,20 +37,22 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # 任意: モデル指定（未指定ならClaude Code既定）。例: claude-sonnet-4-6 / claude-opus-4-8
           POST_MODEL: ${{ vars.POST_MODEL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           # Secretに改行/空白が混入していてもトークンとして使えるよう除去する
           export CLAUDE_CODE_OAUTH_TOKEN="$(printf '%s' "$CLAUDE_CODE_OAUTH_TOKEN" | tr -d '[:space:]')"
           npm run generate
 
-      - name: Commit & push if changed
+      - name: Commit & push topic ledger if changed
         run: |
-          if [ -n "$(git status --porcelain blog content sitemap.xml)" ]; then
-            git config user.name "growth-marketing-bot"
+          if [ -n "$(git status --porcelain content/topics.json)" ]; then
+            git config user.name "adpress-bot"
             git config user.email "bot@users.noreply.github.com"
-            git add blog content sitemap.xml
-            git commit -m "Auto-publish SEO post ($(date -u +%Y-%m-%d))"
+            git add content/topics.json
+            git commit -m "Auto-publish editorial post ($(date -u +%Y-%m-%d))"
             git pull --rebase origin main
             git push
           else
-            echo "No new post generated — nothing to commit."
+            echo "No topic ledger change — nothing to commit."
           fi

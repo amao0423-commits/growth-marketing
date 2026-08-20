@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "node legacy-static/scripts/generate-post.mjs",
+    "generate": "node scripts/generate-post.mjs",
     "migrate:legacy": "tsx scripts/migrate-legacy-articles.ts"
   },
   "dependencies": {
