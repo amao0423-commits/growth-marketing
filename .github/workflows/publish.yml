@@ -2,8 +2,10 @@ name: Auto-publish editorial post
 
 on:
   schedule:
-    # 週3回：月・水・金 09:00 JST（= 00:00 UTC）。品質優先の投稿頻度。曜日/時刻は調整可。
-    - cron: '0 0 * * 1,3,5'
+    # 週10回：平日(月〜金) 09:00と18:00 JST（= 00:00と09:00 UTC）。
+    # topics.json の categoryRotation は5カテゴリ（sns/ads/seo/content/brand）を
+    # 順送りするため、週10回＝各カテゴリちょうど2回ずつのローテーションになる。
+    - cron: '0 0,9 * * 1-5'
   workflow_dispatch: {}   # 手動でもオンデマンド実行可能
 
 permissions:
