@@ -1,5 +1,69 @@
 [
   {
+    "slug": "ads-quality-score",
+    "category": "ads",
+    "categoryLabel": "広告運用",
+    "title": "リスティング広告の品質スコアを上げる方法｜原因・手順・失敗例を実務目線で解説",
+    "description": "品質スコアの仕組みから広告文・LP改善の手順、よくある失敗例までを実務チェックリスト付きで解説。",
+    "date": "2026.08.17"
+  },
+  {
+    "slug": "sns-instagram-stories-engagement",
+    "category": "sns",
+    "categoryLabel": "SNS運用",
+    "title": "インスタ ストーリーズ活用ガイド：エンゲージメントと来店・購入につなげる運用手順",
+    "description": "ストーリーズのエンゲージメントを高め来店・購入へつなげる設計手順・失敗例・KPIを実務目線で解説。",
+    "date": "2026.08.17"
+  },
+  {
+    "slug": "brand-community",
+    "category": "brand",
+    "categoryLabel": "ブランディング",
+    "title": "ブランドコミュニティとは？ファンと築く作り方・運営手順・失敗例を徹底解説",
+    "description": "ブランドコミュニティの定義から設計・運営KPI・失敗例まで、実務目線で徹底解説。",
+    "date": "2026.08.14"
+  },
+  {
+    "slug": "content-measurement-roi",
+    "category": "content",
+    "categoryLabel": "コンテンツマーケティング",
+    "title": "コンテンツマーケティングROIの測定方法とは？指標設計・改善手順・失敗例を徹底解説",
+    "description": "ROI測定の指標設計から改善手順・失敗例まで。コンテンツマーケティングの成果を正しく可視化する実務ガイド。",
+    "date": "2026.08.12"
+  },
+  {
+    "slug": "seo-local-mybusiness",
+    "category": "seo",
+    "categoryLabel": "SEO",
+    "title": "MEO・Googleビジネスプロフィール最適化とは？設定手順・改善策・チェックリストを徹底解説",
+    "description": "MEO対策の基礎から、Googleビジネスプロフィールの設定手順・失敗例・KPIまで実務目線で解説します。",
+    "date": "2026.08.10"
+  },
+  {
+    "slug": "ads-creative-fatigue",
+    "category": "ads",
+    "categoryLabel": "広告運用",
+    "title": "広告クリエイティブの疲弊とは？検知指標・差し替えタイミング・運用フローを実務目線で解説",
+    "description": "クリエイティブ疲弊の定義から検知指標・差し替え判断・運用フローまで実務目線で解説。",
+    "date": "2026.08.07"
+  },
+  {
+    "slug": "sns-analytics-kpi",
+    "category": "sns",
+    "categoryLabel": "SNS運用",
+    "title": "SNS分析KPIの設計方法とダッシュボードの作り方｜虚栄の指標を避けて成果を可視化する",
+    "description": "SNS分析KPIの選び方から、成果につながるダッシュボードの構成手順・失敗例・改善策まで実務目線で解説。",
+    "date": "2026.08.05"
+  },
+  {
+    "slug": "brand-employee-advocacy",
+    "category": "brand",
+    "categoryLabel": "ブランディング",
+    "title": "従業員アンバサダーとは？エンプロイーアドボカシーの導入手順・効果・失敗例を徹底解説",
+    "description": "従業員アンバサダーの定義・導入手順・失敗例・KPIまで実務目線で解説。ブランド認知を社内から広げたい担当者向け。",
+    "date": "2026.08.04"
+  },
+  {
     "slug": "instagram-latest-updates-2026",
     "category": "sns",
     "categoryLabel": "SNS運用",
