@@ -1,15 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isCategorySlug } from "@/lib/categories";
 import { reviewArticle } from "@/lib/review";
 
 export const runtime = "nodejs";
 
-// 投稿はログイン不要。送信されたら即座に articles へ status='published' で
-// INSERTする（審査待ちにはしない）。ルールベース審査は非同期・非ブロッキングで
-// 実行し、結果を review_logs に記録するのみ（flagged でも公開は継続する）。
+// 投稿にはログイン（Google）が必要。ログイン済みユーザーの投稿は、
+// 審査を待たずに即座に articles へ status='published' でINSERTされる。
+// ルールベース審査は非同期・非ブロッキングで実行し、結果を review_logs に
+// 記録するのみ（flagged でも公開は継続する）。
 // 不適切と判断した場合の削除は編集部が事後に行う（利用規約 第9条）。
 export async function POST(req: NextRequest) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "投稿にはログインが必要です。" }, { status: 401 });
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("display_name, email")
+    .eq("id", user.id)
+    .single();
+
   let body: unknown;
   try {
     body = await req.json();
@@ -22,9 +39,8 @@ export async function POST(req: NextRequest) {
   const bodyHtml = String(input.bodyHtml ?? "").trim();
   const excerpt = input.excerpt ? String(input.excerpt).trim() : null;
   const categorySlug = String(input.categorySlug ?? "");
-  const displayName = String(input.displayName ?? "").trim();
-  const contactOrg = String(input.contactOrg ?? displayName).trim();
-  const contactEmail = String(input.contactEmail ?? "").trim();
+  const contactOrg = String(input.contactOrg ?? profile?.display_name ?? "").trim();
+  const contactEmail = String(input.contactEmail ?? profile?.email ?? user.email ?? "").trim();
   const contactTel = input.contactTel ? String(input.contactTel).trim() : null;
   const contactUrl = input.contactUrl ? String(input.contactUrl).trim() : null;
   const contactPublic = Boolean(input.contactPublic);
@@ -36,7 +52,7 @@ export async function POST(req: NextRequest) {
   if (!title) formErrors.push("タイトルを入力してください");
   if (!bodyHtml) formErrors.push("本文を入力してください");
   if (!isCategorySlug(categorySlug)) formErrors.push("カテゴリを選択してください");
-  if (!displayName) formErrors.push("発信元（表示名）を入力してください");
+  if (!contactOrg) formErrors.push("発信元（表示名）を入力してください");
   if (!contactEmail) formErrors.push("連絡先メールアドレスを入力してください");
   if (formErrors.length > 0) {
     return NextResponse.json({ error: formErrors.join(" / ") }, { status: 400 });
@@ -53,21 +69,13 @@ export async function POST(req: NextRequest) {
     contactEmail,
   });
 
-  let supabase;
-  try {
-    supabase = createAdminClient();
-  } catch {
-    // Supabase未接続（開発中・キー未設定）の場合はここで止める。
-    return NextResponse.json(
-      { error: "現在、投稿の受付は準備中です。しばらくしてから再度お試しください。" },
-      { status: 503 }
-    );
-  }
-
+  // 挿入自体はRLS（articles_insert: author_id = auth.uid()）に従うログインユーザーの
+  // クライアントで行う。review_logs・article_linksの書き込みは編集部専用ポリシーのため
+  // service role（admin client）を使う。
   const { data: article, error: insertError } = await supabase
     .from("articles")
     .insert({
-      display_name: displayName,
+      author_id: user.id,
       category_slug: categorySlug,
       title,
       body_html: bodyHtml,
@@ -81,7 +89,7 @@ export async function POST(req: NextRequest) {
       contact_url: contactUrl,
       contact_public: contactPublic,
     })
-    .select("id, edit_token")
+    .select("id")
     .single();
 
   if (insertError || !article) {
@@ -91,8 +99,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  let admin;
+  try {
+    admin = createAdminClient();
+  } catch {
+    // service role未設定でも、記事自体はすでに公開済みなのでここは握りつぶす。
+    return NextResponse.json({ id: article.id, message: "投稿を受け付けました。すでに公開されています。" });
+  }
+
   if (links.length > 0) {
-    await supabase.from("article_links").insert(
+    await admin.from("article_links").insert(
       links.map((l) => ({
         article_id: article.id,
         url: l.url,
@@ -104,7 +120,7 @@ export async function POST(req: NextRequest) {
   }
 
   // 審査結果は事後確認用として記録するのみ。失敗しても投稿の公開には影響させない。
-  await supabase.from("review_logs").insert({
+  await admin.from("review_logs").insert({
     article_id: article.id,
     verdict: review.verdict,
     violations: review.violations,
@@ -114,7 +130,6 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({
     id: article.id,
-    editToken: article.edit_token,
     message: "投稿を受け付けました。すでに公開されています。",
   });
 }

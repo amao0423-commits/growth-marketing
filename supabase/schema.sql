@@ -123,6 +123,11 @@ create table categories (
   is_active    boolean not null default true
 );
 
+-- 参照専用マスタ。誰でも読めるが、書き込みは編集部のみ。
+alter table categories enable row level security;
+create policy categories_public_read on categories
+  for select using (true);
+
 insert into categories (slug,label,color_bg,color_fg,sort_order,description) values
  ('kpop', 'K-POP',      '#FFD9E4','#8A3A55',1,'アーティストのリリース、来日公演、ファンイベントの告知'),
  ('korea','韓国情報',    '#FFE2CC','#94502A',2,'コスメ、フード、カルチャー。日本上陸のニュース'),
@@ -488,6 +493,14 @@ alter table content_reports enable row level security;
 create or replace function is_editor() returns boolean as $$
   select coalesce((select is_editorial from profiles where id = auth.uid()), false);
 $$ language sql stable security definer;
+
+-- categories：読み取りは誰でも可（テーブル作成時に設定済み）。書き込みは編集部のみ。
+create policy categories_editor on categories
+  for insert with check (is_editor());
+create policy categories_editor_update on categories
+  for update using (is_editor());
+create policy categories_editor_delete on categories
+  for delete using (is_editor());
 
 -- profiles
 create policy profiles_self on profiles
