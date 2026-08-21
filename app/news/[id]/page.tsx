@@ -131,6 +131,18 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
           </div>
         </section>
       )}
+
+      <section className="band">
+        <div className="wrap band-in">
+          <div>
+            <h2>気になった記事は、いいねで残せます。</h2>
+            <p>ログインすると記事にいいねを付けられます。いいねした記事はマイページにまとまります。登録は無料です。</p>
+          </div>
+          <Link href={user ? "/mypage/" : "/login/"} className="post-btn">
+            {user ? "いいねした記事" : "ログイン"}
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

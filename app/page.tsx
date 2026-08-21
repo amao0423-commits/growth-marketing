@@ -70,6 +70,9 @@ function FeaturedCard({ article, size }: { article: ArticleListItem; size: "lead
 
 export default async function HomePage() {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const { data: articles } = await supabase
     .from("articles")
     .select(ARTICLE_LIST_SELECT)
@@ -122,23 +125,26 @@ export default async function HomePage() {
         />
       </div>
 
-      <section className="band">
+      <section className="band" id="save">
         <div className="wrap band-in">
           <div>
-            <h2>編集部から、確かな発表を届けます。</h2>
-            <p>アドプレス編集部が確認したプレスリリースと解説記事を、新着順に掲載しています。</p>
+            <h2>気になった記事は、いいねで残せます。</h2>
+            <p>ログインすると記事にいいねを付けられます。いいねした記事はマイページにまとまるので、あとから読み返したり、社内で共有したりできます。登録は無料です。</p>
             <div className="steps">
               <span className="step">
-                <b>1</b>発表内容を確認
+                <b>1</b>Google・LINE・Xでログイン
               </span>
               <span className="step">
-                <b>2</b>編集部で記事化
+                <b>2</b>気になった記事にいいね
               </span>
               <span className="step">
-                <b>3</b>公開
+                <b>3</b>マイページでいつでも読み返す
               </span>
             </div>
           </div>
+          <Link href={user ? "/mypage/" : "/login/"} className="post-btn">
+            {user ? "いいねした記事" : "ログイン"}
+          </Link>
         </div>
       </section>
     </div>

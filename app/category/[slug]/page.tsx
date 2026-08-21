@@ -25,6 +25,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   const cat = categoryDef(slug);
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const { data: articles, count } = await supabase
     .from("articles")
     .select(ARTICLE_LIST_SELECT, { count: "exact" })
@@ -80,6 +83,18 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           }
         />
       </div>
+
+      <section className="band">
+        <div className="wrap band-in">
+          <div>
+            <h2>{cat.label}関連のニュースを、まとめて追う。</h2>
+            <p>ログインすると記事にいいねを付けられます。いいねした記事はマイページにまとまります。登録は無料です。</p>
+          </div>
+          <a href={user ? "/mypage/" : "/login/"} className="post-btn">
+            {user ? "いいねした記事" : "ログイン"}
+          </a>
+        </div>
+      </section>
     </div>
   );
 }
