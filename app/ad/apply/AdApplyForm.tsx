@@ -217,7 +217,7 @@ export default function AdApplyForm() {
           <div className="two">
             <div className="f">
               <label htmlFor="pic">ご担当者名<span className="req">必須</span></label>
-              <input id="pic" type="text" value={form.pic} onChange={(e) => update("pic", e.target.value)} placeholder="例）安藤 葵" />
+              <input id="pic" type="text" value={form.pic} onChange={(e) => update("pic", e.target.value)} placeholder="例）あん" />
               {errors.pic && <p className="err on">ご担当者名をご記入ください。</p>}
             </div>
             <div className="f">
