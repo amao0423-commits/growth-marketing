@@ -7,23 +7,25 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:sites": "opennextjs-cloudflare build --skipWranglerConfigCheck",
     "start": "next start",
     "lint": "next lint",
     "generate": "node scripts/generate-post.mjs",
     "migrate:legacy": "tsx scripts/migrate-legacy-articles.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.47.10",
     "next": "^16.3.1",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "@supabase/supabase-js": "^2.47.10",
-    "@supabase/ssr": "^0.5.2"
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.2",
+    "@opennextjs/cloudflare": "^1.20.2",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
   }
 }
