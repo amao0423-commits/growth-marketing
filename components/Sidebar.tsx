@@ -48,6 +48,17 @@ export default function Sidebar({
         </div>
       )}
 
+      <div className="panel placement-cta">
+        <h3>記事掲載のご相談</h3>
+        <p className="lead">あなたのサービスを、読者に届く記事として紹介しませんか。</p>
+        <ul>
+          <li>新商品・サービスの紹介</li>
+          <li>イベントやキャンペーンの告知</li>
+          <li>編集部による記事化の相談</li>
+        </ul>
+        <a href="mailto:a-ando@hotseller.jp?subject=%E3%82%A2%E3%83%89%E3%83%97%E3%83%AC%E3%82%B9%20%E8%A8%98%E4%BA%8B%E6%8E%B2%E8%BC%89%E3%81%AE%E7%9B%B8%E8%AB%87">記事掲載を相談する</a>
+      </div>
+
       {extra}
     </aside>
   );

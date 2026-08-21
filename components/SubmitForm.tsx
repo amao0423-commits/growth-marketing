@@ -210,7 +210,7 @@ export default function SubmitForm({
 
   return (
     <form className="wrap" style={{ maxWidth: 760, padding: "30px 20px 60px" }} onSubmit={handleSubmit}>
-      <h1 style={{ fontFamily: "var(--font-disp)", fontSize: 25, letterSpacing: ".04em", margin: "0 0 6px" }}>記事を投稿する</h1>
+      <h1 style={{ fontFamily: "var(--font-disp)", fontSize: 25, letterSpacing: ".04em", margin: "0 0 6px" }}>編集部投稿</h1>
       <p style={{ fontSize: 13.5, color: "var(--ink-2)", margin: "0 0 24px" }}>
         送信すると、審査を待たずにそのまま公開されます。掲載料はかかりません。
       </p>

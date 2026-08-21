@@ -482,6 +482,20 @@ body[data-cat="editorial"]{--cbg:var(--c-edit-bg);--cfg:var(--c-edit-fg)}
 .subcats a{font-size:12px;background:var(--mist);border-radius:99px;padding:5px 12px;color:var(--ink-2);text-decoration:none}
 .subcats a:hover{background:var(--line)}
 
+.placement-cta{background:var(--action-bg);border-color:transparent;color:var(--action-fg)}
+.placement-cta h3{color:var(--action-fg)}
+.placement-cta .lead{font-size:13px;font-weight:700;line-height:1.8;margin:0 0 12px}
+.placement-cta ul{list-style:none;margin:0 0 15px;padding:0;font-size:12.5px;line-height:1.85}
+.placement-cta li{position:relative;padding-left:15px}
+.placement-cta li::before{content:"";position:absolute;left:2px;top:12px;width:6px;height:1.5px;background:currentColor;opacity:.65}
+.placement-cta a,.article-consult-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;padding:0 22px;border-radius:99px;
+  background:var(--action-fg);color:#fff!important;
+  font-size:13.5px;font-weight:700;text-decoration:none!important;
+}
+.placement-cta a{width:100%}
+
 /* 投稿バンド */
 .band{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:44px 0}
 .band-in{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center}

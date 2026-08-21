@@ -12,10 +12,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const cat = categoryDef(slug);
   const koreaDescription =
-    "韓国コスメ、フード、カルチャー、日本上陸のニュースまで。企業・団体・個人が投稿した韓国情報のプレスリリースを新着順に掲載しています。";
+    "韓国コスメ、フード、カルチャー、日本上陸のニュースまで。編集部が確認した韓国情報のプレスリリースを新着順に掲載しています。";
   return {
     title: `${cat.label}のプレスリリース一覧`,
-    description: slug === "korea" ? koreaDescription : `企業・団体・個人が投稿した${cat.label}のプレスリリースを新着順に掲載しています。`,
+    description: slug === "korea" ? koreaDescription : `編集部が確認した${cat.label}のプレスリリースを新着順に掲載しています。`,
   };
 }
 
@@ -38,8 +38,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   const relatedCats = CATEGORIES.filter((c) => c.slug !== slug).slice(0, 4);
   const description =
     slug === "korea"
-      ? "コスメ、フード、カルチャーから日本上陸のニュースまで。企業・団体・個人が投稿した韓国関連のプレスリリースを新着順に掲載しています。"
-      : `企業・団体・個人が投稿した${cat.label}のプレスリリースを新着順に掲載しています。`;
+      ? "コスメ、フード、カルチャーから日本上陸のニュースまで。編集部が確認した韓国関連のプレスリリースを新着順に掲載しています。"
+      : `編集部が確認した${cat.label}のプレスリリースを新着順に掲載しています。`;
 
   return (
     <div data-cat={slug}>

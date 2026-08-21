@@ -63,7 +63,7 @@ export default async function MyPage() {
 
       {(!articles || articles.length === 0) && (
         <p style={{ fontSize: 13.5, color: "var(--ink-3)" }}>
-          まだ投稿がありません。<Link href="/submit/">記事を投稿する</Link>
+          まだ記事はありません。
         </p>
       )}
 

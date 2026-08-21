@@ -11,9 +11,9 @@ export default async function SubmitPage() {
   if (!user) {
     return (
       <div className="ap-wrap" style={{ maxWidth: 480, padding: "60px 20px 100px", textAlign: "center" }}>
-        <h1 style={{ marginBottom: 8 }}>記事を投稿する</h1>
-        <p style={{ color: "#55575E", fontSize: 13.5, marginBottom: 28 }}>
-          投稿にはログインが必要です。
+        <h1 style={{ marginBottom: 8 }}>編集部投稿</h1>
+        <p style={{ color: "#55575E", fontSize: 13.5, lineHeight: 1.9, marginBottom: 28 }}>
+          記事の投稿は編集部アカウントに限定しています。
         </p>
         <Link
           href="/login/"
