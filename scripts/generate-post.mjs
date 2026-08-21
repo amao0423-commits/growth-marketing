@@ -199,6 +199,57 @@ async function buildSourceLinks(findings, category) {
   return unique([...fromResearch, ...fallback]).slice(0, 8);
 }
 
+// --- アイキャッチ: 参照した出典記事のog:image（サムネイル写真）をキャプチャして流用する ---
+// 独自に画像を生成/撮影するのではなく、本文で参照した一次情報ページのog:imageを
+// そのままアイキャッチとして使う。取得できなければ null（呼び出し側で自動生成SVGにフォールバック）。
+const BROWSER_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+function extractMetaImage(html, baseUrl) {
+  const patterns = [
+    /<meta[^>]+property=["']og:image(?::secure_url)?["'][^>]+content=["']([^"']+)["']/i,
+    /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image(?::secure_url)?["']/i,
+    /<meta[^>]+name=["']twitter:image(?::src)?["'][^>]+content=["']([^"']+)["']/i,
+    /<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image(?::src)?["']/i,
+  ];
+  for (const re of patterns) {
+    const m = html.match(re);
+    if (m && m[1]) {
+      try { return new URL(m[1], baseUrl).toString(); } catch { continue; }
+    }
+  }
+  return null;
+}
+
+async function fetchWithTimeout(url, opts = {}, timeoutMs = 8000) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...opts, signal: ctrl.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function findEyecatchImage(candidateUrls) {
+  for (const pageUrl of unique(candidateUrls)) {
+    try {
+      const res = await fetchWithTimeout(pageUrl, { headers: { "User-Agent": BROWSER_UA, Accept: "text/html" } });
+      if (!res.ok) continue;
+      const html = await res.text();
+      const imageUrl = extractMetaImage(html, pageUrl);
+      if (!imageUrl) continue;
+      const imgRes = await fetchWithTimeout(imageUrl, { method: "HEAD", headers: { "User-Agent": BROWSER_UA } });
+      const contentType = imgRes.headers.get("content-type") || "";
+      if (imgRes.ok && contentType.startsWith("image/")) {
+        return { url: imageUrl, sourcePage: pageUrl };
+      }
+    } catch {
+      continue;
+    }
+  }
+  return null;
+}
+
 function scoreCocomarkeArticle(article, idea) {
   const haystack = `${article.slug} ${article.keywords.join(" ")}`.toLowerCase();
   const words = `${idea.primaryKeyword} ${idea.intent}`.toLowerCase()
@@ -241,17 +292,17 @@ function enforceExternalAttrs(html) {
   });
 }
 
+// 毎日1本・カテゴリはランダムに選ぶ。未使用トピックが残っているカテゴリの中から
+// 均等な確率で1つ選び、そのカテゴリの未使用アイデアからランダムに1つ選ぶ。
 function pickTopic(topics) {
-  const order = topics.categoryRotation;
   const used = new Set(topics.usedTopicIds);
-  const n = order.length;
-  for (let i = 0; i < n; i++) {
-    const idx = (topics.nextRotationIndex + i) % n;
-    const cat = order[idx];
-    const idea = topics.clusters[cat].ideas.find((x) => !used.has(x.id));
-    if (idea) return { category: cat, idea, chosenIndex: idx };
-  }
-  return null;
+  const available = topics.categoryRotation
+    .map((cat) => ({ cat, ideas: topics.clusters[cat].ideas.filter((x) => !used.has(x.id)) }))
+    .filter((x) => x.ideas.length > 0);
+  if (available.length === 0) return null;
+  const { cat, ideas } = available[Math.floor(Math.random() * available.length)];
+  const idea = ideas[Math.floor(Math.random() * ideas.length)];
+  return { category: cat, idea };
 }
 
 // --- Step A: Web検索でトレンド/一次情報を収集 ---
@@ -964,7 +1015,7 @@ async function main() {
 
   const choice = pickTopic(topics);
   if (!choice) { console.log("未使用トピックがありません。content/topics.json の ideas を追加してください。"); return; }
-  const { category, idea, chosenIndex } = choice;
+  const { category, idea } = choice;
   const catLabel = GM_CATEGORY_LABELS[category] || category;
   const categorySlug = CATEGORY_MAP[category] || "sns";
   console.log(`▶ トピック: [${category}→${categorySlug}] ${idea.intent}\n  model=${MODEL}`);
@@ -1010,6 +1061,12 @@ async function main() {
   if (sourceLinks.length < 2) throw new Error("公式出典URLを2本以上確認できませんでした。調査クエリまたはfallback sourceを見直してください。");
   console.log(`  公式出典URL ${sourceLinks.length}件を確認`);
 
+  console.log("▶ アイキャッチ画像を出典記事から探索中…");
+  const eyecatch = await findEyecatchImage(sourceLinks);
+  console.log(eyecatch
+    ? `  アイキャッチ取得: ${eyecatch.url}（出典: ${eyecatch.sourcePage}）`
+    : "  アイキャッチ取得失敗。自動生成SVGにフォールバックします。");
+
   let article = null, gate = null, feedback = "";
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     console.log(`▶ 記事生成（試行 ${attempt + 1}/${MAX_RETRIES + 1}）…`);
@@ -1047,6 +1104,7 @@ async function main() {
       contact_email: EDITORIAL_EMAIL,
       contact_public: false,
       published_at: new Date(`${dates.iso}T03:00:00.000Z`).toISOString(), // JST正午相当
+      ...(eyecatch ? { cover_url: eyecatch.url, cover_is_generated: false } : {}),
     })
     .select("id")
     .single();
@@ -1057,7 +1115,6 @@ async function main() {
 
   // 台帳更新（次回の重複選定を防ぐ）
   topics.usedTopicIds.push(idea.id);
-  topics.nextRotationIndex = (chosenIndex + 1) % topics.categoryRotation.length;
   writeJson("content/topics.json", topics);
 
   console.log(`\n✅ 公開完了: ${BASE_URL}/news/${inserted.id}/`);
@@ -1065,6 +1122,7 @@ async function main() {
   console.log(`   カテゴリ: ${categorySlug}`);
   console.log(`   相互リンク: ${article.cocomarkeLinksUsed?.join(", ") || "(本文内)"}`);
   console.log(`   出典: ${article.backlinksUsed?.join(", ") || "(本文内)"}`);
+  console.log(`   アイキャッチ: ${eyecatch ? eyecatch.url : "(自動生成SVG)"}`);
 }
 
 main().catch((e) => { console.error("ERROR:", e?.message || e); process.exit(1); });

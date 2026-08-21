@@ -2,10 +2,10 @@ name: Auto-publish editorial post
 
 on:
   schedule:
-    # 週10回：平日(月〜金) 09:00と18:00 JST（= 00:00と09:00 UTC）。
-    # topics.json の categoryRotation は5カテゴリ（sns/ads/seo/content/brand）を
-    # 順送りするため、週10回＝各カテゴリちょうど2回ずつのローテーションになる。
-    - cron: '0 0,9 * * 1-5'
+    # 毎日1回、09:00 JST（= 00:00 UTC）に1本だけ公開。
+    # カテゴリは content/topics.json の categoryRotation（sns/ads/seo/content/brand）
+    # の中から、未使用トピックが残っているものをランダムに1つ選ぶ（generate-post.mjs 側でランダム抽選）。
+    - cron: '0 0 * * *'
   workflow_dispatch: {}   # 手動でもオンデマンド実行可能
 
 permissions:

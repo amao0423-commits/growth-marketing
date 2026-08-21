@@ -1,5 +1,5 @@
 {
-  "_comment": "SEO記事自動生成のトピック台帳。categoryRotation の順にカテゴリを輪番し、各カテゴリの未使用トピックから検索意図の高いものを選ぶ。usedTopicIds に公開済みを記録して重複を防ぐ。新しいトレンドが出たら ideas に追記すればよい。",
+  "_comment": "SEO記事自動生成のトピック台帳。毎日1本、categoryRotation に列挙したカテゴリの中から未使用トピックが残っているものをランダムに1つ選び、そのカテゴリの未使用アイデアからランダムに1つ選ぶ。usedTopicIds に公開済みを記録して重複を防ぐ。新しいトレンドが出たら ideas に追記すればよい。",
   "categoryRotation": [
     "sns",
     "ads",
@@ -7,7 +7,6 @@
     "content",
     "brand"
   ],
-  "nextRotationIndex": 2,
   "usedTopicIds": [
     "sns-reels-retention-2026",
     "ads-meta-advantage-plus",
@@ -35,7 +34,8 @@
     "content-measurement-roi",
     "brand-community",
     "sns-instagram-stories-engagement",
-    "ads-quality-score"
+    "ads-quality-score",
+    "sns-influencer-marketing"
   ],
   "clusters": {
     "sns": {
