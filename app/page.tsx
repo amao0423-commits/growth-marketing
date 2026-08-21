@@ -30,7 +30,6 @@ function FeaturedCard({ article, size }: { article: ArticleListItem; size: "lead
 
   const badges = (
     <>
-      {article.is_sponsored && <span className="pr">PR</span>}{" "}
       <span className="tag" style={{ background: cat.bg, color: cat.fg }}>
         {cat.label}
       </span>
@@ -126,33 +125,20 @@ export default async function HomePage() {
       <section className="band">
         <div className="wrap band-in">
           <div>
-            <h2>その日のうちに、記事になる。</h2>
-            <p>ログインして入稿フォームに記事を入力するだけ。AIによる自動審査を通過すると、最短数十分で公開されます。掲載料はかかりません。</p>
+            <h2>編集部から、確かな発表を届けます。</h2>
+            <p>アドプレス編集部が確認したプレスリリースと解説記事を、新着順に掲載しています。</p>
             <div className="steps">
               <span className="step">
-                <b>1</b>ログインして記事を入力
+                <b>1</b>発表内容を確認
               </span>
               <span className="step">
-                <b>2</b>AI自動審査
+                <b>2</b>編集部で記事化
               </span>
               <span className="step">
-                <b>3</b>公開・お知らせが届く
+                <b>3</b>公開
               </span>
-              <span className="step">
-                <b>4</b>掲載記事を紹介してリンクを提出
-              </span>
-            </div>
-            <div className="cond">
-              <b>掲載後のお願い</b>
-              <br />
-              掲載された記事は、自社サイトのお知らせ欄などで記事タイトルとリンクを掲載して紹介してください。個人の方はSNSでリンク付きで紹介いただければ結構です。紹介したページのURLをマイページから提出してください。
-              <br />
-              掲載日から14日以内に提出がない場合、記事を取り下げます。
             </div>
           </div>
-          <Link href="/submit/" className="post-btn">
-            記事を投稿する<span>無料</span>
-          </Link>
         </div>
       </section>
     </div>

@@ -6,7 +6,7 @@ import { reviewArticle } from "@/lib/review";
 
 export const runtime = "nodejs";
 
-// 投稿にはログイン（Google）が必要。ログイン済みユーザーの投稿は、
+// 投稿にはログイン（Google）と編集部権限が必要。編集部ユーザーの投稿は、
 // 審査を待たずに即座に articles へ status='published' でINSERTされる。
 // ルールベース審査は非同期・非ブロッキングで実行し、結果を review_logs に
 // 記録するのみ（flagged でも公開は継続する）。
@@ -23,9 +23,13 @@ export async function POST(req: NextRequest) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("display_name, email")
+    .select("display_name, email, is_editorial")
     .eq("id", user.id)
     .single();
+
+  if (!profile?.is_editorial) {
+    return NextResponse.json({ error: "現在、記事の投稿は編集部アカウントに限定しています。" }, { status: 403 });
+  }
 
   let body: unknown;
   try {
@@ -81,8 +85,7 @@ export async function POST(req: NextRequest) {
       body_html: bodyHtml,
       excerpt,
       status: "published",
-      source: "user",
-      is_sponsored: false,
+      source: "editorial",
       contact_org: contactOrg,
       contact_email: contactEmail,
       contact_tel: contactTel,

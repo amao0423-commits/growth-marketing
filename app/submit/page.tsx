@@ -35,9 +35,23 @@ export default async function SubmitPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("display_name, email")
+    .select("display_name, email, is_editorial")
     .eq("id", user.id)
     .single();
+
+  if (!profile?.is_editorial) {
+    return (
+      <div className="ap-wrap" style={{ maxWidth: 560, padding: "60px 20px 100px", textAlign: "center" }}>
+        <h1 style={{ marginBottom: 8 }}>投稿権限がありません</h1>
+        <p style={{ color: "#55575E", fontSize: 13.5, lineHeight: 1.9, marginBottom: 28 }}>
+          現在、記事の投稿は編集部アカウントに限定しています。
+        </p>
+        <Link href="/" className="post-btn" style={{ height: 50, fontSize: 15 }}>
+          トップページへ戻る
+        </Link>
+      </div>
+    );
+  }
 
   return <SubmitForm defaultOrg={profile?.display_name ?? ""} defaultEmail={profile?.email ?? user.email ?? ""} />;
 }

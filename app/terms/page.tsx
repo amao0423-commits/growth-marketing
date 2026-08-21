@@ -5,7 +5,7 @@ import LegalPage from "@/components/LegalPage";
 
 export const metadata: Metadata = {
   title: "利用規約",
-  description: "アドプレスの利用規約です。アカウント登録、記事の掲載、掲載内容の責任、禁止事項、記事の取り下げ、広告枠掲載、免責事項などを定めています。",
+  description: "アドプレスの利用規約です。アカウント登録、記事の掲載、掲載内容の責任、禁止事項、記事の取り下げ、免責事項などを定めています。",
 };
 
 const TOC = [
@@ -19,12 +19,11 @@ const TOC = [
   { href: "#a8", label: "第8条 掲載記事の紹介" },
   { href: "#a9", label: "第9条 編集および取り下げ" },
   { href: "#a10", label: "第10条 知的財産権" },
-  { href: "#a11", label: "第11条 広告枠掲載" },
-  { href: "#a12", label: "第12条 個人情報" },
-  { href: "#a13", label: "第13条 免責事項" },
-  { href: "#a14", label: "第14条 変更・中断・終了" },
-  { href: "#a15", label: "第15条 規約の変更" },
-  { href: "#a16", label: "第16条 準拠法・管轄" },
+  { href: "#a11", label: "第11条 個人情報" },
+  { href: "#a12", label: "第12条 免責事項" },
+  { href: "#a13", label: "第13条 変更・中断・終了" },
+  { href: "#a14", label: "第14条 規約の変更" },
+  { href: "#a15", label: "第15条 準拠法・管轄" },
   { href: "#operator", label: "運営者情報" },
 ];
 

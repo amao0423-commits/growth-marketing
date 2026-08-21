@@ -6,6 +6,7 @@ import { categoryDef } from "@/lib/categories";
 import { generateEyecatchSvg } from "@/lib/eyecatch";
 import { ARTICLE_LIST_SELECT, formatDate, type ArticleListItem } from "@/lib/articles";
 import PostCard from "@/components/PostCard";
+import LikeButton from "@/components/LikeButton";
 
 export const revalidate = 60;
 
@@ -14,7 +15,7 @@ async function getArticle(id: number) {
   const { data: article } = await supabase
     .from("articles")
     .select(
-      "id, title, body_html, excerpt, category_slug, contact_org, contact_email, contact_tel, contact_url, contact_public, cover_url, is_sponsored, published_at, status"
+      "id, title, body_html, excerpt, category_slug, contact_org, contact_email, contact_tel, contact_url, contact_public, cover_url, published_at, status"
     )
     .eq("id", id)
     .eq("status", "published")
@@ -42,15 +43,25 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
 
   const cat = categoryDef(article.category_slug);
   const supabase = await createClient();
-  const { data: related } = await supabase
-    .from("articles")
-    .select(ARTICLE_LIST_SELECT)
-    .eq("status", "published")
-    .eq("category_slug", article.category_slug)
-    .neq("id", article.id)
-    .order("published_at", { ascending: false })
-    .limit(3)
-    .returns<ArticleListItem[]>();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const [{ data: related }, { count: likeCount }, { data: existingLike }] = await Promise.all([
+    supabase
+      .from("articles")
+      .select(ARTICLE_LIST_SELECT)
+      .eq("status", "published")
+      .eq("category_slug", article.category_slug)
+      .neq("id", article.id)
+      .order("published_at", { ascending: false })
+      .limit(3)
+      .returns<ArticleListItem[]>(),
+    supabase.from("article_likes").select("*", { count: "exact", head: true }).eq("article_id", article.id),
+    user
+      ? supabase.from("article_likes").select("article_id").eq("article_id", article.id).eq("profile_id", user.id).maybeSingle()
+      : Promise.resolve({ data: null }),
+  ]);
 
   const svg = article.cover_url
     ? null
@@ -68,7 +79,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
             <span className="eyebrow">{cat.label}</span>
             <h1>{article.title}</h1>
             <div className="article-meta">
-              {article.is_sponsored && <span className="pr-badge">PR</span>}
               <span>{formatDate(article.published_at)}</span>
               <span>{article.contact_org}</span>
             </div>
@@ -105,12 +115,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
             </div>
           </div>
         )}
-
-        {article.is_sponsored && (
-          <div className="article-body">
-            <p className="pr-note">この記事は広告枠掲載（PR）です。掲載費用は投稿者から受け取っています。</p>
-          </div>
-        )}
+        <div className="article-body">
+          <LikeButton articleId={article.id} initialCount={likeCount ?? 0} initialLiked={!!existingLike} isLoggedIn={!!user} />
+        </div>
       </article>
 
       {related && related.length > 0 && (

@@ -21,11 +21,6 @@ export default function PostCard({ article }: { article: ArticleListItem }) {
       </div>
       <div className="post-body">
         <span className="post-cat" style={{ background: cat.bg, color: cat.fg }}>
-          {article.is_sponsored && (
-            <span className="pr-badge" style={{ marginRight: 6 }}>
-              PR
-            </span>
-          )}
           {cat.label}
         </span>
         <h3>{article.title}</h3>

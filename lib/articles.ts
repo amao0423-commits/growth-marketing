@@ -7,12 +7,11 @@ export type ArticleListItem = {
   category_slug: string;
   contact_org: string;
   cover_url: string | null;
-  is_sponsored: boolean;
   published_at: string;
 };
 
 export const ARTICLE_LIST_SELECT =
-  "id, title, excerpt, category_slug, contact_org, cover_url, is_sponsored, published_at";
+  "id, title, excerpt, category_slug, contact_org, cover_url, published_at";
 
 export function formatDate(iso: string): string {
   const d = new Date(iso);

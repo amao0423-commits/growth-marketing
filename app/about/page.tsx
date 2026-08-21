@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "アドプレスについて",
-  description: "アドプレスは、企業・団体・個人が無料でプレスリリースを掲載できるメディアです。",
+  description: "アドプレスは、編集部が確認したプレスリリースやニュースを掲載するメディアです。",
 };
 
 export default function AboutPage() {
@@ -16,21 +16,16 @@ export default function AboutPage() {
           <h1>アドプレスについて</h1>
 
           <p className="intro">
-            アドプレス（ADPRESS）は、企業・団体・個人が無料でプレスリリースを掲載できるメディアです。Googleアカウントでログインして投稿するだけで、最短数十分で記事が公開されます。
+            アドプレス（ADPRESS）は、編集部が確認したプレスリリースやニュースを掲載するメディアです。現在、記事の投稿は編集部アカウントに限定しています。
           </p>
 
           <h2>特徴</h2>
           <ul>
-            <li>掲載料は無料（広告枠掲載を除く）</li>
-            <li>投稿は審査を待たずにそのまま公開</li>
+            <li>掲載料は無料</li>
+            <li>編集部アカウントからの記事投稿に対応</li>
             <li>K-POP／韓国情報／エンタメ／IT・テック／SNS・マーケ／ライフ／旅行／ビジネスの8カテゴリ</li>
-            <li>マイページで投稿記事の管理・紹介リンクの提出が可能</li>
+            <li>マイページで記事の状態やお知らせを確認可能</li>
           </ul>
-
-          <h2>広告枠掲載</h2>
-          <p>
-            より多くの読者に届けたいプレスリリースには、有料の広告枠掲載（1本20,000円・税別）もご用意しています。詳しくは<a href="/ad/">広告枠掲載のご案内</a>をご覧ください。
-          </p>
 
           <div className="sig">
             <strong>運営者情報</strong>
@@ -48,10 +43,6 @@ export default function AboutPage() {
               <dt>お問い合わせ</dt>
               <dd>
                 <a href="/contact/">お問い合わせフォーム</a>
-              </dd>
-              <dt>広告枠掲載</dt>
-              <dd>
-                <a href="mailto:a-ando@hotseller.jp">a-ando@hotseller.jp</a>
               </dd>
             </dl>
           </div>

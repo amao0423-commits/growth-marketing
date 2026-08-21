@@ -28,7 +28,7 @@ export default function SubmitForm({
   const [tel, setTel] = useState("");
   const [siteUrl, setSiteUrl] = useState("");
   const [contactPublic, setContactPublic] = useState(false);
-  const [agree, setAgree] = useState({ rights: false, referral: false, terms: false });
+  const [agree, setAgree] = useState({ rights: false, terms: false });
   const [errors, setErrors] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<SubmitResult | null>(null);
@@ -77,7 +77,7 @@ export default function SubmitForm({
   function openLinkBox() {
     saveSelection();
     if (countLinksInEditor() >= MAX_LINKS) {
-      setErrors(["無料掲載ではリンクは合計2本までです（本文中＋参考リンクの合算）。"]);
+      setErrors(["リンクは合計2本までです（本文中＋参考リンクの合算）。"]);
       return;
     }
     const sel = window.getSelection();
@@ -139,10 +139,10 @@ export default function SubmitForm({
     if (!category) errs.push("カテゴリを選んでください");
     if (!title.trim()) errs.push("タイトルを入力してください");
     if (bodyChars < 200) errs.push("本文は200字以上入力してください");
-    if (totalLinks > MAX_LINKS) errs.push(`無料掲載ではリンクは${MAX_LINKS}本までです（現在${totalLinks}本）`);
+    if (totalLinks > MAX_LINKS) errs.push(`リンクは${MAX_LINKS}本までです（現在${totalLinks}本）`);
     if (!org.trim()) errs.push("発信元（会社名・団体名等）を入力してください");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.push("連絡先メールアドレスを正しく入力してください");
-    if (!agree.rights || !agree.referral || !agree.terms) errs.push("すべての確認事項にチェックしてください");
+    if (!agree.rights || !agree.terms) errs.push("すべての確認事項にチェックしてください");
     if (errs.length) {
       setErrors(errs);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -196,9 +196,9 @@ export default function SubmitForm({
           </p>
         </section>
         <section className="sec">
-          <h2>記事の紹介について</h2>
+          <h2>記事の管理</h2>
           <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 14 }}>
-            公開日から14日以内に、記事を紹介したページ（自社サイトのお知らせ欄・SNS投稿など）のURLを<a href="/mypage/">マイページ</a>から提出してください。提出がない場合、記事が取り下げられることがあります。
+            公開した記事は<a href="/mypage/">マイページ</a>から確認できます。必要に応じて、掲載後の状態やお知らせを確認してください。
           </p>
           <a href="/mypage/" className="post-btn" style={{ height: 50, fontSize: 15 }}>
             マイページを開く
@@ -334,8 +334,7 @@ export default function SubmitForm({
           </div>
           {linkCount >= MAX_LINKS && (
             <div className="quota">
-              リンクは本文と参考リンクをあわせて{MAX_LINKS}本までです。3本目以降を掲載したい場合は、
-              <a href="/ad/">広告枠掲載（¥20,000）</a>で5本まで挿入できます。
+              リンクは本文と参考リンクをあわせて{MAX_LINKS}本までです。
             </div>
           )}
         </div>
@@ -428,12 +427,6 @@ export default function SubmitForm({
         </div>
         <div className="f">
           <label className="check">
-            <input type="checkbox" checked={agree.referral} onChange={(e) => setAgree((p) => ({ ...p, referral: e.target.checked }))} />
-            <span>掲載後は、自社サイトのお知らせやSNSなどで記事を紹介し、そのページのURLをマイページから提出します。（14日以内に提出がない場合、記事は取り下げられます）</span>
-          </label>
-        </div>
-        <div className="f">
-          <label className="check">
             <input type="checkbox" checked={agree.terms} onChange={(e) => setAgree((p) => ({ ...p, terms: e.target.checked }))} />
             <span>
               <a href="/guideline/">掲載ガイドライン</a>と<a href="/terms/">利用規約</a>に同意します。
@@ -441,12 +434,12 @@ export default function SubmitForm({
           </label>
         </div>
         <button type="submit" className="submit" disabled={submitting}>
-          {submitting ? "送信中…" : "審査に出して掲載する"}
+          {submitting ? "送信中…" : "記事を公開する"}
         </button>
       </section>
 
       <p className="foot-note">
-        送信すると自動審査が始まります。掲載料はかかりません。
+        送信すると記事は公開され、自動審査が始まります。掲載料はかかりません。
         <br />
         審査で修正が必要になった場合は、マイページのお知らせでご案内します。
       </p>

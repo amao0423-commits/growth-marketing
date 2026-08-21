@@ -19,9 +19,8 @@ const TOC = [
   { href: "#share", label: "8. 掲載後のご紹介" },
   { href: "#edit", label: "9. 記事の編集" },
   { href: "#remove", label: "10. 記事の取り下げ" },
-  { href: "#ad", label: "11. 広告枠掲載" },
-  { href: "#disclaimer", label: "12. 免責事項" },
-  { href: "#contact", label: "13. お問い合わせ" },
+  { href: "#disclaimer", label: "11. 免責事項" },
+  { href: "#contact", label: "12. お問い合わせ" },
 ];
 
 export default function GuidelinePage() {

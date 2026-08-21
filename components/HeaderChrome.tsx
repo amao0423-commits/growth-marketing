@@ -7,7 +7,7 @@ import { CATEGORIES } from "@/lib/categories";
 // ホーム／カテゴリ一覧ページは検索ボックス＋カテゴリチップ付きの .top ヘッダー
 // （design-ref/index.html・category-korea.html 準拠）、それ以外のページは
 // 従来の簡易ヘッダー（.ap-header、design-ref/article.html 等準拠）を出し分ける。
-export default function HeaderChrome({ isLoggedIn }: { isLoggedIn: boolean }) {
+export default function HeaderChrome({ isLoggedIn, isEditorial }: { isLoggedIn: boolean; isEditorial: boolean }) {
   const pathname = usePathname();
   const isRich = pathname === "/" || pathname.startsWith("/category/");
 
@@ -42,9 +42,11 @@ export default function HeaderChrome({ isLoggedIn }: { isLoggedIn: boolean }) {
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
               {authLinks}
-              <Link href="/submit/" className="post-btn">
-                記事を投稿する<span>無料</span>
-              </Link>
+              {isEditorial && (
+                <Link href="/submit/" className="post-btn">
+                  記事を投稿する
+                </Link>
+              )}
             </div>
           </div>
         </header>
@@ -98,9 +100,11 @@ export default function HeaderChrome({ isLoggedIn }: { isLoggedIn: boolean }) {
         </nav>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           {authLinks}
-          <Link className="ap-post" href="/submit/">
-            記事を投稿する
-          </Link>
+          {isEditorial && (
+            <Link className="ap-post" href="/submit/">
+              記事を投稿する
+            </Link>
+          )}
         </div>
       </div>
     </header>

@@ -32,8 +32,7 @@ create type article_status as enum (
 );
 
 create type article_source as enum (
-  'user',           -- 一般ユーザーの無料投稿
-  'sponsored',      -- 有料の広告記事（PR表記が必須）
+  'user',           -- 旧仕様の一般ユーザー投稿
   'editorial',      -- 編集部記事
   'legacy'          -- 旧 /blog/ から移行した編集部記事
 );
@@ -47,17 +46,7 @@ create type referral_status as enum (
   'submitted',      -- 提出済み・確認待ち
   'verified',       -- 確認済み
   'rejected',       -- 確認できなかった（リンク切れ・該当記事なし）
-  'waived'          -- 提出不要（広告記事・編集部記事）
-);
-
-create type ad_order_status as enum (
-  'inquiry',        -- 申込受付
-  'awaiting_draft', -- 原稿待ち
-  'producing',      -- 制作中
-  'published',      -- 掲載中
-  'invoiced',       -- 請求済
-  'paid',           -- 入金済
-  'cancelled'
+  'waived'          -- 提出不要（編集部記事）
 );
 
 create type notification_type as enum (
@@ -156,7 +145,6 @@ create table articles (
 
   status            article_status not null default 'published',
   source            article_source not null default 'user',
-  is_sponsored      boolean not null default false,   -- true なら PR 表記が必須
 
   -- URL。legacy は /blog/{legacy_path}、それ以外は /news/{id}/
   legacy_path       text unique,
@@ -187,16 +175,13 @@ create table articles (
   created_at        timestamptz not null default now(),
   updated_at        timestamptz not null default now(),
 
-  constraint sponsored_link_cap check (
-    (is_sponsored and link_count <= 5) or (not is_sponsored and link_count <= 2)
-  ),
+  constraint link_cap check (link_count <= 2),
   constraint image_cap check (image_count <= 5)
 );
 
 create index on articles (status, published_at desc);
 create index on articles (category_slug, published_at desc) where status = 'published';
 create index on articles (author_id, created_at desc);
-create index on articles (is_sponsored, published_at desc) where status = 'published';
 create index articles_body_trgm on articles using gin (body_text gin_trgm_ops);
 
 create or replace function set_article_deadlines() returns trigger as $$
@@ -223,7 +208,7 @@ create table article_links (
   url         text not null,
   anchor_text text,
   placement   text not null check (placement in ('inline','outline')),  -- 本文中 / 記事末尾
-  rel         text not null default 'nofollow',   -- 有料記事は 'sponsored'
+  rel         text not null default 'nofollow',
   click_count int not null default 0,
   created_at  timestamptz not null default now()
 );
@@ -242,6 +227,19 @@ end $$ language plpgsql;
 create trigger trg_sync_link_count
   after insert or delete on article_links
   for each statement execute function sync_link_count();
+
+-- =============================================================================
+-- article_likes — ログインユーザーの記事いいね
+-- =============================================================================
+
+create table article_likes (
+  article_id  bigint not null references articles(id) on delete cascade,
+  profile_id  uuid not null references profiles(id) on delete cascade,
+  created_at  timestamptz not null default now(),
+  primary key (article_id, profile_id)
+);
+
+create index on article_likes (profile_id, created_at desc);
 
 -- =============================================================================
 -- review_logs — ルールベース審査の記録（非ブロッキング。事後確認用）
@@ -300,7 +298,7 @@ create table referrals (
 
 create index on referrals (status, due_at);
 
--- 公開と同時に referrals を作る。広告記事・編集部記事は waived
+-- 公開と同時に referrals を作る。編集部記事は waived
 create or replace function create_referral_on_insert() returns trigger as $$
 begin
   if new.status = 'published' then
@@ -308,7 +306,7 @@ begin
     values (
       new.id,
       new.published_at + interval '14 days',
-      case when new.source = 'user' and not new.is_sponsored
+      case when new.source = 'user'
            then 'pending'::referral_status
            else 'waived'::referral_status end
     )
@@ -365,60 +363,6 @@ end $$ language plpgsql;
 create trigger trg_notify_removed
   after update on articles
   for each row execute function notify_on_removed();
-
--- =============================================================================
--- ad_orders — 広告枠の申込（¥20,000・請求書払い）
--- =============================================================================
-
-create table ad_orders (
-  id             bigserial primary key,
-  order_no       text not null unique
-                 default 'AD-' || to_char(now(),'YYYYMM') || '-' ||
-                         lpad((nextval('ad_orders_id_seq'))::text, 4, '0'),
-
-  profile_id     uuid references profiles(id),
-  article_id     bigint references articles(id),   -- 掲載後に紐づく
-
-  status         ad_order_status not null default 'inquiry',
-
-  -- 申込内容
-  company_name   text not null,
-  contact_name   text not null,
-  contact_email  text not null,
-  contact_tel    text,
-  billing_name   text,                             -- 請求書の宛名
-  billing_address text,
-  wants_writing  boolean not null default false,   -- 記事作成代行（任意）
-  desired_date   date,
-  memo           text,
-
-  -- 金額
-  amount         int not null default 20000,       -- 税別
-  tax_rate       numeric(4,3) not null default 0.10,
-  amount_total   int generated always as
-                 (round(amount * (1 + 0.10))::int) stored,
-
-  -- 掲載枠
-  top_slot_until      timestamptz,                 -- トップPR枠 7日間
-  category_slot_until timestamptz,                 -- カテゴリ上部 14日間
-
-  -- 請求
-  invoice_no     text,
-  invoiced_at    timestamptz,
-  due_date       date,
-  paid_at        timestamptz,
-  payment_note   text,
-
-  created_at     timestamptz not null default now(),
-  updated_at     timestamptz not null default now()
-);
-
-create index on ad_orders (status, created_at desc);
-create index on ad_orders (profile_id);
-create index on ad_orders (invoiced_at) where paid_at is null;
-
-comment on table ad_orders is
-  'オンライン決済は行わない。掲載後に請求書を発行し銀行振込で回収する';
 
 -- =============================================================================
 -- article_stats — PVレポート用の日次集計
@@ -482,10 +426,10 @@ create index on content_reports (handled_at) where handled_at is null;
 alter table profiles       enable row level security;
 alter table articles       enable row level security;
 alter table article_links  enable row level security;
+alter table article_likes  enable row level security;
 alter table referrals      enable row level security;
 alter table review_logs    enable row level security;
 alter table notifications  enable row level security;
-alter table ad_orders      enable row level security;
 alter table article_stats  enable row level security;
 alter table content_reports enable row level security;
 
@@ -514,7 +458,7 @@ create policy articles_public_read on articles
 create policy articles_own on articles
   for select using (author_id = auth.uid());
 create policy articles_insert on articles
-  for insert with check (author_id = auth.uid());
+  for insert with check (author_id = auth.uid() and is_editor());
 -- 公開後の状態変更（削除など）はサーバー側（service role）で行う。ここでは
 -- 投稿者による更新は許可しない（投稿後は本文を編集できない仕様のため）。
 create policy articles_editor on articles
@@ -527,6 +471,15 @@ create policy links_public_read on article_links
 create policy links_own on article_links
   for select using (exists (
     select 1 from articles a where a.id = article_id and a.author_id = auth.uid()));
+
+-- article_likes：公開記事のいいね数は誰でも読める。いいね操作は本人のみ。
+create policy likes_public_read on article_likes
+  for select using (exists (
+    select 1 from articles a where a.id = article_id and a.status = 'published'));
+create policy likes_self_insert on article_likes
+  for insert with check (profile_id = auth.uid());
+create policy likes_self_delete on article_likes
+  for delete using (profile_id = auth.uid());
 
 -- referrals：本人は自分の記事の分だけ。提出のみ可、確認は編集部
 create policy referrals_own_read on referrals
@@ -552,10 +505,6 @@ create policy notifications_own on notifications
 create policy notifications_own_update on notifications
   for update using (profile_id = auth.uid()) with check (profile_id = auth.uid());
 create policy notifications_editor on notifications
-  for all using (is_editor());
-
--- ad_orders：編集部のみ。申込フォームは service role で書き込む
-create policy ad_orders_editor on ad_orders
   for all using (is_editor());
 
 -- article_stats：本人はレポート公開日以降のみ

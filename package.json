@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "アドプレス（ADPRESS）— 誰でも無料でプレスリリースを掲載できるメディア。Next.js + Supabase。",
+  "description": "アドプレス（ADPRESS）— 編集部が確認したプレスリリースやニュースを掲載するメディア。Next.js + Supabase。",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

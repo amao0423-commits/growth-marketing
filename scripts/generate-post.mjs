@@ -1043,7 +1043,6 @@ async function main() {
       excerpt: article.cardDescription,
       status: "published",
       source: "editorial",
-      is_sponsored: false,
       contact_org: EDITORIAL_DISPLAY_NAME,
       contact_email: EDITORIAL_EMAIL,
       contact_public: false,

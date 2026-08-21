@@ -207,7 +207,6 @@ async function main() {
         excerpt: parsed.excerpt,
         status: "published",
         source: "legacy",
-        is_sponsored: false,
         legacy_path: parsed.legacyPath,
         contact_org: EDITORIAL_DISPLAY_NAME,
         contact_email: EDITORIAL_EMAIL,

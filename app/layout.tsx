@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | アドプレス",
   },
   description:
-    "アドプレスは、企業・団体・個人が無料でプレスリリースを掲載できるメディアです。",
+    "アドプレスは、編集部が確認したプレスリリースやニュースを掲載するメディアです。",
 };
 
 export default function RootLayout({

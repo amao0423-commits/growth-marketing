@@ -33,7 +33,6 @@ export default function Timeline({ articles }: { articles: ArticleListItem[] }) 
                   <div className="time mono">{formatTime(a.published_at)}</div>
                   <div>
                     <div className="badges">
-                      {a.is_sponsored && <span className="pr">PR</span>}
                       <span className="tag" style={{ background: cat.bg, color: cat.fg }}>
                         {cat.label}
                       </span>
