@@ -35,6 +35,7 @@ export default function HeaderChrome({ isLoggedIn }: { isLoggedIn: boolean; isEd
         <header className="top">
           <div className="wrap top-in">
             <Link href="/" className="mast">
+              <img src="/logo-icon.png" alt="" width={33} height={25} className="mast-logo" />
               アドプレス<small>ADPRESS</small>
             </Link>
             <div className="search">
@@ -84,6 +85,7 @@ export default function HeaderChrome({ isLoggedIn }: { isLoggedIn: boolean; isEd
     <header className="ap-header">
       <div className="ap-wrap">
         <Link className="ap-mast" href="/">
+          <img src="/logo-icon.png" alt="" width={29} height={22} className="mast-logo" />
           アドプレス<small>ADPRESS</small>
         </Link>
         <nav className="ap-nav">
