@@ -63,6 +63,13 @@ const AUTH_DOMAINS = [
   "www.tiktok.com", "ads.tiktok.com", "business.tiktok.com",
   "business.x.com", "help.x.com", "thinkwithgoogle.com",
   "www.soumu.go.jp", "www.meti.go.jp", "www.caa.go.jp",
+  "www.youtube.com", "youtube.com", "creatoracademy.youtube.com",
+  "www.lycbiz.com", "linebiz.com", "www.linebiz.com",
+  "www.threads.net", "www.threads.com", "about.threads.net",
+  "note.com",
+  // ソーシャルリスニング等、政府/プラットフォーム公式だけでは情報が薄いテーマ向けに、
+  // 当該分野の主要ベンダー公式サイト（自社製品・手法についての一次情報）を権威ドメインとして許可
+  "www.meltwater.com", "www.brandwatch.com", "www.hootsuite.com",
 ];
 
 const FALLBACK_SOURCE_URLS = {
@@ -71,6 +78,8 @@ const FALLBACK_SOURCE_URLS = {
     "https://help.instagram.com/",
     "https://www.tiktok.com/business/en",
     "https://business.x.com/",
+    "https://www.youtube.com/creators/",
+    "https://www.lycbiz.com/jp/service/line-official-account/",
   ],
   ads: [
     "https://www.facebook.com/business/ads",
@@ -128,7 +137,7 @@ async function claudeText(prompt, opts = {}) {
   } else {
     args.push("--tools", "");
   }
-  const writeMin = Number(process.env.WRITE_TIMEOUT_MIN || 6);
+  const writeMin = Number(process.env.WRITE_TIMEOUT_MIN || 9);
   const researchMin = Number(process.env.RESEARCH_TIMEOUT_MIN || 9);
   const timeoutMs = (opts.webTools ? researchMin : writeMin) * 60 * 1000;
   const { stdout, stderr, code } = await runClaude(args, prompt, timeoutMs);
@@ -290,6 +299,68 @@ function enforceExternalAttrs(html) {
     if (!/rel=/.test(attrs)) attrs += ' rel="noopener"';
     return `<a href="${href}"${attrs}>`;
   });
+}
+
+// --- リンク自浄化 ---
+// モデルは「このリストのURLだけを使え」という指示があっても、しばしば自分の記憶から
+// もっともらしいURL（例: support.google.com/youtube/answer/12345）を書いてしまう。
+// これを毎回フルリトライで弾くと、同じ幻覚URLを繰り返し出して品質ゲートを通過できず、
+// 5回リトライしてもタイムアウトするだけ、という事態が起きる（実際に観測された）。
+// そこで、許可リスト外・実在しない内部リンクは「本文を丸ごと書き直させる」のではなく、
+// リンクタグだけを剥がしてテキストとして残す形で自動修正する。
+function unlinkHrefs(html, hrefSet) {
+  if (!hrefSet.size) return html;
+  return String(html || "").replace(/<a\s+href="([^"]+)"([^>]*)>([\s\S]*?)<\/a>/g, (full, href, attrs, text) => {
+    return hrefSet.has(href) ? text : full;
+  });
+}
+
+function collectBadHrefs(fullBody, { sourceLinks, cocoSet, adpressIdSet, consultUrl, baseHost }) {
+  const allowedSource = new Set(sourceLinks);
+  const bad = new Set();
+  for (const h of extractHrefs(fullBody)) {
+    if (h === consultUrl || cocoSet.has(h)) continue;
+    if (/^\/news\/[0-9]+\/?$/.test(h)) {
+      const id = h.match(/\/news\/([0-9]+)/)?.[1];
+      if (!adpressIdSet.has(id)) bad.add(h);
+      continue;
+    }
+    if (/^https?:\/\//.test(h) && hostOf(h) !== baseHost && !allowedSource.has(h)) {
+      bad.add(h);
+    }
+  }
+  return bad;
+}
+
+const ARTICLE_HTML_FIELDS = ["leadParagraphHtml", "authorProfileHtml", "expertiseNoteHtml", "conclusionHtml"];
+
+function sanitizeArticleLinks(article, ctx) {
+  const fullBody = [
+    article.leadParagraphHtml, article.authorProfileHtml, article.expertiseNoteHtml,
+    ...(article.originalInsights || []), ...(article.practicalExamples || []).map((e) => e.html),
+    ...article.sections.map((s) => s.html), article.conclusionHtml,
+    ...(article.faq || []).map((f) => f.answerHtml),
+  ].join("\n");
+  const bad = collectBadHrefs(fullBody, ctx);
+
+  // referencesUsed は本文中の<a href>とは別の構造化フィールドで、本文にリンクとして
+  // 出てこない参照資料をモデルが書くこともあるため、bad（本文hrefから収集した集合）だけでは
+  // 拾えない。sourceLinks/cocoSetに対して独立に検証する。
+  const allowedSource = new Set(ctx.sourceLinks);
+  const badRefs = (article.referencesUsed || []).filter(
+    (r) => !allowedSource.has(r.url) && !ctx.cocoSet.has(r.url)
+  );
+
+  if (!bad.size && !badRefs.length) return [];
+  const clean = (html) => unlinkHrefs(html, bad);
+  for (const field of ARTICLE_HTML_FIELDS) article[field] = clean(article[field]);
+  article.originalInsights = (article.originalInsights || []).map(clean);
+  article.practicalExamples = (article.practicalExamples || []).map((e) => ({ ...e, html: clean(e.html) }));
+  article.sections = article.sections.map((s) => ({ ...s, html: clean(s.html) }));
+  article.faq = (article.faq || []).map((f) => ({ ...f, answerHtml: clean(f.answerHtml) }));
+  const badRefUrls = new Set(badRefs.map((r) => r.url));
+  article.referencesUsed = (article.referencesUsed || []).filter((r) => !badRefUrls.has(r.url));
+  return [...new Set([...bad, ...badRefUrls])];
 }
 
 // 毎日1本・カテゴリはランダムに選ぶ。未使用トピックが残っているカテゴリの中から
@@ -476,6 +547,11 @@ ${cocoList}
 # 使用可能な公式出典URL
 本文にはこの中から2〜4本のみ使用してください。
 存在しないURLやリスト外URLは絶対に作らないでください。
+
+重要：あなた自身の知識にある「support.google.com/answer/12345」のような具体的なヘルプ記事URLを
+記憶や推測で書かないでください。記事IDやクエリパラメータは実在するかどうか検証できません。
+必ず下記リストの文字列をそのまま1文字も変えずにコピーして使用し、リストにないURLは
+本文にもreferencesUsedにも一切登場させないでください。
 
 ${sourceList}
 
@@ -1078,6 +1154,17 @@ async function main() {
     for (const e of draft.practicalExamples || []) e.html = enforceExternalAttrs(e.html);
     draft.conclusionHtml = enforceExternalAttrs(draft.conclusionHtml);
     for (const f of draft.faq || []) f.answerHtml = enforceExternalAttrs(f.answerHtml);
+
+    const removedLinks = sanitizeArticleLinks(draft, {
+      sourceLinks,
+      cocoSet: new Set(cocomarke.map((c) => c.url)),
+      adpressIdSet: adpressCandidateIds,
+      consultUrl: CONSULT_URL,
+      baseHost: hostOf(BASE_URL),
+    });
+    if (removedLinks.length) {
+      console.log(`  リンク自動修正: 許可外/未確認のURLを${removedLinks.length}件除去 → ${removedLinks.join(", ")}`);
+    }
 
     gate = await qualityGate(draft, cocomarke, sourceLinks, idea, adpressCandidateIds);
     if (gate.ok) { article = draft; break; }
