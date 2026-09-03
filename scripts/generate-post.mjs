@@ -425,7 +425,8 @@ function sanitizeArticleLinks(article, ctx) {
 
 // 毎日1本、categoryRotation の順にカテゴリを交互に巡回する（各カテゴリの未使用トピックが
 // 尽きるまで公平に順番が回ってくるよう、topics.nextRotationIndex から一周スキャンする）。
-function pickTopic(topics) {
+// excludeCategories: 今回の実行中に生成失敗して既にスキップしたカテゴリ（別カテゴリを探すため除外する）
+function pickTopic(topics, excludeCategories = new Set()) {
   const used = new Set(topics.usedTopicIds);
   // 動作確認・臨時生成用: FORCE_CATEGORY を指定すると、ローテーションを無視してそのカテゴリの
   // 未使用アイデアから選ぶ（本番の日次実行では未指定＝通常の交互巡回）。
@@ -444,6 +445,7 @@ function pickTopic(topics) {
   for (let i = 0; i < n; i++) {
     const idx = (start + i) % n;
     const cat = order[idx];
+    if (excludeCategories.has(cat)) continue;
     const candidates = topics.clusters[cat].ideas.filter((x) => !used.has(x.id));
     if (candidates.length > 0) {
       const idea = candidates[Math.floor(Math.random() * candidates.length)];
@@ -1445,148 +1447,171 @@ async function main() {
   const supabase = createClient(supabaseUrl, serviceKey, { auth: { autoRefreshToken: false, persistSession: false } });
 
   const topics = readJson("content/topics.json");
-
-  const choice = pickTopic(topics);
-  if (!choice) { console.log("未使用トピックがありません。content/topics.json の ideas を追加してください。"); return; }
-  const { category, idea } = choice;
-  const isNews = isNewsCategory(category);
-  const catLabel = GM_CATEGORY_LABELS[category] || category;
-  const categorySlug = categorySlugFor(category);
-  console.log(`▶ トピック: [${category}→${categorySlug}]${isNews ? "（ニュース系）" : "（マーケ系）"} ${idea.intent}\n  model=${MODEL}`);
-
   const editorialId = await ensureEditorialProfile(supabase);
 
-  // COCOマーケ相互リンクはマーケ系カテゴリのみ（ニュース系はcocomarke.comと無関係のため取得しない）
-  let cocomarke = [];
-  if (!isNews) {
-    const cocomarkeAll = await fetchCocomarkeArticles();
-    cocomarke = pickCocomarkeCandidates(cocomarkeAll, idea);
-    console.log(`  cocomarke記事 ${cocomarkeAll.length}件から関連候補 ${cocomarke.length}件を選定`);
-  }
+  // カテゴリ単位で生成に失敗した場合は、そのカテゴリを今回はスキップして別カテゴリを探す
+  // （放置してよい・当日の投稿を諦めるのではなく別カテゴリで公開を試みる）。
+  // 全カテゴリで失敗した場合のみ、何も公開せずに正常終了する（CIを赤くしない）。
+  const excludeCategories = new Set();
+  const rotationLength = Array.isArray(topics.categoryRotation) ? topics.categoryRotation.length : 1;
+  let published = false;
 
-  // アドプレス内部リンク候補：同カテゴリ優先で直近の公開記事を取得
-  const { data: sameCatArticles } = await supabase
-    .from("articles")
-    .select("id, title")
-    .eq("status", "published")
-    .eq("category_slug", categorySlug)
-    .order("published_at", { ascending: false })
-    .limit(15);
-  const { data: otherArticles } = await supabase
-    .from("articles")
-    .select("id, title")
-    .eq("status", "published")
-    .neq("category_slug", categorySlug)
-    .order("published_at", { ascending: false })
-    .limit(10);
-  const adpressCandidates = [...(sameCatArticles || []), ...(otherArticles || [])].slice(0, 20);
-  const adpressCandidateIds = new Set(adpressCandidates.map((a) => String(a.id)));
-  console.log(`  アドプレス内部リンク候補 ${adpressCandidates.length}件`);
+  for (let categoryAttempt = 0; !published && categoryAttempt <= rotationLength; categoryAttempt++) {
+    const choice = pickTopic(topics, excludeCategories);
+    if (!choice) {
+      console.log(categoryAttempt === 0
+        ? "未使用トピックがありません。content/topics.json の ideas を追加してください。"
+        : "他に試せるカテゴリがありません。本日はここまで。");
+      break;
+    }
+    const { category, idea } = choice;
+    const isNews = isNewsCategory(category);
+    const catLabel = GM_CATEGORY_LABELS[category] || category;
+    const categorySlug = categorySlugFor(category);
+    console.log(`▶ トピック: [${category}→${categorySlug}]${isNews ? "（ニュース系）" : "（マーケ系）"} ${idea.intent}\n  model=${MODEL}`);
 
-  let findings = "";
-  if (ENABLE_RESEARCH) {
-    console.log("▶ Web検索で調査中…");
     try {
-      findings = await research(idea, catLabel, isNews);
+      // COCOマーケ相互リンクはマーケ系カテゴリのみ（ニュース系はcocomarke.comと無関係のため取得しない）
+      let cocomarke = [];
+      if (!isNews) {
+        const cocomarkeAll = await fetchCocomarkeArticles();
+        cocomarke = pickCocomarkeCandidates(cocomarkeAll, idea);
+        console.log(`  cocomarke記事 ${cocomarkeAll.length}件から関連候補 ${cocomarke.length}件を選定`);
+      }
+
+      // アドプレス内部リンク候補：同カテゴリ優先で直近の公開記事を取得
+      const { data: sameCatArticles } = await supabase
+        .from("articles")
+        .select("id, title")
+        .eq("status", "published")
+        .eq("category_slug", categorySlug)
+        .order("published_at", { ascending: false })
+        .limit(15);
+      const { data: otherArticles } = await supabase
+        .from("articles")
+        .select("id, title")
+        .eq("status", "published")
+        .neq("category_slug", categorySlug)
+        .order("published_at", { ascending: false })
+        .limit(10);
+      const adpressCandidates = [...(sameCatArticles || []), ...(otherArticles || [])].slice(0, 20);
+      const adpressCandidateIds = new Set(adpressCandidates.map((a) => String(a.id)));
+      console.log(`  アドプレス内部リンク候補 ${adpressCandidates.length}件`);
+
+      let findings = "";
+      if (ENABLE_RESEARCH) {
+        console.log("▶ Web検索で調査中…");
+        try {
+          findings = await research(idea, catLabel, isNews);
+        } catch (e) {
+          console.log(`  調査に失敗したため調査なしで継続します: ${String(e?.message || e).slice(0, 200)}`);
+          findings = "";
+        }
+      } else {
+        console.log("▶ 調査スキップ（モデル知識＋カテゴリ公式出典で生成。最新Web検索が必要なら ENABLE_RESEARCH=1）");
+      }
+      const sourceLinks = await buildSourceLinks(findings, category);
+      if (sourceLinks.length < 2) throw new Error("公式出典URLを2本以上確認できませんでした。調査クエリまたはfallback sourceを見直してください。");
+      console.log(`  公式出典URL ${sourceLinks.length}件を確認`);
+
+      console.log("▶ アイキャッチ画像を出典記事から探索中…");
+      // 直近公開記事で使用済みの画像は除外し、使い回しを防ぐ
+      const { data: recentCovers } = await supabase
+        .from("articles")
+        .select("cover_url")
+        .eq("status", "published")
+        .eq("cover_is_generated", false)
+        .not("cover_url", "is", null)
+        .order("published_at", { ascending: false })
+        .limit(30);
+      const usedImageKeys = new Set((recentCovers || []).map((a) => imageIdentityKey(a.cover_url)));
+      const eyecatch = await findEyecatchImage(sourceLinks, usedImageKeys);
+      console.log(eyecatch
+        ? `  アイキャッチ取得: ${eyecatch.url}（出典: ${eyecatch.sourcePage}）`
+        : "  アイキャッチ取得失敗。自動生成SVGにフォールバックします。");
+
+      let article = null, gate = null, feedback = "";
+      for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+        console.log(`▶ 記事生成（試行 ${attempt + 1}/${MAX_RETRIES + 1}）…`);
+        const draft = isNews
+          ? await writeNewsArticle(idea, catLabel, findings, adpressCandidates, sourceLinks, feedback)
+          : await writeArticle(idea, catLabel, findings, cocomarke, adpressCandidates, sourceLinks, feedback, categorySlug);
+        for (const s of draft.sections) s.html = enforceExternalAttrs(s.html);
+        draft.leadParagraphHtml = enforceExternalAttrs(draft.leadParagraphHtml);
+        draft.authorProfileHtml = enforceExternalAttrs(draft.authorProfileHtml);
+        draft.expertiseNoteHtml = enforceExternalAttrs(draft.expertiseNoteHtml);
+        for (const e of draft.practicalExamples || []) e.html = enforceExternalAttrs(e.html);
+        draft.conclusionHtml = enforceExternalAttrs(draft.conclusionHtml);
+        for (const f of draft.faq || []) f.answerHtml = enforceExternalAttrs(f.answerHtml);
+
+        const removedLinks = sanitizeArticleLinks(draft, {
+          sourceLinks,
+          cocoSet: new Set(cocomarke.map((c) => c.url)),
+          adpressIdSet: adpressCandidateIds,
+          consultUrl: isNews ? "" : CONSULT_URL,
+          baseHost: hostOf(BASE_URL),
+        });
+        if (removedLinks.length) {
+          console.log(`  リンク自動修正: 許可外/未確認のURLを${removedLinks.length}件除去 → ${removedLinks.join(", ")}`);
+        }
+
+        gate = isNews
+          ? await qualityGateNews(draft, sourceLinks, idea, adpressCandidateIds)
+          : await qualityGate(draft, cocomarke, sourceLinks, idea, adpressCandidateIds);
+        if (gate.ok) { article = draft; break; }
+        feedback = gate.issues.join("\n");
+        console.log(`  品質ゲート不通過:\n   - ${gate.issues.join("\n   - ")}`);
+      }
+      if (!article) { throw new Error(`品質基準を満たせませんでした。\n${feedback}`); }
+      console.log(`✓ 品質ゲート通過（本文 約${gate.textLen}字）`);
+
+      const dates = jstDate();
+      const bodyHtml = buildBodyHtml(article);
+
+      const { data: inserted, error: insertErr } = await supabase
+        .from("articles")
+        .insert({
+          author_id: editorialId,
+          category_slug: categorySlug,
+          title: article.h1,
+          body_html: bodyHtml,
+          excerpt: article.cardDescription,
+          status: "published",
+          source: "editorial",
+          contact_org: EDITORIAL_DISPLAY_NAME,
+          contact_email: EDITORIAL_EMAIL,
+          contact_public: false,
+          published_at: new Date(`${dates.iso}T03:00:00.000Z`).toISOString(), // JST正午相当
+          ...(eyecatch ? { cover_url: eyecatch.url, cover_is_generated: false } : {}),
+        })
+        .select("id")
+        .single();
+
+      if (insertErr || !inserted) {
+        throw new Error(`Supabaseへの記事保存に失敗しました: ${insertErr?.message}`);
+      }
+
+      // 台帳更新（次回の重複選定を防ぐ・カテゴリの交互巡回位置を進める）
+      topics.usedTopicIds.push(idea.id);
+      topics.nextRotationIndex = choice.nextRotationIndex;
+      writeJson("content/topics.json", topics);
+
+      console.log(`\n✅ 公開完了: ${BASE_URL}/news/${inserted.id}/`);
+      console.log(`   タイトル: ${article.h1}`);
+      console.log(`   カテゴリ: ${categorySlug}`);
+      console.log(`   相互リンク: ${article.cocomarkeLinksUsed?.join(", ") || "(本文内)"}`);
+      console.log(`   出典: ${article.backlinksUsed?.join(", ") || "(本文内)"}`);
+      console.log(`   アイキャッチ: ${eyecatch ? eyecatch.url : "(自動生成SVG)"}`);
+      published = true;
     } catch (e) {
-      console.log(`  調査に失敗したため調査なしで継続します: ${String(e?.message || e).slice(0, 200)}`);
-      findings = "";
+      console.log(`⚠ [${category}] 生成に失敗したためスキップします: ${String(e?.message || e).slice(0, 300)}`);
+      excludeCategories.add(category);
     }
-  } else {
-    console.log("▶ 調査スキップ（モデル知識＋カテゴリ公式出典で生成。最新Web検索が必要なら ENABLE_RESEARCH=1）");
-  }
-  const sourceLinks = await buildSourceLinks(findings, category);
-  if (sourceLinks.length < 2) throw new Error("公式出典URLを2本以上確認できませんでした。調査クエリまたはfallback sourceを見直してください。");
-  console.log(`  公式出典URL ${sourceLinks.length}件を確認`);
-
-  console.log("▶ アイキャッチ画像を出典記事から探索中…");
-  // 直近公開記事で使用済みの画像は除外し、使い回しを防ぐ
-  const { data: recentCovers } = await supabase
-    .from("articles")
-    .select("cover_url")
-    .eq("status", "published")
-    .eq("cover_is_generated", false)
-    .not("cover_url", "is", null)
-    .order("published_at", { ascending: false })
-    .limit(30);
-  const usedImageKeys = new Set((recentCovers || []).map((a) => imageIdentityKey(a.cover_url)));
-  const eyecatch = await findEyecatchImage(sourceLinks, usedImageKeys);
-  console.log(eyecatch
-    ? `  アイキャッチ取得: ${eyecatch.url}（出典: ${eyecatch.sourcePage}）`
-    : "  アイキャッチ取得失敗。自動生成SVGにフォールバックします。");
-
-  let article = null, gate = null, feedback = "";
-  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-    console.log(`▶ 記事生成（試行 ${attempt + 1}/${MAX_RETRIES + 1}）…`);
-    const draft = isNews
-      ? await writeNewsArticle(idea, catLabel, findings, adpressCandidates, sourceLinks, feedback)
-      : await writeArticle(idea, catLabel, findings, cocomarke, adpressCandidates, sourceLinks, feedback, categorySlug);
-    for (const s of draft.sections) s.html = enforceExternalAttrs(s.html);
-    draft.leadParagraphHtml = enforceExternalAttrs(draft.leadParagraphHtml);
-    draft.authorProfileHtml = enforceExternalAttrs(draft.authorProfileHtml);
-    draft.expertiseNoteHtml = enforceExternalAttrs(draft.expertiseNoteHtml);
-    for (const e of draft.practicalExamples || []) e.html = enforceExternalAttrs(e.html);
-    draft.conclusionHtml = enforceExternalAttrs(draft.conclusionHtml);
-    for (const f of draft.faq || []) f.answerHtml = enforceExternalAttrs(f.answerHtml);
-
-    const removedLinks = sanitizeArticleLinks(draft, {
-      sourceLinks,
-      cocoSet: new Set(cocomarke.map((c) => c.url)),
-      adpressIdSet: adpressCandidateIds,
-      consultUrl: isNews ? "" : CONSULT_URL,
-      baseHost: hostOf(BASE_URL),
-    });
-    if (removedLinks.length) {
-      console.log(`  リンク自動修正: 許可外/未確認のURLを${removedLinks.length}件除去 → ${removedLinks.join(", ")}`);
-    }
-
-    gate = isNews
-      ? await qualityGateNews(draft, sourceLinks, idea, adpressCandidateIds)
-      : await qualityGate(draft, cocomarke, sourceLinks, idea, adpressCandidateIds);
-    if (gate.ok) { article = draft; break; }
-    feedback = gate.issues.join("\n");
-    console.log(`  品質ゲート不通過:\n   - ${gate.issues.join("\n   - ")}`);
-  }
-  if (!article) { throw new Error(`品質基準を満たせませんでした。公開を中止します。\n${feedback}`); }
-  console.log(`✓ 品質ゲート通過（本文 約${gate.textLen}字）`);
-
-  const dates = jstDate();
-  const bodyHtml = buildBodyHtml(article);
-
-  const { data: inserted, error: insertErr } = await supabase
-    .from("articles")
-    .insert({
-      author_id: editorialId,
-      category_slug: categorySlug,
-      title: article.h1,
-      body_html: bodyHtml,
-      excerpt: article.cardDescription,
-      status: "published",
-      source: "editorial",
-      contact_org: EDITORIAL_DISPLAY_NAME,
-      contact_email: EDITORIAL_EMAIL,
-      contact_public: false,
-      published_at: new Date(`${dates.iso}T03:00:00.000Z`).toISOString(), // JST正午相当
-      ...(eyecatch ? { cover_url: eyecatch.url, cover_is_generated: false } : {}),
-    })
-    .select("id")
-    .single();
-
-  if (insertErr || !inserted) {
-    throw new Error(`Supabaseへの記事保存に失敗しました: ${insertErr?.message}`);
   }
 
-  // 台帳更新（次回の重複選定を防ぐ・カテゴリの交互巡回位置を進める）
-  topics.usedTopicIds.push(idea.id);
-  topics.nextRotationIndex = choice.nextRotationIndex;
-  writeJson("content/topics.json", topics);
-
-  console.log(`\n✅ 公開完了: ${BASE_URL}/news/${inserted.id}/`);
-  console.log(`   タイトル: ${article.h1}`);
-  console.log(`   カテゴリ: ${categorySlug}`);
-  console.log(`   相互リンク: ${article.cocomarkeLinksUsed?.join(", ") || "(本文内)"}`);
-  console.log(`   出典: ${article.backlinksUsed?.join(", ") || "(本文内)"}`);
-  console.log(`   アイキャッチ: ${eyecatch ? eyecatch.url : "(自動生成SVG)"}`);
+  if (!published) {
+    console.log("\n本日は公開できる記事がありませんでした（全カテゴリで生成に失敗、または対象トピックがありません）。");
+  }
 }
 
 main().catch((e) => { console.error("ERROR:", e?.message || e); process.exit(1); });
