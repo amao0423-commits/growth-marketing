@@ -1,11 +1,20 @@
 {
-  "_comment": "SEO記事自動生成のトピック台帳。毎日1本、categoryRotation に列挙したカテゴリの中から未使用トピックが残っているものをランダムに1つ選び、そのカテゴリの未使用アイデアからランダムに1つ選ぶ。usedTopicIds に公開済みを記録して重複を防ぐ。新しいトレンドが出たら ideas に追記すればよい。",
+  "_comment": "記事自動生成のトピック台帳。毎日1本、categoryRotation の順に各カテゴリを交互に巡回し（nextRotationIndexで管理）、そのカテゴリの未使用アイデアから1つ選ぶ。usedTopicIds に公開済みを記録して重複を防ぐ。新しいトレンドが出たら ideas に追記すればよい。sns/ads/seo/content/brand はマーケ系（generate-post.mjsのCATEGORY_MAP経由でsite category sns/bizに変換、COCOマーケCTA・被リンクあり）。korea/ent/life はADPRESS本来のニュース系カテゴリ（site categoryのslugをそのまま使用、マーケCTA・COCOマーケ被リンクなし）。",
   "categoryRotation": [
     "sns",
     "ads",
     "seo",
     "content",
-    "brand"
+    "brand",
+    "korea",
+    "ent",
+    "life"
+  ],
+  "nextRotationIndex": 0,
+  "newsCategories": [
+    "korea",
+    "ent",
+    "life"
   ],
   "usedTopicIds": [
     "sns-reels-retention-2026",
@@ -41,7 +50,10 @@
     "sns-x-growth",
     "seo-structured-data",
     "content-editorial-calendar",
-    "brand-visual-identity"
+    "brand-visual-identity",
+    "korea-fashion-trend",
+    "ent-movie-boxoffice",
+    "life-household-budget"
   ],
   "clusters": {
     "sns": {
@@ -396,6 +408,114 @@
           "id": "brand-loyalty",
           "primaryKeyword": "ブランドロイヤルティ 高める",
           "intent": "顧客ロイヤルティを高める施策を知りたい"
+        }
+      ]
+    },
+    "korea": {
+      "label": "韓国情報",
+      "pillar": "韓国カルチャー・ニュース",
+      "ideas": [
+        {
+          "id": "korea-skincare-trend",
+          "primaryKeyword": "韓国コスメ トレンド",
+          "intent": "日本で人気の韓国コスメの最新トレンドと成分・選び方を知りたい"
+        },
+        {
+          "id": "korea-street-food",
+          "primaryKeyword": "韓国グルメ 東京",
+          "intent": "日本国内で楽しめる韓国グルメ・専門店の傾向と選び方を知りたい"
+        },
+        {
+          "id": "korea-drama-hit",
+          "primaryKeyword": "韓国ドラマ 配信 話題",
+          "intent": "話題の韓国ドラマの配信状況・見どころの傾向を知りたい"
+        },
+        {
+          "id": "korea-travel-seoul",
+          "primaryKeyword": "ソウル 旅行 最新",
+          "intent": "ソウル旅行の最新スポット・注意点を知りたい"
+        },
+        {
+          "id": "korea-fashion-trend",
+          "primaryKeyword": "韓国ファッション トレンド",
+          "intent": "日本で人気の韓国ファッション・ブランドの傾向を知りたい"
+        },
+        {
+          "id": "korea-language-learning",
+          "primaryKeyword": "韓国語 学習 アプリ",
+          "intent": "韓国語学習アプリ・独学方法の選び方を知りたい"
+        }
+      ]
+    },
+    "ent": {
+      "label": "エンタメ",
+      "pillar": "エンタメ・ニュース",
+      "ideas": [
+        {
+          "id": "ent-live-tour",
+          "primaryKeyword": "来日公演 チケット",
+          "intent": "アーティストの来日公演・チケット動向を知りたい"
+        },
+        {
+          "id": "ent-anime-season",
+          "primaryKeyword": "新作アニメ 配信",
+          "intent": "新作アニメの配信情報・見どころを知りたい"
+        },
+        {
+          "id": "ent-movie-boxoffice",
+          "primaryKeyword": "映画 興行収入 ランキング",
+          "intent": "話題の映画・興行収入ランキングの傾向を知りたい"
+        },
+        {
+          "id": "ent-game-release",
+          "primaryKeyword": "新作ゲーム 発売",
+          "intent": "新作ゲームの発売情報・注目ポイントを知りたい"
+        },
+        {
+          "id": "ent-streaming-original",
+          "primaryKeyword": "配信オリジナル作品",
+          "intent": "配信サービスのオリジナル作品で話題の作品を知りたい"
+        },
+        {
+          "id": "ent-music-festival",
+          "primaryKeyword": "音楽フェス ラインナップ",
+          "intent": "音楽フェスの開催情報・出演ラインナップの傾向を知りたい"
+        }
+      ]
+    },
+    "life": {
+      "label": "ライフ",
+      "pillar": "暮らし・お金・健康",
+      "ideas": [
+        {
+          "id": "life-nisa-beginner",
+          "primaryKeyword": "新NISA 始め方",
+          "intent": "新NISAの始め方・注意点を知りたい"
+        },
+        {
+          "id": "life-health-checkup",
+          "primaryKeyword": "健康診断 結果 見方",
+          "intent": "健康診断結果の見方・生活改善のポイントを知りたい"
+        },
+        {
+          "id": "life-work-life-balance",
+          "primaryKeyword": "ワークライフバランス 実践",
+          "intent": "ワークライフバランスを整える実践方法を知りたい"
+        },
+        {
+          "id": "life-household-budget",
+          "primaryKeyword": "家計管理 アプリ",
+          "intent": "家計管理・節約アプリの選び方を知りたい"
+        },
+        {
+          "id": "life-remote-work-setup",
+          "primaryKeyword": "在宅勤務 環境 づくり",
+          "intent": "在宅勤務の作業環境・生産性向上の工夫を知りたい"
+        },
+        {
+          "id": "life-sleep-quality",
+          "primaryKeyword": "睡眠の質 改善",
+          "intent": "睡眠の質を改善する生活習慣・方法を知りたい"
         }
       ]
     }

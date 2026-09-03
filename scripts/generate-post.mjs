@@ -47,6 +47,8 @@ const backoffMs = (attempt) => Math.min(60000, 5000 * 2 ** attempt);
 
 // GM時代のトピックカテゴリ（content/topics.json）→ アドプレスの記事カテゴリ
 // 元がSNS/広告運用会社のブログのため、ブランディング以外は概ね「SNS・マーケ」に収まる。
+// korea/ent/life はADPRESS本来のニュース系カテゴリで、topics.jsonのカテゴリキー＝site categoryのslug
+// なのでCATEGORY_MAPを介さずそのまま使う（isNewsCategoryで判定）。
 const CATEGORY_MAP = { sns: "sns", ads: "sns", seo: "sns", content: "sns", brand: "biz" };
 const GM_CATEGORY_LABELS = {
   sns: "SNS運用",
@@ -54,7 +56,17 @@ const GM_CATEGORY_LABELS = {
   seo: "SEO",
   content: "コンテンツマーケティング",
   brand: "ブランディング",
+  korea: "韓国情報",
+  ent: "エンタメ",
+  life: "ライフ",
 };
+const NEWS_CATEGORIES = new Set(["korea", "ent", "life"]);
+function isNewsCategory(category) {
+  return NEWS_CATEGORIES.has(category);
+}
+function categorySlugFor(category) {
+  return isNewsCategory(category) ? category : CATEGORY_MAP[category] || "sns";
+}
 
 const AUTH_DOMAINS = [
   "developers.google.com", "support.google.com", "business.google.com", "blog.google",
@@ -70,6 +82,12 @@ const AUTH_DOMAINS = [
   // ソーシャルリスニング等、政府/プラットフォーム公式だけでは情報が薄いテーマ向けに、
   // 当該分野の主要ベンダー公式サイト（自社製品・手法についての一次情報）を権威ドメインとして許可
   "www.meltwater.com", "www.brandwatch.com", "www.hootsuite.com",
+  // korea/ent/life（ニュース系カテゴリ）向けの公式・準公式ソース
+  "english.visitkorea.or.kr", "korean.visitseoul.net", "www.mofa.go.jp",
+  "www.oricon.co.jp", "natalie.mu", "www.famitsu.com", "famitsu.com",
+  "animeanime.jp", "about.netflix.com", "www.eiga.com", "eiga.com",
+  "www.mhlw.go.jp", "www.fsa.go.jp", "www.jpx.co.jp",
+  "www3.nhk.or.jp", "www.nhk.or.jp", "ja.wikipedia.org",
 ];
 
 const FALLBACK_SOURCE_URLS = {
@@ -105,6 +123,24 @@ const FALLBACK_SOURCE_URLS = {
   common: [
     "https://developers.google.com/search/docs/fundamentals/creating-helpful-content",
     "https://www.thinkwithgoogle.com/",
+  ],
+  korea: [
+    "https://english.visitkorea.or.kr/",
+    "https://korean.visitseoul.net/",
+    "https://www.mofa.go.jp/",
+  ],
+  ent: [
+    "https://www.oricon.co.jp/",
+    "https://natalie.mu/",
+    "https://www.famitsu.com/",
+    "https://animeanime.jp/",
+    "https://about.netflix.com/ja/",
+    "https://www.eiga.com/",
+  ],
+  life: [
+    "https://www.mhlw.go.jp/",
+    "https://www.fsa.go.jp/",
+    "https://www.jpx.co.jp/",
   ],
 };
 
@@ -387,22 +423,42 @@ function sanitizeArticleLinks(article, ctx) {
   return [...new Set([...bad, ...badRefUrls])];
 }
 
-// 毎日1本・カテゴリはランダムに選ぶ。未使用トピックが残っているカテゴリの中から
-// 均等な確率で1つ選び、そのカテゴリの未使用アイデアからランダムに1つ選ぶ。
+// 毎日1本、categoryRotation の順にカテゴリを交互に巡回する（各カテゴリの未使用トピックが
+// 尽きるまで公平に順番が回ってくるよう、topics.nextRotationIndex から一周スキャンする）。
 function pickTopic(topics) {
   const used = new Set(topics.usedTopicIds);
-  const available = topics.categoryRotation
-    .map((cat) => ({ cat, ideas: topics.clusters[cat].ideas.filter((x) => !used.has(x.id)) }))
-    .filter((x) => x.ideas.length > 0);
-  if (available.length === 0) return null;
-  const { cat, ideas } = available[Math.floor(Math.random() * available.length)];
-  const idea = ideas[Math.floor(Math.random() * ideas.length)];
-  return { category: cat, idea };
+  // 動作確認・臨時生成用: FORCE_CATEGORY を指定すると、ローテーションを無視してそのカテゴリの
+  // 未使用アイデアから選ぶ（本番の日次実行では未指定＝通常の交互巡回）。
+  const forced = (process.env.FORCE_CATEGORY || "").trim();
+  if (forced) {
+    if (!topics.clusters[forced]) throw new Error(`FORCE_CATEGORY "${forced}" は content/topics.json に存在しません。`);
+    const candidates = topics.clusters[forced].ideas.filter((x) => !used.has(x.id));
+    if (candidates.length === 0) return null;
+    const idea = candidates[Math.floor(Math.random() * candidates.length)];
+    // 強制指定時はローテーション位置を進めない（通常の交互巡回を乱さない）
+    return { category: forced, idea, nextRotationIndex: topics.nextRotationIndex };
+  }
+  const order = topics.categoryRotation;
+  const n = order.length;
+  const start = Number.isInteger(topics.nextRotationIndex) ? topics.nextRotationIndex : 0;
+  for (let i = 0; i < n; i++) {
+    const idx = (start + i) % n;
+    const cat = order[idx];
+    const candidates = topics.clusters[cat].ideas.filter((x) => !used.has(x.id));
+    if (candidates.length > 0) {
+      const idea = candidates[Math.floor(Math.random() * candidates.length)];
+      return { category: cat, idea, nextRotationIndex: (idx + 1) % n };
+    }
+  }
+  return null;
 }
 
 // --- Step A: Web検索でトレンド/一次情報を収集 ---
-async function research(idea, catLabel) {
-  const prompt = `あなたはマーケティング領域の調査担当です。Web検索ツールを使い、次のテーマについて
+async function research(idea, catLabel, isNews = false) {
+  const role = isNews
+    ? "あなたは「アドプレス」編集部のニュース調査担当です"
+    : "あなたはマーケティング領域の調査担当です";
+  const prompt = `${role}。Web検索ツールを使い、次のテーマについて
 2026年時点の最新動向・検索上位で語られている論点・一次情報を調べてください。
 
 テーマ: ${idea.intent}
@@ -466,6 +522,277 @@ Google検索セントラル、Meta/Instagram、TikTok、総務省など公式情
 - 不確かな数値やベンチマークは「経験則」「目安」として扱う`;
 
   return (await claudeText(prompt, { webTools: true })).trim();
+}
+
+// ニュース系カテゴリ（korea/ent/life）向けの簡略スキーマ。マーケ記事のARTICLE_SCHEMAと違い、
+// practicalExamples/originalInsights/cocomarkeLinksUsed/backlinksUsedのような
+// 「実務ケース・KPI・COCOマーケ相互リンク」前提のフィールドは持たない。
+const NEWS_ARTICLE_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    metaTitle: { type: "string" },
+    metaDescription: { type: "string" },
+    keywords: { type: "array", items: { type: "string" } },
+    searchIntent: { type: "string" },
+    h1: { type: "string" },
+    cardDescription: { type: "string" },
+    readMinutes: { type: "integer" },
+    authorProfileHtml: { type: "string" },
+    keyTakeaways: { type: "array", items: { type: "string" } },
+    expertiseNoteHtml: { type: "string" },
+    leadParagraphHtml: { type: "string" },
+    sections: {
+      type: "array",
+      items: {
+        type: "object", additionalProperties: false,
+        properties: { id: { type: "string" }, heading: { type: "string" }, html: { type: "string" } },
+        required: ["id", "heading", "html"],
+      },
+    },
+    conclusionHtml: { type: "string" },
+    updateHistory: {
+      type: "array",
+      items: {
+        type: "object", additionalProperties: false,
+        properties: { date: { type: "string" }, detail: { type: "string" } },
+        required: ["date", "detail"],
+      },
+    },
+    referencesUsed: {
+      type: "array",
+      items: {
+        type: "object", additionalProperties: false,
+        properties: { label: { type: "string" }, url: { type: "string" }, accessedDate: { type: "string" } },
+        required: ["label", "url", "accessedDate"],
+      },
+    },
+    faq: {
+      type: "array",
+      items: {
+        type: "object", additionalProperties: false,
+        properties: { question: { type: "string" }, answerHtml: { type: "string" } },
+        required: ["question", "answerHtml"],
+      },
+    },
+    relatedArticleIdsUsed: { type: "array", items: { type: "string" } },
+  },
+  required: ["metaTitle", "metaDescription", "keywords", "searchIntent", "h1", "cardDescription", "readMinutes",
+    "authorProfileHtml", "keyTakeaways", "expertiseNoteHtml", "leadParagraphHtml", "sections",
+    "conclusionHtml", "updateHistory", "referencesUsed", "faq", "relatedArticleIdsUsed"],
+};
+
+// --- ニュース系カテゴリ用の記事生成（COCOマーケCTA・相互リンクなし） ---
+async function writeNewsArticle(idea, catLabel, findings, adpressCandidates, sourceLinks, feedback) {
+  const briefFindings = String(findings || "").slice(0, 8000)
+    || "（外部調査は省略。あなたの知識から正確な情報のみを記述してください。断定できない情報は「〜とされる」「〜の可能性がある」のように慎重に書く。）";
+  const adpressList = adpressCandidates.map((p) => `- /news/${p.id}/ ：${p.title}`).join("\n");
+  const sourceList = sourceLinks.map((u) => `- ${u}`).join("\n");
+
+  const prompt = `あなたは「アドプレス」編集部の編集者です。
+アドプレスは、企業・団体・個人が無料でプレスリリースを掲載できるメディアで、
+${catLabel}カテゴリでは編集部が確認したニュース・トレンド解説記事を掲載しています。
+下記の調査結果をもとに、読者の関心に応える高品質な日本語記事を作成してください。
+
+読者が知りたいことに答え、事実に基づいた正確で読みやすい記事にしてください。
+広告運用・SNS運用代行の売り込みやマーケティング相談への誘導は一切不要です（アドプレスはニュースメディアであり、マーケ支援は行っていません）。
+
+# テーマ
+${idea.intent}
+
+主要キーワード:
+${idea.primaryKeyword}
+
+カテゴリ:
+${catLabel}
+
+# 調査結果（最新情報・一次情報）
+${briefFindings}
+
+# 使用可能な公式出典URL
+本文にはこの中から2〜4本のみ使用してください。存在しないURLやリスト外URLは絶対に作らないでください。
+
+${sourceList}
+
+# アドプレス内の関連記事候補
+relatedArticleIdsUsed に、実際に本文中でリンクした記事のパス（例 "/news/12/"）を入れてください。
+さらに【必須】本文中にも、このリストから1〜3本を文脈に合う自然なアンカーテキストで
+<a href="/news/ID/">語句</a> の形（パスはリストの値そのまま）で挿入してください。
+リストにあるパスのみ使用し、存在しないIDやURLは作らないでください。
+
+${adpressList}
+
+# 執筆要件
+
+- 本文合計はおおむね2500〜4000字
+- 事実に基づき、背景・詳細・今後の見どころ/影響まで具体的に書く
+- searchIntent には、読者が知りたいことを1文で要約する
+- metaTitle は32〜55字目安で、主要キーワードを前方に入れる
+- h1 はmetaTitleと近い語を含めつつ、内容が分かるタイトルにする
+- metaDescription は110〜130字で、主要キーワードと記事で分かることを自然に含める
+- keywords は5語前後
+- cardDescription は一覧カード用に60字前後
+
+# 必須構成
+
+記事は以下の順で構成してください。
+
+1. 導入 leadParagraphHtml（冒頭200字以内に何についての記事か明確にする定義文を入れる）
+2. 著者プロフィール authorProfileHtml
+3. 重要ポイント keyTakeaways 4〜5個
+4. 編集・検証方針 expertiseNoteHtml
+5. 本文セクション sections 5〜7個
+6. 更新履歴 updateHistory
+7. 参照資料 referencesUsed
+8. FAQ faq 4〜6個
+9. まとめ conclusionHtml
+
+# authorProfileHtml の必須条件
+
+必ず以下を含めてください。
+- 著者名は「アドプレス編集部」
+- ${catLabel}に関するニュース・トレンドを編集部が確認して掲載していること
+- 編集方針ページへのリンク: <a href="${EDITORIAL_POLICY_URL}">編集方針</a>
+
+重要: 個人名の監修者は記載しないでください（実在の監修者を立てていません）。
+
+# expertiseNoteHtml の必須条件
+
+80〜180字程度で、情報の確認方法・出典の扱いなど編集・検証方針を書いてください。
+必ず <a href="${EDITORIAL_POLICY_URL}">編集方針</a> へのリンクを入れてください。
+
+# sections の必須条件
+
+sections は5〜7個作成してください。各 heading は読者の関心に沿う見出しにしてください。
+id は英小文字とハイフンのユニークなアンカーにしてください。
+
+本文の各 section.html では、必要に応じて以下を使用してください。
+- <p> / <h3>小見出し</h3> / <ul><li> / <ol><li> / <strong> / <blockquote> / <table><thead><tbody><tr><th><td> / <div class="callout"><p>要点</p></div>
+
+h1/h2タグ、style属性、画像タグは使わないでください。CTAボタンや申し込み誘導の文は入れないでください。
+
+# FAQ条件
+
+FAQは4〜6問作成してください。質問は自然検索されやすい文にしてください。
+回答は最初に結論を短く示し、その後で補足してください。
+
+# 出典・数値の扱い
+
+- 公式が公表していない数値を断定しない
+- 不確かな情報は「〜とされる」「〜の見込み」のように慎重に表現する
+- 出典の要約だけで終わらせず、読者にとっての意味・見どころを書く
+
+# 更新履歴と参照資料の条件
+
+updateHistory は1件以上。初回公開時は「YYYY年M月D日：記事公開。」のように書いてください。
+referencesUsed は2〜5件、本文で使った公式出典URLのみ。accessedDateは記事公開日と同じ日付にしてください。`
+    + (feedback ? `\n\n# 前回の指摘（品質ゲート不合格時のみ・必ず修正すること）\n${feedback}` : "")
+    + `\n\n# 出力JSONスキーマ（この構造に完全準拠する）\n${JSON.stringify(NEWS_ARTICLE_SCHEMA)}`
+    + `\n\n# 出力形式（厳守）\nマークダウンのコードフェンスや前置き・後置きの説明を一切付けず、上記スキーマに完全準拠したJSONオブジェクトのみを出力してください。`;
+
+  let parsed = null, lastRaw = "", lastErr = null;
+  for (let i = 0; i < WRITE_ATTEMPTS; i++) {
+    const p = i === 0 ? prompt
+      : prompt + "\n\n# 重要\n前回の生成は失敗またはJSONとして解析できませんでした。説明やコードフェンスを付けず、上記スキーマに完全準拠したJSONオブジェクトのみを返してください。";
+    try {
+      lastRaw = await claudeText(p);
+    } catch (e) {
+      lastErr = e;
+      console.log(`  記事生成の呼び出しに失敗（試行 ${i + 1}/${WRITE_ATTEMPTS}）: ${String(e?.message || e).slice(0, 200)}`);
+      if (i < WRITE_ATTEMPTS - 1) await sleep(backoffMs(i));
+      continue;
+    }
+    parsed = extractJsonObject(lastRaw);
+    if (parsed) break;
+    console.log(`  生成結果をJSONとして解析できませんでした（試行 ${i + 1}/${WRITE_ATTEMPTS}）`);
+    if (i < WRITE_ATTEMPTS - 1) await sleep(backoffMs(i));
+  }
+  if (!parsed) {
+    const detail = lastErr ? ` (last error: ${String(lastErr?.message || lastErr).slice(0, 200)})` : "";
+    throw new Error("writer returned no parseable JSON" + detail + ": " + String(lastRaw).slice(0, 300));
+  }
+  return parsed;
+}
+
+// --- ニュース系カテゴリ用の品質ゲート（COCOマーケ相互リンク・CTA必須は課さない） ---
+async function qualityGateNews(article, sourceLinks, idea, adpressCandidateIds) {
+  const issues = [];
+  const fullBody = [
+    article.leadParagraphHtml,
+    article.authorProfileHtml,
+    article.expertiseNoteHtml,
+    ...article.sections.map((s) => s.html),
+    article.conclusionHtml,
+    ...(article.faq || []).map((f) => f.answerHtml),
+  ].join("\n");
+  const textLen = fullBody.replace(/<[^>]+>/g, "").replace(/\s+/g, "").length;
+  const MIN_NEWS_CHARS = Math.min(MIN_TEXT_CHARS, 2200);
+  if (textLen < MIN_NEWS_CHARS) issues.push(`本文が短すぎます（約${textLen}字）。${MIN_NEWS_CHARS}字以上にしてください。`);
+  if (article.sections.length < 4) issues.push("セクションが少なすぎます。4個以上にしてください。");
+  if (!keywordCovered(idea.primaryKeyword, article.metaTitle, article.h1)) {
+    issues.push(`主要キーワード「${idea.primaryKeyword}」の主要語がmetaTitleまたはh1に自然に含まれていません。`);
+  }
+  if ((article.metaTitle || "").length < 20 || (article.metaTitle || "").length > 60) {
+    issues.push("metaTitle は20〜60字の範囲にしてください。");
+  }
+  if ((article.metaDescription || "").length < 80 || (article.metaDescription || "").length > 150) {
+    issues.push("metaDescription は80〜150字の範囲にしてください。");
+  }
+  if (!Array.isArray(article.keyTakeaways) || article.keyTakeaways.length < 3) {
+    issues.push("keyTakeaways が不足しています。3個以上にしてください。");
+  }
+  if (!article.authorProfileHtml || !article.authorProfileHtml.includes(EDITORIAL_POLICY_URL)) {
+    issues.push("authorProfileHtml にアドプレス編集部の説明と編集方針ページへのリンクを含めてください。");
+  }
+  if (!Array.isArray(article.faq) || article.faq.length < 2) {
+    issues.push("FAQ が不足しています。2個以上にしてください。");
+  }
+  if (!article.expertiseNoteHtml || stripTags(article.expertiseNoteHtml).length < 50) {
+    issues.push("expertiseNoteHtml が不足しています。編集・検証方針を50字以上で明記してください。");
+  }
+  if (!article.expertiseNoteHtml.includes(EDITORIAL_POLICY_URL)) {
+    issues.push("expertiseNoteHtml に編集方針ページへのリンクを含めてください。");
+  }
+  if (!Array.isArray(article.updateHistory) || article.updateHistory.length < 1) {
+    issues.push("updateHistory が不足しています。更新履歴を1件以上にしてください。");
+  }
+  if (!Array.isArray(article.referencesUsed) || article.referencesUsed.length < 2) {
+    issues.push("referencesUsed が不足しています。公式参照資料を2件以上にしてください。");
+  }
+  const ids = article.sections.map((s) => s.id);
+  if (new Set(ids).size !== ids.length) issues.push("セクションidが重複しています。");
+  if (/<\/?(h1|h2|script|style|img)\b/i.test(fullBody)) {
+    issues.push("本文HTMLに使用禁止タグ（h1/h2/script/style/img）があります。");
+  }
+
+  const hrefs = extractHrefs(fullBody);
+  const idSet = adpressCandidateIds instanceof Set ? adpressCandidateIds : new Set(adpressCandidateIds || []);
+  const internalLinks = hrefs.filter((h) => /^\/news\/[0-9]+\/?$/.test(h));
+  const badInternal = internalLinks.filter((h) => {
+    const id = h.match(/\/news\/([0-9]+)/)?.[1];
+    return !idSet.has(id);
+  });
+  if (internalLinks.length < 1) issues.push("本文中にアドプレスの内部リンク（関連記事候補の/news/ID/）がありません（最低1本、自然な文脈で）。");
+  if (badInternal.length) issues.push(`存在しない内部リンクがあります: ${badInternal.join(", ")}。関連記事候補のIDのみ使ってください。`);
+
+  const ext = hrefs.filter((h) => /^https?:\/\//.test(h) && hostOf(h) !== hostOf(BASE_URL));
+  const auth = ext.filter(isAuthoritative);
+  const nonAuth = ext.filter((h) => !isAuthoritative(h));
+  const allowedSources = new Set(sourceLinks);
+  const inventedSources = auth.filter((h) => !allowedSources.has(h));
+  const invalidReferences = (article.referencesUsed || []).map((r) => r.url).filter((u) => !allowedSources.has(u));
+  if (nonAuth.length) issues.push(`許可外ドメインへの外部リンクがあります: ${nonAuth.join(", ")}。権威ドメインのみにしてください。`);
+  if (inventedSources.length) issues.push(`使用可能な公式出典URLリスト外のリンクがあります: ${inventedSources.join(", ")}。提示URLのみ使ってください。`);
+  if (invalidReferences.length) issues.push(`referencesUsed に使用可能な公式出典URLリスト外のURLがあります: ${invalidReferences.join(", ")}。`);
+  if (auth.length < 2) issues.push("公式出典リンクが不足しています（最低2本）。");
+
+  const dead = [];
+  for (const u of unique(auth)) {
+    if (!(await isLinkAlive(u, { lenient: true }))) dead.push(u);
+  }
+  if (dead.length) issues.push(`到達できないリンクがあります（404等）: ${dead.join(", ")}。実在URLに修正してください。`);
+
+  return { ok: issues.length === 0, issues, textLen };
 }
 
 const ARTICLE_SCHEMA = {
@@ -535,12 +862,17 @@ const ARTICLE_SCHEMA = {
 };
 
 // --- Step B: 構造化出力で記事を生成 ---
-async function writeArticle(idea, catLabel, findings, cocomarke, adpressCandidates, sourceLinks, feedback) {
+async function writeArticle(idea, catLabel, findings, cocomarke, adpressCandidates, sourceLinks, feedback, categorySlug) {
   const briefFindings = String(findings || "").slice(0, 8000)
     || "（外部調査は省略。2026年時点のベストプラクティスを、あなたの知識から正確かつ具体的に記述してください。最新の固有数値は断定せず「目安」として扱う。）";
   const cocoList = cocomarke.slice(0, 20).map((c) => `- ${c.url} （関連語: ${c.keywords.join("、")}）`).join("\n");
   const adpressList = adpressCandidates.map((p) => `- /news/${p.id}/ ：${p.title}`).join("\n");
   const sourceList = sourceLinks.map((u) => `- ${u}`).join("\n");
+  // SNS・マーケカテゴリでは、「関連記事」「インスタ運用代行」という語句が自然に出た場合、
+  // その語句自体をCOCOマーケのトップページへのリンクにする（2026-09-03のルール追加）。
+  const sitewideCocomarkeLinkRule = categorySlug === "sns"
+    ? `\n本文中で「関連記事」または「インスタ運用代行」という語句が自然に登場する場合は、\nその語句自体を <a href="https://www.cocomarke.com/">関連記事</a> のようにCOCOマーケのトップページ\n（https://www.cocomarke.com/）へのリンクにしてください（cocoListのURLとは別枠で、これは必須ではなく\n語句が自然に出た場合のみ）。`
+    : "";
 
   const prompt = `あなたはSEO・GEO・CV改善に精通した「アドプレス」編集部の編集者です。
 アドプレスは、企業・団体・個人が無料でプレスリリースを掲載できるメディアです。
@@ -776,6 +1108,7 @@ originalInsights は3〜5個作成してください。
 公式出典リンクは、sourceListに含まれるURLのみ使用してください。
 相互リンクは、cocoListに含まれるURLのみ使用してください。
 存在しないURLやリスト外URLは絶対に作らないでください。
+${sitewideCocomarkeLinkRule}
 
 # FAQ条件
 
@@ -1116,15 +1449,20 @@ async function main() {
   const choice = pickTopic(topics);
   if (!choice) { console.log("未使用トピックがありません。content/topics.json の ideas を追加してください。"); return; }
   const { category, idea } = choice;
+  const isNews = isNewsCategory(category);
   const catLabel = GM_CATEGORY_LABELS[category] || category;
-  const categorySlug = CATEGORY_MAP[category] || "sns";
-  console.log(`▶ トピック: [${category}→${categorySlug}] ${idea.intent}\n  model=${MODEL}`);
+  const categorySlug = categorySlugFor(category);
+  console.log(`▶ トピック: [${category}→${categorySlug}]${isNews ? "（ニュース系）" : "（マーケ系）"} ${idea.intent}\n  model=${MODEL}`);
 
   const editorialId = await ensureEditorialProfile(supabase);
 
-  const cocomarkeAll = await fetchCocomarkeArticles();
-  const cocomarke = pickCocomarkeCandidates(cocomarkeAll, idea);
-  console.log(`  cocomarke記事 ${cocomarkeAll.length}件から関連候補 ${cocomarke.length}件を選定`);
+  // COCOマーケ相互リンクはマーケ系カテゴリのみ（ニュース系はcocomarke.comと無関係のため取得しない）
+  let cocomarke = [];
+  if (!isNews) {
+    const cocomarkeAll = await fetchCocomarkeArticles();
+    cocomarke = pickCocomarkeCandidates(cocomarkeAll, idea);
+    console.log(`  cocomarke記事 ${cocomarkeAll.length}件から関連候補 ${cocomarke.length}件を選定`);
+  }
 
   // アドプレス内部リンク候補：同カテゴリ優先で直近の公開記事を取得
   const { data: sameCatArticles } = await supabase
@@ -1149,7 +1487,7 @@ async function main() {
   if (ENABLE_RESEARCH) {
     console.log("▶ Web検索で調査中…");
     try {
-      findings = await research(idea, catLabel);
+      findings = await research(idea, catLabel, isNews);
     } catch (e) {
       console.log(`  調査に失敗したため調査なしで継続します: ${String(e?.message || e).slice(0, 200)}`);
       findings = "";
@@ -1180,7 +1518,9 @@ async function main() {
   let article = null, gate = null, feedback = "";
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     console.log(`▶ 記事生成（試行 ${attempt + 1}/${MAX_RETRIES + 1}）…`);
-    const draft = await writeArticle(idea, catLabel, findings, cocomarke, adpressCandidates, sourceLinks, feedback);
+    const draft = isNews
+      ? await writeNewsArticle(idea, catLabel, findings, adpressCandidates, sourceLinks, feedback)
+      : await writeArticle(idea, catLabel, findings, cocomarke, adpressCandidates, sourceLinks, feedback, categorySlug);
     for (const s of draft.sections) s.html = enforceExternalAttrs(s.html);
     draft.leadParagraphHtml = enforceExternalAttrs(draft.leadParagraphHtml);
     draft.authorProfileHtml = enforceExternalAttrs(draft.authorProfileHtml);
@@ -1193,14 +1533,16 @@ async function main() {
       sourceLinks,
       cocoSet: new Set(cocomarke.map((c) => c.url)),
       adpressIdSet: adpressCandidateIds,
-      consultUrl: CONSULT_URL,
+      consultUrl: isNews ? "" : CONSULT_URL,
       baseHost: hostOf(BASE_URL),
     });
     if (removedLinks.length) {
       console.log(`  リンク自動修正: 許可外/未確認のURLを${removedLinks.length}件除去 → ${removedLinks.join(", ")}`);
     }
 
-    gate = await qualityGate(draft, cocomarke, sourceLinks, idea, adpressCandidateIds);
+    gate = isNews
+      ? await qualityGateNews(draft, sourceLinks, idea, adpressCandidateIds)
+      : await qualityGate(draft, cocomarke, sourceLinks, idea, adpressCandidateIds);
     if (gate.ok) { article = draft; break; }
     feedback = gate.issues.join("\n");
     console.log(`  品質ゲート不通過:\n   - ${gate.issues.join("\n   - ")}`);
@@ -1234,8 +1576,9 @@ async function main() {
     throw new Error(`Supabaseへの記事保存に失敗しました: ${insertErr?.message}`);
   }
 
-  // 台帳更新（次回の重複選定を防ぐ）
+  // 台帳更新（次回の重複選定を防ぐ・カテゴリの交互巡回位置を進める）
   topics.usedTopicIds.push(idea.id);
+  topics.nextRotationIndex = choice.nextRotationIndex;
   writeJson("content/topics.json", topics);
 
   console.log(`\n✅ 公開完了: ${BASE_URL}/news/${inserted.id}/`);
