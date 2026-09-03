@@ -211,7 +211,28 @@ async function buildSourceLinks(findings, category) {
 // --- アイキャッチ: 参照した出典記事のog:image（サムネイル写真）をキャプチャして流用する ---
 // 独自に画像を生成/撮影するのではなく、本文で参照した一次情報ページのog:imageを
 // そのままアイキャッチとして使う。取得できなければ null（呼び出し側で自動生成SVGにフォールバック）。
+//
+// ルール（2026-09-03）:
+//   - 同じ画像を2記事以上で使い回さない（直近公開記事のcover_urlと重複するものは除外）
+//   - タイトルと無関係な汎用画像は使わない。developers.google.comやgstatic.comの
+//     サイト共通シェア画像のように、ページ内容によらず同一URLが返るものは既知パターンとして除外する
 const BROWSER_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+// ページ内容と無関係に返ってくることが判明している汎用シェア画像（ホスト+パスで判定。クエリ文字列は無視）
+const GENERIC_IMAGE_URL_PATTERNS = [
+  /developers\.google\.com\/static\/search\/images\/home-social-share-lockup\.jpg/i,
+  /gstatic\.com\/marketing-cms\/assets\/images\/.*creators-home-page-meta-image/i,
+];
+
+// クエリ文字列（?hl=en 等のロケール違いだけの場合が多い）を無視して同一画像かどうかを比較する
+function imageIdentityKey(url) {
+  try {
+    const u = new URL(url);
+    return u.origin + u.pathname;
+  } catch {
+    return url;
+  }
+}
 
 function extractMetaImage(html, baseUrl) {
   const patterns = [
@@ -239,7 +260,7 @@ async function fetchWithTimeout(url, opts = {}, timeoutMs = 8000) {
   }
 }
 
-async function findEyecatchImage(candidateUrls) {
+async function findEyecatchImage(candidateUrls, usedImageKeys = new Set()) {
   for (const pageUrl of unique(candidateUrls)) {
     try {
       const res = await fetchWithTimeout(pageUrl, { headers: { "User-Agent": BROWSER_UA, Accept: "text/html" } });
@@ -247,6 +268,9 @@ async function findEyecatchImage(candidateUrls) {
       const html = await res.text();
       const imageUrl = extractMetaImage(html, pageUrl);
       if (!imageUrl) continue;
+      if (GENERIC_IMAGE_URL_PATTERNS.some((re) => re.test(imageUrl))) continue;
+      const key = imageIdentityKey(imageUrl);
+      if (usedImageKeys.has(key)) continue;
       const imgRes = await fetchWithTimeout(imageUrl, { method: "HEAD", headers: { "User-Agent": BROWSER_UA } });
       const contentType = imgRes.headers.get("content-type") || "";
       if (imgRes.ok && contentType.startsWith("image/")) {
@@ -1138,7 +1162,17 @@ async function main() {
   console.log(`  公式出典URL ${sourceLinks.length}件を確認`);
 
   console.log("▶ アイキャッチ画像を出典記事から探索中…");
-  const eyecatch = await findEyecatchImage(sourceLinks);
+  // 直近公開記事で使用済みの画像は除外し、使い回しを防ぐ
+  const { data: recentCovers } = await supabase
+    .from("articles")
+    .select("cover_url")
+    .eq("status", "published")
+    .eq("cover_is_generated", false)
+    .not("cover_url", "is", null)
+    .order("published_at", { ascending: false })
+    .limit(30);
+  const usedImageKeys = new Set((recentCovers || []).map((a) => imageIdentityKey(a.cover_url)));
+  const eyecatch = await findEyecatchImage(sourceLinks, usedImageKeys);
   console.log(eyecatch
     ? `  アイキャッチ取得: ${eyecatch.url}（出典: ${eyecatch.sourcePage}）`
     : "  アイキャッチ取得失敗。自動生成SVGにフォールバックします。");
