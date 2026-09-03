@@ -91,11 +91,14 @@ const AUTH_DOMAINS = [
   "animeanime.jp", "about.netflix.com", "www.eiga.com", "eiga.com",
   "www.mhlw.go.jp", "www.fsa.go.jp", "www.jpx.co.jp",
   "www3.nhk.or.jp", "www.nhk.or.jp", "ja.wikipedia.org",
-  // kpop向け（音楽チャート公式）
-  "www.hanteo.com",
+  // kpop向け（音楽チャート公式・主要英字韓国紙・K-POP専門メディア）
+  "www.hanteo.com", "www.koreaherald.com", "www.koreatimes.co.kr", "www.soompi.com",
+  // 企業の公式プレスリリース配信サービス（ニュース系カテゴリ全般で一次情報として妥当）
+  "prtimes.jp",
   // tech向け（国内主要テックメディア・政府機関）
   "www.itmedia.co.jp", "internet.watch.impress.co.jp", "www.watch.impress.co.jp",
-  "www.ipa.go.jp", "www.npa.go.jp",
+  "www.ipa.go.jp", "www.npa.go.jp", "support.apple.com", "www.apple.com",
+  "source.android.com", "android-developers.googleblog.com",
   // trip向け（観光庁・国交省・JNTO・主要航空会社公式）
   "www.mlit.go.jp", "www.jnto.go.jp", "japan.travel",
   "www.ana.co.jp", "www.jal.co.jp",
@@ -157,11 +160,15 @@ const FALLBACK_SOURCE_URLS = {
     "https://www.oricon.co.jp/",
     "https://natalie.mu/music",
     "https://www.hanteo.com/",
+    "https://www.koreaherald.com/",
+    "https://www.soompi.com/",
   ],
   tech: [
     "https://www.itmedia.co.jp/",
     "https://internet.watch.impress.co.jp/",
     "https://www.ipa.go.jp/",
+    "https://support.apple.com/ja-jp",
+    "https://source.android.com/",
   ],
   trip: [
     "https://www.mlit.go.jp/",
@@ -459,6 +466,7 @@ function pickTopic(topics, excludeCategories = new Set()) {
   const forced = (process.env.FORCE_CATEGORY || "").trim();
   if (forced) {
     if (!topics.clusters[forced]) throw new Error(`FORCE_CATEGORY "${forced}" は content/topics.json に存在しません。`);
+    if (excludeCategories.has(forced)) return null; // 強制指定カテゴリが既に失敗済みなら、これ以上試すカテゴリはない
     const candidates = topics.clusters[forced].ideas.filter((x) => !used.has(x.id));
     if (candidates.length === 0) return null;
     const idea = candidates[Math.floor(Math.random() * candidates.length)];

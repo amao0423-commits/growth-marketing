@@ -60,7 +60,10 @@
     "korea-fashion-trend",
     "ent-movie-boxoffice",
     "life-household-budget",
-    "sns-ugc-campaign"
+    "sns-ugc-campaign",
+    "kpop-fanmeeting",
+    "trip-onsen-recommend",
+    "tech-app-update"
   ],
   "clusters": {
     "sns": {
@@ -588,8 +591,8 @@
         },
         {
           "id": "tech-app-update",
-          "primaryKeyword": "人気アプリ アップデート",
-          "intent": "人気アプリの新機能・アップデート情報を知りたい"
+          "primaryKeyword": "スマホOS アップデート",
+          "intent": "スマートフォンOS（Android/iOS）の最新アップデート内容・変更点を知りたい"
         },
         {
           "id": "tech-gadget-release",
