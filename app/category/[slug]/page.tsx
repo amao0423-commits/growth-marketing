@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { CATEGORIES, categoryDef, isCategorySlug } from "@/lib/categories";
 import { ARTICLE_LIST_SELECT, type ArticleListItem } from "@/lib/articles";
+import { SITE_URL } from "@/lib/site";
 import Timeline from "@/components/Timeline";
 import Sidebar from "@/components/Sidebar";
 
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${cat.label}のプレスリリース一覧`,
     description: slug === "korea" ? koreaDescription : `編集部が確認した${cat.label}のプレスリリースを新着順に掲載しています。`,
+    alternates: { canonical: `/category/${slug}/` },
   };
 }
 
@@ -44,8 +46,21 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       ? "コスメ、フード、カルチャーから日本上陸のニュースまで。編集部が確認した韓国関連のプレスリリースを新着順に掲載しています。"
       : `編集部が確認した${cat.label}のプレスリリースを新着順に掲載しています。`;
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "ホーム", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: cat.label, item: `${SITE_URL}/category/${slug}/` },
+    ],
+  };
+
   return (
     <div data-cat={slug}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="wrap">
         <nav className="crumb">
           <a href="/">ホーム</a> / {cat.label}

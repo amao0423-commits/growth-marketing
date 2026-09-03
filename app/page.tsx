@@ -1,12 +1,32 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { categoryDef } from "@/lib/categories";
 import { generateEyecatchSvg } from "@/lib/eyecatch";
 import { ARTICLE_LIST_SELECT, formatDate, type ArticleListItem } from "@/lib/articles";
+import { SITE_URL } from "@/lib/site";
 import Timeline from "@/components/Timeline";
 import Sidebar from "@/components/Sidebar";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "アドプレス",
+  alternateName: "ADPRESS",
+  url: SITE_URL,
+  publisher: {
+    "@type": "Organization",
+    name: "アドプレス",
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo-full.png`,
+  },
+};
 
 function FeaturedCard({ article, size }: { article: ArticleListItem; size: "lead" | "sub" }) {
   const cat = categoryDef(article.category_slug);
@@ -96,6 +116,10 @@ export default async function HomePage() {
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSON_LD) }}
+      />
       {lead && (
         <section className="feat wrap">
           <div className="feat-grid">

@@ -1,5 +1,5 @@
 {
-  "_comment": "記事自動生成のトピック台帳。毎日1本、categoryRotation の順に各カテゴリを交互に巡回し（nextRotationIndexで管理）、そのカテゴリの未使用アイデアから1つ選ぶ。usedTopicIds に公開済みを記録して重複を防ぐ。新しいトレンドが出たら ideas に追記すればよい。sns/ads/seo/content/brand はマーケ系（generate-post.mjsのCATEGORY_MAP経由でsite category sns/bizに変換、COCOマーケCTA・被リンクあり）。korea/ent/life はADPRESS本来のニュース系カテゴリ（site categoryのslugをそのまま使用、マーケCTA・COCOマーケ被リンクなし）。",
+  "_comment": "記事自動生成のトピック台帳。毎日1本、categoryRotation の順に各カテゴリを交互に巡回し（nextRotationIndexで管理）、そのカテゴリの未使用アイデアから1つ選ぶ。usedTopicIds に公開済みを記録して重複を防ぐ。新しいトレンドが出たら ideas に追記すればよい。sns/ads/seo/content/brand はマーケ系（generate-post.mjsのCATEGORY_MAP経由でsite category sns/bizに変換、COCOマーケCTA・被リンクあり）。korea/ent/life/kpop/tech/trip はADPRESS本来のニュース系カテゴリ（site categoryのslugをそのまま使用、マーケCTA・COCOマーケ被リンクなし）。",
   "categoryRotation": [
     "sns",
     "ads",
@@ -8,13 +8,19 @@
     "brand",
     "korea",
     "ent",
-    "life"
+    "life",
+    "kpop",
+    "tech",
+    "trip"
   ],
   "nextRotationIndex": 0,
   "newsCategories": [
     "korea",
     "ent",
-    "life"
+    "life",
+    "kpop",
+    "tech",
+    "trip"
   ],
   "usedTopicIds": [
     "sns-reels-retention-2026",
@@ -516,6 +522,114 @@
           "id": "life-sleep-quality",
           "primaryKeyword": "睡眠の質 改善",
           "intent": "睡眠の質を改善する生活習慣・方法を知りたい"
+        }
+      ]
+    },
+    "kpop": {
+      "label": "K-POP",
+      "pillar": "K-POPニュース",
+      "ideas": [
+        {
+          "id": "kpop-comeback-2026",
+          "primaryKeyword": "K-POP カムバック 新曲",
+          "intent": "話題のK-POPアーティストのカムバック・新曲情報を知りたい"
+        },
+        {
+          "id": "kpop-japan-tour",
+          "primaryKeyword": "K-POP 来日公演",
+          "intent": "K-POPアーティストの来日公演・グッズ販売情報を知りたい"
+        },
+        {
+          "id": "kpop-rookie-group",
+          "primaryKeyword": "新人グループ デビュー",
+          "intent": "注目の新人K-POPグループのデビュー情報を知りたい"
+        },
+        {
+          "id": "kpop-fanmeeting",
+          "primaryKeyword": "ファンミーティング 開催",
+          "intent": "K-POPアーティストのファンミーティング開催情報を知りたい"
+        },
+        {
+          "id": "kpop-chart-record",
+          "primaryKeyword": "音楽チャート 記録",
+          "intent": "K-POPアーティストの音楽チャート・記録更新の話題を知りたい"
+        },
+        {
+          "id": "kpop-brand-collab",
+          "primaryKeyword": "K-POP 企業 コラボ",
+          "intent": "K-POPアーティストと企業のコラボ企画を知りたい"
+        }
+      ]
+    },
+    "tech": {
+      "label": "IT・テック",
+      "pillar": "テックニュース",
+      "ideas": [
+        {
+          "id": "tech-ai-service-launch",
+          "primaryKeyword": "新AIサービス リリース",
+          "intent": "話題の新AIサービス・アップデート情報を知りたい"
+        },
+        {
+          "id": "tech-startup-funding",
+          "primaryKeyword": "スタートアップ 資金調達",
+          "intent": "注目スタートアップの資金調達ニュースを知りたい"
+        },
+        {
+          "id": "tech-smartphone-release",
+          "primaryKeyword": "新型スマートフォン 発売",
+          "intent": "新型スマートフォンの発売・スペック情報を知りたい"
+        },
+        {
+          "id": "tech-cybersecurity-alert",
+          "primaryKeyword": "サイバーセキュリティ 注意喚起",
+          "intent": "サイバーセキュリティの最新の注意喚起・対策を知りたい"
+        },
+        {
+          "id": "tech-app-update",
+          "primaryKeyword": "人気アプリ アップデート",
+          "intent": "人気アプリの新機能・アップデート情報を知りたい"
+        },
+        {
+          "id": "tech-gadget-release",
+          "primaryKeyword": "新製品 ガジェット",
+          "intent": "話題の新製品ガジェットの特徴を知りたい"
+        }
+      ]
+    },
+    "trip": {
+      "label": "旅行",
+      "pillar": "旅行ニュース",
+      "ideas": [
+        {
+          "id": "trip-domestic-spot",
+          "primaryKeyword": "国内旅行 スポット",
+          "intent": "話題の国内旅行スポット・イベント情報を知りたい"
+        },
+        {
+          "id": "trip-overseas-entry",
+          "primaryKeyword": "海外旅行 入国手続き",
+          "intent": "海外旅行の入国手続き・最新ルールを知りたい"
+        },
+        {
+          "id": "trip-airline-campaign",
+          "primaryKeyword": "航空券 セール",
+          "intent": "航空会社のセール・キャンペーン情報を知りたい"
+        },
+        {
+          "id": "trip-hotel-trend",
+          "primaryKeyword": "ホテル 新規開業",
+          "intent": "新規開業ホテル・宿泊トレンドを知りたい"
+        },
+        {
+          "id": "trip-onsen-recommend",
+          "primaryKeyword": "温泉地 おすすめ",
+          "intent": "おすすめ温泉地・旅行プランの傾向を知りたい"
+        },
+        {
+          "id": "trip-travel-insurance",
+          "primaryKeyword": "海外旅行保険 選び方",
+          "intent": "海外旅行保険の選び方・注意点を知りたい"
         }
       ]
     }

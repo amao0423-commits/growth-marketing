@@ -47,8 +47,8 @@ const backoffMs = (attempt) => Math.min(60000, 5000 * 2 ** attempt);
 
 // GM時代のトピックカテゴリ（content/topics.json）→ アドプレスの記事カテゴリ
 // 元がSNS/広告運用会社のブログのため、ブランディング以外は概ね「SNS・マーケ」に収まる。
-// korea/ent/life はADPRESS本来のニュース系カテゴリで、topics.jsonのカテゴリキー＝site categoryのslug
-// なのでCATEGORY_MAPを介さずそのまま使う（isNewsCategoryで判定）。
+// korea/ent/life/kpop/tech/trip はADPRESS本来のニュース系カテゴリで、topics.jsonのカテゴリキー＝
+// site categoryのslugなのでCATEGORY_MAPを介さずそのまま使う（isNewsCategoryで判定）。
 const CATEGORY_MAP = { sns: "sns", ads: "sns", seo: "sns", content: "sns", brand: "biz" };
 const GM_CATEGORY_LABELS = {
   sns: "SNS運用",
@@ -59,8 +59,11 @@ const GM_CATEGORY_LABELS = {
   korea: "韓国情報",
   ent: "エンタメ",
   life: "ライフ",
+  kpop: "K-POP",
+  tech: "IT・テック",
+  trip: "旅行",
 };
-const NEWS_CATEGORIES = new Set(["korea", "ent", "life"]);
+const NEWS_CATEGORIES = new Set(["korea", "ent", "life", "kpop", "tech", "trip"]);
 function isNewsCategory(category) {
   return NEWS_CATEGORIES.has(category);
 }
@@ -88,6 +91,14 @@ const AUTH_DOMAINS = [
   "animeanime.jp", "about.netflix.com", "www.eiga.com", "eiga.com",
   "www.mhlw.go.jp", "www.fsa.go.jp", "www.jpx.co.jp",
   "www3.nhk.or.jp", "www.nhk.or.jp", "ja.wikipedia.org",
+  // kpop向け（音楽チャート公式）
+  "www.hanteo.com",
+  // tech向け（国内主要テックメディア・政府機関）
+  "www.itmedia.co.jp", "internet.watch.impress.co.jp", "www.watch.impress.co.jp",
+  "www.ipa.go.jp", "www.npa.go.jp",
+  // trip向け（観光庁・国交省・JNTO・主要航空会社公式）
+  "www.mlit.go.jp", "www.jnto.go.jp", "japan.travel",
+  "www.ana.co.jp", "www.jal.co.jp",
 ];
 
 const FALLBACK_SOURCE_URLS = {
@@ -141,6 +152,21 @@ const FALLBACK_SOURCE_URLS = {
     "https://www.mhlw.go.jp/",
     "https://www.fsa.go.jp/",
     "https://www.jpx.co.jp/",
+  ],
+  kpop: [
+    "https://www.oricon.co.jp/",
+    "https://natalie.mu/music",
+    "https://www.hanteo.com/",
+  ],
+  tech: [
+    "https://www.itmedia.co.jp/",
+    "https://internet.watch.impress.co.jp/",
+    "https://www.ipa.go.jp/",
+  ],
+  trip: [
+    "https://www.mlit.go.jp/",
+    "https://www.jnto.go.jp/",
+    "https://japan.travel/",
   ],
 };
 

@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { categoryDef } from "@/lib/categories";
 import { generateEyecatchSvg } from "@/lib/eyecatch";
 import { ARTICLE_LIST_SELECT, formatDate, type ArticleListItem } from "@/lib/articles";
+import { SITE_URL } from "@/lib/site";
 import PostCard from "@/components/PostCard";
 import LikeButton from "@/components/LikeButton";
 
@@ -15,7 +16,7 @@ async function getArticle(id: number) {
   const { data: article } = await supabase
     .from("articles")
     .select(
-      "id, title, body_html, excerpt, category_slug, contact_org, contact_email, contact_tel, contact_url, contact_public, cover_url, published_at, status"
+      "id, title, body_html, excerpt, category_slug, contact_org, contact_email, contact_tel, contact_url, contact_public, cover_url, published_at, updated_at, status"
     )
     .eq("id", id)
     .eq("status", "published")
@@ -67,8 +68,32 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
     ? null
     : generateEyecatchSvg({ title: article.title, bg: cat.bg, fg: cat.fg, categoryLabel: cat.label, width: 1000, height: 520 });
 
+  const articleUrl = `${SITE_URL}/news/${article.id}/`;
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    description: article.excerpt ?? undefined,
+    image: article.cover_url ? [article.cover_url] : undefined,
+    datePublished: article.published_at,
+    dateModified: article.updated_at ?? article.published_at,
+    mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl },
+    articleSection: cat.label,
+    author: { "@type": "Organization", name: "アドプレス編集部", url: SITE_URL },
+    publisher: {
+      "@type": "Organization",
+      name: "アドプレス",
+      url: SITE_URL,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo-full.png` },
+    },
+  };
+
   return (
     <div data-cat={article.category_slug}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <nav className="crumb">
         <Link href="/">ホーム</Link> <span>/</span> <Link href={`/category/${article.category_slug}/`}>{cat.label}</Link>
       </nav>
