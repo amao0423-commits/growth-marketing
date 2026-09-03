@@ -13,7 +13,7 @@
     "tech",
     "trip"
   ],
-  "nextRotationIndex": 0,
+  "nextRotationIndex": 1,
   "newsCategories": [
     "korea",
     "ent",
@@ -59,7 +59,8 @@
     "brand-visual-identity",
     "korea-fashion-trend",
     "ent-movie-boxoffice",
-    "life-household-budget"
+    "life-household-budget",
+    "sns-ugc-campaign"
   ],
   "clusters": {
     "sns": {
