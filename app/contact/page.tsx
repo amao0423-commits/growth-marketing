@@ -31,7 +31,7 @@ export default function ContactPage() {
               <dd>東京都中央区晴海</dd>
               <dt>メール</dt>
               <dd>
-                <a href="mailto:a-ando@hotseller.jp">a-ando@hotseller.jp</a>
+                <a href="mailto:info@cocomake-guide.com">info@cocomake-guide.com</a>
               </dd>
             </dl>
           </div>

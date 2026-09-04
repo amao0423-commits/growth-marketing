@@ -18,6 +18,8 @@ export default function AdApplyForm() {
   const [billDiff, setBillDiff] = useState(false);
   const [agreed, setAgreed] = useState([false, false, false, false]);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [form, setForm] = useState({
     wish: "",
@@ -40,7 +42,7 @@ export default function AdApplyForm() {
     setErrors((current) => ({ ...current, [name]: false }));
   }
 
-  function submit() {
+  async function submit() {
     const next = {
       category: !category,
       subject: subject.trim().length === 0,
@@ -51,8 +53,28 @@ export default function AdApplyForm() {
     };
     setErrors(next);
     if (Object.values(next).some(Boolean)) return;
-    setSent(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    setSending(true);
+    setSendError("");
+    try {
+      const res = await fetch("/api/ad-apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, category, subject, draft, qty, billDiff }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        // 送信できていないのに完了画面を出さない
+        setSendError(data?.error || "送信に失敗しました。時間をおいて再度お試しください。");
+        return;
+      }
+      setSent(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch {
+      setSendError("送信に失敗しました。通信環境をご確認のうえ再度お試しください。");
+    } finally {
+      setSending(false);
+    }
   }
 
   if (sent) {
@@ -277,7 +299,10 @@ export default function AdApplyForm() {
             </div>
           ))}
           {errors.agreed && <p className="err on">すべての項目にチェックしてください。</p>}
-          <button className="submit" type="button" onClick={submit}>この内容で申し込む</button>
+          {sendError && <p className="err on">{sendError}</p>}
+          <button className="submit" type="button" onClick={submit} disabled={sending}>
+            {sending ? "送信中…" : "この内容で申し込む"}
+          </button>
         </section>
 
         <p className="foot-note">送信の時点では費用は発生しません。<br />掲載可否とご希望日の空き状況を、1〜2営業日でご連絡します。</p>

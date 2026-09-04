@@ -13,6 +13,8 @@ const reasons = [
 
 export default function ReportForm() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
   const [reason, setReason] = useState("");
   const [agreed, setAgreed] = useState([false, false]);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
@@ -23,7 +25,7 @@ export default function ReportForm() {
     setErrors((current) => ({ ...current, [name]: false }));
   }
 
-  function submit() {
+  async function submit() {
     const next = {
       url: !/^https?:\/\/.+\..+/.test(form.url.trim()),
       reason: !reason,
@@ -33,8 +35,28 @@ export default function ReportForm() {
     };
     setErrors(next);
     if (Object.values(next).some(Boolean)) return;
-    setSent(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    setSending(true);
+    setSendError("");
+    try {
+      const res = await fetch("/api/report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, reason }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        // 送信できていないのに完了画面を出さない
+        setSendError(data?.error || "送信に失敗しました。時間をおいて再度お試しください。");
+        return;
+      }
+      setSent(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch {
+      setSendError("送信に失敗しました。通信環境をご確認のうえ再度お試しください。");
+    } finally {
+      setSending(false);
+    }
   }
 
   if (sent) {
@@ -169,7 +191,10 @@ export default function ReportForm() {
             </div>
           ))}
           {errors.agreed && <p className="err on">すべての項目にチェックしてください。</p>}
-          <button type="button" className="submit" onClick={submit}>この内容で送信する</button>
+          {sendError && <p className="err on">{sendError}</p>}
+          <button type="button" className="submit" onClick={submit} disabled={sending}>
+            {sending ? "送信中…" : "この内容で送信する"}
+          </button>
         </section>
 
         <section className="sec">

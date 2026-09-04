@@ -35,7 +35,7 @@ export default function ArticlePlacementPage() {
           </ul>
 
           <p>
-            <a className="article-consult-btn" href="mailto:a-ando@hotseller.jp?subject=%E3%82%A2%E3%83%89%E3%83%97%E3%83%AC%E3%82%B9%20%E8%A8%98%E4%BA%8B%E6%8E%B2%E8%BC%89%E3%81%AE%E7%9B%B8%E8%AB%87">
+            <a className="article-consult-btn" href="mailto:info@cocomake-guide.com?subject=%E3%82%A2%E3%83%89%E3%83%97%E3%83%AC%E3%82%B9%20%E8%A8%98%E4%BA%8B%E6%8E%B2%E8%BC%89%E3%81%AE%E7%9B%B8%E8%AB%87">
               記事掲載を相談する
             </a>
           </p>
