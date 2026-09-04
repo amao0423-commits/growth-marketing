@@ -293,6 +293,74 @@ const GENERIC_IMAGE_URL_PATTERNS = [
   /gstatic\.com\/marketing-cms\/assets\/images\/.*creators-home-page-meta-image/i,
 ];
 
+// 記事内容と無関係な「サイトのロゴ・共通アセット」を弾くURLパターン。
+// 多くのメディアは個別記事にog:imageが無いとき、サイトロゴを返してくる
+// （例: 金融庁のtitle_j_t.png、ORICONのlogo-oricon05.png、eiga.comのrectlogo）。
+const LOGO_LIKE_URL_PATTERNS = [
+  /\/logo[-_.]?/i,
+  /[-_/]logo\.(png|jpe?g|svg|webp)/i,
+  /\/_parts\//i,
+  /\/shared\//i,
+  /\/common\//i,
+  /\/title[-_][a-z_]*\.(png|jpe?g|webp)/i,
+  /favicon|apple-touch|sprite|placeholder|noimage|no_image|default[-_]?image/i,
+];
+
+// 画像バイナリの先頭から実寸を読む（PNG/JPEG/GIF/WebP）。ロゴは小さく・正方形に近いことが多いので、
+// 「横幅が小さい」「アイキャッチとして不自然な縦横比」を根拠に弾くために使う。
+function parseImageSize(buf) {
+  if (buf.length < 24) return null;
+  // PNG
+  if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) {
+    return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
+  }
+  // GIF
+  if (buf[0] === 0x47 && buf[1] === 0x49 && buf[2] === 0x46) {
+    return { width: buf.readUInt16LE(6), height: buf.readUInt16LE(8) };
+  }
+  // WebP (RIFF....WEBP)
+  if (buf.slice(0, 4).toString("ascii") === "RIFF" && buf.slice(8, 12).toString("ascii") === "WEBP") {
+    const fmt = buf.slice(12, 16).toString("ascii");
+    if (fmt === "VP8 " && buf.length >= 30) {
+      return { width: buf.readUInt16LE(26) & 0x3fff, height: buf.readUInt16LE(28) & 0x3fff };
+    }
+    if (fmt === "VP8L" && buf.length >= 25) {
+      const b = buf.readUInt32LE(21);
+      return { width: (b & 0x3fff) + 1, height: ((b >> 14) & 0x3fff) + 1 };
+    }
+    if (fmt === "VP8X" && buf.length >= 30) {
+      const w = 1 + (buf[24] | (buf[25] << 8) | (buf[26] << 16));
+      const h = 1 + (buf[27] | (buf[28] << 8) | (buf[29] << 16));
+      return { width: w, height: h };
+    }
+    return null;
+  }
+  // JPEG: SOFn マーカーを走査する
+  if (buf[0] === 0xff && buf[1] === 0xd8) {
+    let i = 2;
+    while (i + 9 < buf.length) {
+      if (buf[i] !== 0xff) { i++; continue; }
+      const marker = buf[i + 1];
+      // SOF0-SOF15（DHT/DAC/RSTn等は除く）に寸法が入っている
+      if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
+        return { height: buf.readUInt16BE(i + 5), width: buf.readUInt16BE(i + 7) };
+      }
+      const len = buf.readUInt16BE(i + 2);
+      if (len <= 0) break;
+      i += 2 + len;
+    }
+  }
+  return null;
+}
+
+// アイキャッチとして成立する画像かどうか（小さすぎる／正方形寄り＝ロゴの可能性が高い）
+function isUsableEyecatchSize(size) {
+  if (!size || !size.width || !size.height) return false;
+  const ratio = size.width / size.height;
+  // 横幅600px以上・横長寄り（1.2〜3.0）を条件にする。og:image の定番は1200x630(=1.9)。
+  return size.width >= 600 && ratio >= 1.2 && ratio <= 3.0;
+}
+
 // クエリ文字列（?hl=en 等のロケール違いだけの場合が多い）を無視して同一画像かどうかを比較する
 function imageIdentityKey(url) {
   try {
@@ -338,13 +406,29 @@ async function findEyecatchImage(candidateUrls, usedImageKeys = new Set()) {
       const imageUrl = extractMetaImage(html, pageUrl);
       if (!imageUrl) continue;
       if (GENERIC_IMAGE_URL_PATTERNS.some((re) => re.test(imageUrl))) continue;
+      if (LOGO_LIKE_URL_PATTERNS.some((re) => re.test(imageUrl))) {
+        console.log(`    スキップ（ロゴ/共通アセットに見えるURL）: ${imageUrl}`);
+        continue;
+      }
       const key = imageIdentityKey(imageUrl);
       if (usedImageKeys.has(key)) continue;
-      const imgRes = await fetchWithTimeout(imageUrl, { method: "HEAD", headers: { "User-Agent": BROWSER_UA } });
+
+      // 実体を取得して、画像であること＋アイキャッチとして成立する寸法であることを確認する
+      const imgRes = await fetchWithTimeout(imageUrl, { headers: { "User-Agent": BROWSER_UA } }, 12000);
       const contentType = imgRes.headers.get("content-type") || "";
-      if (imgRes.ok && contentType.startsWith("image/")) {
-        return { url: imageUrl, sourcePage: pageUrl };
+      if (!imgRes.ok || !contentType.startsWith("image/")) continue;
+      // SVGはロゴであることがほとんどなのでアイキャッチには使わない
+      if (contentType.includes("svg")) {
+        console.log(`    スキップ（SVG=ロゴの可能性が高い）: ${imageUrl}`);
+        continue;
       }
+      const buf = Buffer.from(await imgRes.arrayBuffer());
+      const size = parseImageSize(buf);
+      if (!isUsableEyecatchSize(size)) {
+        console.log(`    スキップ（アイキャッチに不向きな寸法 ${size ? `${size.width}x${size.height}` : "不明"}）: ${imageUrl}`);
+        continue;
+      }
+      return { url: imageUrl, sourcePage: pageUrl, size };
     } catch {
       continue;
     }
@@ -1561,7 +1645,7 @@ async function main() {
       const usedImageKeys = new Set((recentCovers || []).map((a) => imageIdentityKey(a.cover_url)));
       const eyecatch = await findEyecatchImage(sourceLinks, usedImageKeys);
       console.log(eyecatch
-        ? `  アイキャッチ取得: ${eyecatch.url}（出典: ${eyecatch.sourcePage}）`
+        ? `  アイキャッチ取得: ${eyecatch.url} [${eyecatch.size?.width}x${eyecatch.size?.height}]（出典: ${eyecatch.sourcePage}）`
         : "  アイキャッチ取得失敗。自動生成SVGにフォールバックします。");
 
       let article = null, gate = null, feedback = "";
