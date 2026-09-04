@@ -2,14 +2,15 @@
 //
 // 必要な環境変数:
 //   RESEND_API_KEY   … Resend の API キー（未設定なら送信はスキップし、呼び出し側で失敗を返す）
-//   MAIL_FROM        … 差出人。Resendで認証済みドメインのアドレスにする
-//                      （例: "アドプレス <noreply@nishinippon-adv.jp>"）
+//   MAIL_FROM        … 差出人。Resendで認証済みドメインのアドレスである必要がある。
+//                      未認証ドメインを指定すると Resend が403を返す。
+//                      現状の認証済みドメインは cocomarke.com のみ。
 //   MAIL_TO          … 受信先。未設定時は info@cocomake-guide.com
 
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
 
 export const MAIL_TO = process.env.MAIL_TO || "info@cocomake-guide.com";
-const MAIL_FROM = process.env.MAIL_FROM || "アドプレス <noreply@nishinippon-adv.jp>";
+const MAIL_FROM = process.env.MAIL_FROM || "アドプレス <noreply@cocomarke.com>";
 
 export function escapeHtml(value: string): string {
   return String(value)
