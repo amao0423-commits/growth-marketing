@@ -361,6 +361,15 @@ function isUsableEyecatchSize(size) {
   return size.width >= 600 && ratio >= 1.2 && ratio <= 3.0;
 }
 
+// 「og:imageの規定サイズだが中身は白背景のロゴ」を弾くための情報量チェック。
+// 単色背景＋ロゴは極端に圧縮が効くため、画素あたりのバイト数が写真より1桁小さくなる。
+// 実測: じゃらんのロゴ画像 0.038 / Android公式の写真 0.25 / VisitKoreaの写真 0.16。
+const MIN_BYTES_PER_PIXEL = 0.08;
+function hasPhotographicDetail(byteLength, size) {
+  if (!size || !size.width || !size.height) return false;
+  return byteLength / (size.width * size.height) >= MIN_BYTES_PER_PIXEL;
+}
+
 // クエリ文字列（?hl=en 等のロケール違いだけの場合が多い）を無視して同一画像かどうかを比較する
 function imageIdentityKey(url) {
   try {
@@ -426,6 +435,11 @@ async function findEyecatchImage(candidateUrls, usedImageKeys = new Set()) {
       const size = parseImageSize(buf);
       if (!isUsableEyecatchSize(size)) {
         console.log(`    スキップ（アイキャッチに不向きな寸法 ${size ? `${size.width}x${size.height}` : "不明"}）: ${imageUrl}`);
+        continue;
+      }
+      // 規定サイズでも中身が白背景のロゴというケースを弾く
+      if (!hasPhotographicDetail(buf.length, size)) {
+        console.log(`    スキップ（情報量が少なくロゴの可能性が高い ${(buf.length / (size.width * size.height)).toFixed(3)} bytes/px）: ${imageUrl}`);
         continue;
       }
       return { url: imageUrl, sourcePage: pageUrl, size };
