@@ -45,7 +45,7 @@ function FeaturedCard({ article, size }: { article: ArticleListItem; size: "lead
     // eslint-disable-next-line @next/next/no-img-element
     <img src={article.cover_url} alt="" />
   ) : (
-    <div dangerouslySetInnerHTML={{ __html: svg! }} />
+    <div className="svg-wrap" dangerouslySetInnerHTML={{ __html: svg! }} />
   );
 
   const badges = (

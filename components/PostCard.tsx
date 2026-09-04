@@ -16,7 +16,7 @@ export default function PostCard({ article }: { article: ArticleListItem }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={article.cover_url} alt="" />
         ) : (
-          <div dangerouslySetInnerHTML={{ __html: svg! }} />
+          <div className="svg-wrap" dangerouslySetInnerHTML={{ __html: svg! }} />
         )}
       </div>
       <div className="post-body">

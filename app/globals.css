@@ -75,6 +75,11 @@ body{
   text-rendering:optimizeLegibility;
 }
 img,svg,video{max-width:100%;height:auto;display:block}
+/* 自動生成アイキャッチSVGは dangerouslySetInnerHTML の都合で <div> に包まれる。
+   そのままだとサムネイル側の `svg{height:100%}` がラッパー（高さauto）を基準にしてしまい、
+   潰れて何も表示されない。display:contents でラッパーをレイアウト上いない扱いにし、
+   <img> を直接置いたときとまったく同じ扱いになるようにする。 */
+.svg-wrap{display:contents}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--action-fg);outline-offset:2px;border-radius:4px}
 ::selection{background:var(--action-bg);color:var(--action-fg)}
@@ -448,9 +453,14 @@ body[data-cat="editorial"]{--cbg:var(--c-edit-bg);--cfg:var(--c-edit-fg)}
 .feat .card p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.7}
 .feat-meta{display:flex;align-items:center;gap:9px;font-size:11.5px;color:var(--ink-3);margin-top:9px}
 .right-col{display:grid;grid-template-rows:1fr 1fr;gap:14px}
-.card-sub{display:grid;grid-template-columns:112px 1fr}
+/* design-ref は `.card{display:block}` と同specificityの `.card-sub{display:grid}` を後勝ちで
+   上書きしているが、こちらは `.feat .card{display:block}`（specificityが1つ上）で書いてしまい
+   grid化が効かず、サムネイルとテキストが縦積みになっていた。同じspecificityまで上げる。 */
+.feat .card-sub{display:grid;grid-template-columns:112px 1fr}
 .card-sub .th{overflow:hidden;display:flex}
-.card-sub .th svg{height:100%;width:auto;min-width:100%;object-fit:cover}
+/* SVGは preserveAspectRatio="xMidYMid slice" 付きで生成しているので、枠いっぱいに
+   広げれば <img> の object-fit:cover と同じ見え方になる（object-fitはinline SVGには効かない）。 */
+.card-sub .th svg{width:100%;height:100%}
 .card-sub .th img{height:100%;width:100%;object-fit:cover;display:block}
 .card-sub .card-body{padding:12px 14px}
 
@@ -479,7 +489,9 @@ body[data-cat="editorial"]{--cbg:var(--c-edit-bg);--cfg:var(--c-edit-fg)}
 .item .src{font-size:11.5px;color:var(--ink-3)}
 .item .badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px}
 .item .th{border-radius:6px;overflow:hidden;line-height:0;aspect-ratio:200/124}
-.item .th svg{width:100%;height:auto;display:block}
+/* モバイルでは .item .th が 60x60 の正方形になるため、height:auto だと余白ができる。
+   枠いっぱいに広げて slice で切り抜く（imgと同じ扱い）。 */
+.item .th svg{width:100%;height:100%;display:block}
 .item .th img{width:100%;height:100%;object-fit:cover;display:block}
 .empty{background:var(--paper);border:1px dashed var(--line-2);border-radius:var(--r);padding:34px 20px;text-align:center;color:var(--ink-2);font-size:13.5px}
 

@@ -41,7 +41,9 @@ export function generateEyecatchSvg(opts: {
     <circle cx="${cx + r1 * 1.6}" cy="${cy}" r="${r2}" fill="${fg}" opacity=".85"/>
   `;
 
-  return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escapeXml(
+  // preserveAspectRatio は既定が "meet"（＝contain）で、サムネイル枠と比率が違うと
+  // 中央に余白付きで縮小配置されてしまう。写真の <img> と同じ cover 挙動にするため slice を指定する。
+  return `<svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escapeXml(
     title
   )}"><rect width="${width}" height="${height}" fill="${bg}"/><g fill="${fg}" opacity=".13">${dots}</g>${emblem}<text x="${
     width * 0.07

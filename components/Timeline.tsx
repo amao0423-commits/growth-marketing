@@ -45,7 +45,7 @@ export default function Timeline({ articles }: { articles: ArticleListItem[] }) 
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={a.cover_url} alt="" />
                     ) : (
-                      <div dangerouslySetInnerHTML={{ __html: svg! }} />
+                      <div className="svg-wrap" dangerouslySetInnerHTML={{ __html: svg! }} />
                     )}
                   </div>
                 </Link>
