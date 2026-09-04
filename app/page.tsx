@@ -37,8 +37,9 @@ function FeaturedCard({ article, size }: { article: ArticleListItem; size: "lead
         bg: cat.bg,
         fg: cat.fg,
         categoryLabel: cat.label,
-        width: size === "lead" ? 760 : 240,
-        height: size === "lead" ? 390 : 300,
+        // サブカードのサムネイルは16:9の横長枠（.card-sub .th）に合わせる
+        width: size === "lead" ? 760 : 400,
+        height: size === "lead" ? 390 : 225,
       });
 
   const thumb = article.cover_url ? (

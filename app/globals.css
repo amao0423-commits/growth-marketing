@@ -442,7 +442,9 @@ body[data-cat="editorial"]{--cbg:var(--c-edit-bg);--cfg:var(--c-edit-fg)}
 
 /* 注目枠（ホームのみ） */
 .feat{padding:26px 0 6px}
-.feat-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:14px}
+/* align-items:start にしないと、左右で背の高い方に合わせて引き伸ばされ、
+   短い側のカード下部に大きな余白ができる。 */
+.feat-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;align-items:start}
 .feat .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:block;transition:border-color .15s,transform .15s;text-decoration:none;color:inherit}
 .feat .card:hover{border-color:var(--line-2);transform:translateY(-2px)}
 .feat .card svg{display:block;width:100%;height:auto}
@@ -452,12 +454,12 @@ body[data-cat="editorial"]{--cbg:var(--c-edit-bg);--cfg:var(--c-edit-fg)}
 .card-sub h3{font-size:14px;line-height:1.6;margin:8px 0 5px;font-weight:700}
 .feat .card p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.7}
 .feat-meta{display:flex;align-items:center;gap:9px;font-size:11.5px;color:var(--ink-3);margin-top:9px}
-.right-col{display:grid;grid-template-rows:1fr 1fr;gap:14px}
-/* design-ref は `.card{display:block}` と同specificityの `.card-sub{display:grid}` を後勝ちで
-   上書きしているが、こちらは `.feat .card{display:block}`（specificityが1つ上）で書いてしまい
-   grid化が効かず、サムネイルとテキストが縦積みになっていた。同じspecificityまで上げる。 */
-.feat .card-sub{display:grid;grid-template-columns:112px 1fr}
-.card-sub .th{overflow:hidden;display:flex}
+/* カードの高さは中身に合わせる（1fr 1fr で等分すると、サムネイルが縦に潰れる） */
+.right-col{display:grid;grid-template-rows:auto auto;gap:14px;align-content:start}
+/* design-ref は横並び（112pxのサムネ列）だが、その幅ではアイキャッチがほとんど見えないため、
+   サムネイルを上に全幅で置く縦積みにする。 */
+.feat .card-sub{display:block}
+.card-sub .th{overflow:hidden;display:block;aspect-ratio:16/9;background:var(--mist)}
 /* SVGは preserveAspectRatio="xMidYMid slice" 付きで生成しているので、枠いっぱいに
    広げれば <img> の object-fit:cover と同じ見え方になる（object-fitはinline SVGには効かない）。 */
 .card-sub .th svg{width:100%;height:100%}
