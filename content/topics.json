@@ -13,7 +13,7 @@
     "tech",
     "trip"
   ],
-  "nextRotationIndex": 3,
+  "nextRotationIndex": 4,
   "newsCategories": [
     "korea",
     "ent",
@@ -65,7 +65,8 @@
     "trip-onsen-recommend",
     "tech-app-update",
     "ads-display-remarketing",
-    "seo-title-meta-optimization"
+    "seo-title-meta-optimization",
+    "content-case-study"
   ],
   "clusters": {
     "sns": {
