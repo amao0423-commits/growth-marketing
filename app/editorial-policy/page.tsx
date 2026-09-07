@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "編集ポリシー",
   description: "アドプレスに掲載される記事の種類と、編集部の関与範囲について説明します。",
+  alternates: { canonical: "/editorial-policy/" },
 };
 
 export default function EditorialPolicyPage() {

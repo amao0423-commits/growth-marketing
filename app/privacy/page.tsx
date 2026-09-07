@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "プライバシーポリシー",
   description: "アドプレスにおける個人情報の取り扱いについて定めたプライバシーポリシーです。",
+  alternates: { canonical: "/privacy/" },
 };
 
 export default function PrivacyPage() {

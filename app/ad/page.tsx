@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "記事掲載のご相談",
   description: "サービスや発表をアドプレスの記事として届けたい方向けのご相談窓口です。",
+  alternates: { canonical: "/ad/" },
 };
 
 export default function ArticlePlacementPage() {

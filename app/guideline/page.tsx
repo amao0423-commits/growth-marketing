@@ -6,6 +6,7 @@ import LegalPage from "@/components/LegalPage";
 export const metadata: Metadata = {
   title: "掲載ガイドライン",
   description: "アドプレスへの記事掲載にあたってのルールをまとめたガイドラインです。",
+  alternates: { canonical: "/guideline/" },
 };
 
 const TOC = [

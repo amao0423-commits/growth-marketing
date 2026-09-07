@@ -6,6 +6,7 @@ import LegalPage from "@/components/LegalPage";
 export const metadata: Metadata = {
   title: "利用規約",
   description: "アドプレスの利用規約です。アカウント登録、記事の掲載、掲載内容の責任、禁止事項、記事の取り下げ、免責事項などを定めています。",
+  alternates: { canonical: "/terms/" },
 };
 
 const TOC = [

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "アドプレスについて",
   description: "アドプレスは、編集部が確認したプレスリリースやニュースを掲載するメディアです。",
+  alternates: { canonical: "/about/" },
 };
 
 export default function AboutPage() {

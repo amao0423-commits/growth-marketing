@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "お問い合わせ",
   description: "アドプレスへのお問い合わせ窓口です。",
+  alternates: { canonical: "/contact/" },
 };
 
 export default function ContactPage() {
