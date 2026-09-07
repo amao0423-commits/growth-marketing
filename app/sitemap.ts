@@ -7,7 +7,7 @@ import { SITE_URL } from "@/lib/site";
 export const revalidate = 3600;
 
 const STATIC_PAGES: { path: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }[] = [
-  { path: "", changeFrequency: "hourly", priority: 1 },
+  { path: "/", changeFrequency: "hourly", priority: 1 },
   { path: "/about/", changeFrequency: "yearly", priority: 0.4 },
   { path: "/contact/", changeFrequency: "yearly", priority: 0.4 },
   { path: "/editorial-policy/", changeFrequency: "yearly", priority: 0.3 },

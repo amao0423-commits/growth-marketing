@@ -112,7 +112,7 @@ export default async function MyPage() {
           </div>
         </div>
         <div className="acts">
-          <form action="/api/auth/signout" method="post">
+          <form action="/api/auth/signout/" method="post">
             <button type="submit">ログアウト</button>
           </form>
         </div>

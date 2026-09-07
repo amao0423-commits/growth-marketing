@@ -57,7 +57,7 @@ export default function AdApplyForm() {
     setSending(true);
     setSendError("");
     try {
-      const res = await fetch("/api/ad-apply", {
+      const res = await fetch("/api/ad-apply/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, category, subject, draft, qty, billDiff }),

@@ -16,7 +16,7 @@ export default function HeaderChrome({ isLoggedIn }: { isLoggedIn: boolean; isEd
       <Link href="/mypage/" style={{ fontSize: 13 }}>
         マイページ
       </Link>
-      <form action="/api/auth/signout" method="post">
+      <form action="/api/auth/signout/" method="post">
         <button type="submit" style={{ background: "none", border: "none", fontSize: 13, color: "var(--ink-2)", cursor: "pointer", padding: 0, font: "inherit" }}>
           ログアウト
         </button>

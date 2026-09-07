@@ -14,7 +14,7 @@ export default function ReferralForm({ articleId }: { articleId: number }) {
     setSubmitting(true);
     setError(null);
     try {
-      const res = await fetch("/api/referral", {
+      const res = await fetch("/api/referral/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ articleId, url }),
