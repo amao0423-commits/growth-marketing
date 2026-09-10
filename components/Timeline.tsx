@@ -27,7 +27,7 @@ export default function Timeline({ articles }: { articles: ArticleListItem[] }) 
               const fresh = isFresh(a.published_at);
               const svg = a.cover_url
                 ? null
-                : generateEyecatchSvg({ title: a.title, bg: cat.bg, fg: cat.fg, categoryLabel: cat.label, width: 200, height: 124 });
+                : generateEyecatchSvg({ title: a.title, bg: cat.bg, fg: cat.fg, categoryLabel: cat.label, categorySlug: cat.slug, width: 200, height: 124 });
               return (
                 <Link href={`/news/${a.id}/`} key={a.id} className={`item${fresh ? " fresh" : ""}`}>
                   <div className="time mono">{formatTime(a.published_at)}</div>

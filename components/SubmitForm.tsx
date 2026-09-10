@@ -45,6 +45,7 @@ export default function SubmitForm({
     bg: cat?.bg ?? "#EDEEF2",
     fg: cat?.fg ?? "#3A3D45",
     categoryLabel: cat?.label ?? "カテゴリ未選択",
+    categorySlug: cat?.slug,
     width: 400,
     height: 210,
   });

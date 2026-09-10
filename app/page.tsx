@@ -37,6 +37,7 @@ function FeaturedCard({ article, size }: { article: ArticleListItem; size: "lead
         bg: cat.bg,
         fg: cat.fg,
         categoryLabel: cat.label,
+        categorySlug: cat.slug,
         // サブカードのサムネイルは16:9の横長枠（.card-sub .th）に合わせる
         width: size === "lead" ? 760 : 400,
         height: size === "lead" ? 390 : 225,
