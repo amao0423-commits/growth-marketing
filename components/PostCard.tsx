@@ -7,7 +7,7 @@ export default function PostCard({ article }: { article: ArticleListItem }) {
   const cat = categoryDef(article.category_slug);
   const svg = article.cover_url
     ? null
-    : generateEyecatchSvg({ title: article.title, bg: cat.bg, fg: cat.fg, categoryLabel: cat.label, categorySlug: cat.slug, width: 400, height: 210 });
+    : generateEyecatchSvg({ title: article.title, bg: cat.bg, fg: cat.fg, categoryLabel: cat.label, width: 400, height: 210 });
 
   return (
     <Link className="post-card" href={`/news/${article.id}/`}>

@@ -66,7 +66,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
 
   const svg = article.cover_url
     ? null
-    : generateEyecatchSvg({ title: article.title, bg: cat.bg, fg: cat.fg, categoryLabel: cat.label, categorySlug: cat.slug, width: 1000, height: 520 });
+    : generateEyecatchSvg({ title: article.title, bg: cat.bg, fg: cat.fg, categoryLabel: cat.label, width: 1000, height: 520 });
 
   const articleUrl = `${SITE_URL}/news/${article.id}/`;
   const articleJsonLd = {
