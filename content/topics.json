@@ -13,7 +13,7 @@
     "tech",
     "trip"
   ],
-  "nextRotationIndex": 9,
+  "nextRotationIndex": 10,
   "newsCategories": [
     "korea",
     "ent",
@@ -71,7 +71,8 @@
     "korea-language-learning",
     "ent-music-festival",
     "life-health-checkup",
-    "kpop-chart-record"
+    "kpop-chart-record",
+    "tech-cybersecurity-alert"
   ],
   "clusters": {
     "sns": {
