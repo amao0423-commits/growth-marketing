@@ -13,7 +13,7 @@
     "tech",
     "trip"
   ],
-  "nextRotationIndex": 0,
+  "nextRotationIndex": 1,
   "newsCategories": [
     "korea",
     "ent",
@@ -73,7 +73,8 @@
     "life-health-checkup",
     "kpop-chart-record",
     "tech-cybersecurity-alert",
-    "trip-travel-insurance"
+    "trip-travel-insurance",
+    "sns-line-official-account"
   ],
   "clusters": {
     "sns": {
