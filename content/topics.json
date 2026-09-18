@@ -13,7 +13,7 @@
     "tech",
     "trip"
   ],
-  "nextRotationIndex": 4,
+  "nextRotationIndex": 5,
   "newsCategories": [
     "korea",
     "ent",
@@ -77,7 +77,8 @@
     "sns-line-official-account",
     "ads-conversion-tracking-ga4",
     "seo-keyword-research",
-    "content-storytelling"
+    "content-storytelling",
+    "brand-recruitment-branding"
   ],
   "clusters": {
     "sns": {
