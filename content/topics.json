@@ -13,7 +13,7 @@
     "tech",
     "trip"
   ],
-  "nextRotationIndex": 5,
+  "nextRotationIndex": 6,
   "newsCategories": [
     "korea",
     "ent",
@@ -78,7 +78,8 @@
     "ads-conversion-tracking-ga4",
     "seo-keyword-research",
     "content-storytelling",
-    "brand-recruitment-branding"
+    "brand-recruitment-branding",
+    "korea-street-food"
   ],
   "clusters": {
     "sns": {
