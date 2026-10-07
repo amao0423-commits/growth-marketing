@@ -13,7 +13,7 @@
     "tech",
     "trip"
   ],
-  "nextRotationIndex": 0,
+  "nextRotationIndex": 1,
   "newsCategories": [
     "korea",
     "ent",
@@ -84,7 +84,8 @@
     "life-sleep-quality",
     "kpop-rookie-group",
     "tech-startup-funding",
-    "trip-domestic-spot"
+    "trip-domestic-spot",
+    "sns-social-listening"
   ],
   "clusters": {
     "sns": {
