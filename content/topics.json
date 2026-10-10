@@ -13,7 +13,7 @@
     "tech",
     "trip"
   ],
-  "nextRotationIndex": 4,
+  "nextRotationIndex": 5,
   "newsCategories": [
     "korea",
     "ent",
@@ -87,7 +87,8 @@
     "trip-domestic-spot",
     "sns-social-listening",
     "seo-featured-snippet",
-    "content-seo-writing"
+    "content-seo-writing",
+    "brand-customer-experience"
   ],
   "clusters": {
     "sns": {
